@@ -1,4 +1,4 @@
-package sounds;
+package output;
 
 import java.net.URL;
 

@@ -1,5 +1,3 @@
-package gameplay;
-
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -8,13 +6,11 @@ import java.util.ListIterator;
 import java.util.List;
 import java.util.Set;
 
-import gui.GameFrame;
 import gui.GamePanel;
-import io.KeyHandler;
-import io.Keys;
-import sounds.Sound;
+import input.KeyHandler;
+import input.Keys;
 
-public class GamePlay {
+public class Gameplay {
 
 	int pos_x, pos_y;
 
@@ -23,7 +19,7 @@ public class GamePlay {
 	private BufferedImage backBuffer;
 
 
-	public GamePlay(GamePanel panel, KeyHandler keyHandler) {
+	public Gameplay(GamePanel panel, KeyHandler keyHandler) {
 		this.panel = (GamePanel) panel;
 		this.keyHandler = keyHandler;
 	}
