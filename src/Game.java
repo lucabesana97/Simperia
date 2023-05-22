@@ -1,15 +1,12 @@
-package main;
-
-import gameplay.GamePlay;
 import gui.GameFrame;
 import gui.GamePanel;
-import io.KeyHandler;
+import input.KeyHandler;
 
 public class Game {
 	final private GameFrame gameFrame;
 	final private KeyHandler keyHandler;
 
-	private GamePlay play;
+	private Gameplay play;
 	private GamePanel panel;
 
 	public Game() {
@@ -25,7 +22,7 @@ public class Game {
 
 	public void start() {
 		panel = new GamePanel();
-		play = new GamePlay(panel, keyHandler);
+		play = new Gameplay(panel, keyHandler);
 		gameFrame.setPanel(panel);
 
 		play.init();
