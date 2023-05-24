@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import gui.GamePanel;
+import input.Command;
 import input.KeyHandler;
 import input.Keys;
 
@@ -37,18 +38,16 @@ public class Gameplay {
 			double diffSeconds = (currentTick - lastTick) / 100.0;
 			lastTick = currentTick;
 
-			panel.clear();
-
 			try {
 				handleUserInput();
 			} catch (Exception e) {
 				System.out.println(e.getCause());
 			}
 
-			drawElements();
-
 			update(diffSeconds);
 
+			panel.clear();
+			drawElements();
 			panel.redraw();
 			System.out.flush();
 
@@ -66,14 +65,22 @@ public class Gameplay {
 	}
 
 	private void handleUserInput() {
-
 		final Set<Keys> pressedKeys = keyHandler.getKeys();
 
-		for (Keys keyCode : pressedKeys) {
-			switch (keyCode) {
+		// Create a list to store the commands to execute
+		List<Command> commandsToExecute = new ArrayList<>();
 
+		// Iterate over the pressed keys
+		for (Keys keyCode : pressedKeys) {
+			Command command = keyCode.getCommand();
+			if (command != null) {
+				commandsToExecute.add(command);
 			}
 		}
 
+		// Execute the commands
+		for (Command command : commandsToExecute) {
+			command.execute();
+		}
 	}
 }

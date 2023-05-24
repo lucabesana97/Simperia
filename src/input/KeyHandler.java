@@ -1,70 +1,64 @@
 package input;
 
+import input.Keys;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.LinkedHashSet;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class KeyHandler implements KeyListener {
 
-	private Set<Keys> pressedKeys = new LinkedHashSet<>();
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
+	private Set<Keys> pressedKeys = new HashSet<>();
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
-		Keys tmp = toKey(keyCode);
-		if (tmp != null) {
-			pressedKeys.add(tmp);
+		Keys key = toKey(keyCode);
+		if (key != null) {
+			pressedKeys.add(key);
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int keyCode = e.getKeyCode();
-		Keys tmp = toKey(keyCode);
-		if (tmp != null) {
-			pressedKeys.remove(tmp);
+		Keys key = toKey(keyCode);
+		if (key != null) {
+			pressedKeys.remove(key);
 		}
 	}
 
-	private Keys toKey(int n) {
-		Keys returner = null;
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// No action needed for keyTyped
+	}
 
-		switch (n) {
-		case KeyEvent.VK_W:
-		case KeyEvent.VK_UP:
-			returner = Keys.JUMP;
-			break;
-		case KeyEvent.VK_S:
-		case KeyEvent.VK_DOWN:
-			returner = Keys.DOWN;
-			break;
-		case KeyEvent.VK_A:
-		case KeyEvent.VK_LEFT:
-			returner = Keys.LEFT;
-			break;
-		case KeyEvent.VK_D:
-		case KeyEvent.VK_RIGHT:
-			returner = Keys.RIGHT;
-			break;
-		case KeyEvent.VK_SPACE:
-			returner = Keys.JUMP;
-			break;
-		case KeyEvent.VK_ENTER:
-			returner = Keys.PAUSE;
-			break;
-		case KeyEvent.VK_P:
-			returner = Keys.SHOOT;
-			break;
-		default:
-			break;
+	private Keys toKey(int keyCode) {
+		switch (keyCode) {
+			case KeyEvent.VK_W:
+			case KeyEvent.VK_UP:
+				return Keys.UP;
+			case KeyEvent.VK_S:
+			case KeyEvent.VK_DOWN:
+				return Keys.DOWN;
+			case KeyEvent.VK_A:
+			case KeyEvent.VK_LEFT:
+				return Keys.LEFT;
+			case KeyEvent.VK_D:
+			case KeyEvent.VK_RIGHT:
+				return Keys.RIGHT;
+			case KeyEvent.VK_SPACE:
+				return Keys.UP;
+			case KeyEvent.VK_ENTER:
+				return Keys.PAUSE;
+			case KeyEvent.VK_P:
+				return Keys.PAUSE;
+			default:
+				return null;
 		}
-
-		return returner;
 	}
 
 	public Set<Keys> getKeys() {
