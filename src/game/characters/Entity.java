@@ -1,9 +1,12 @@
 package game.characters;
 
+import game.AGameObject;
 import game.Coordinates;
 import game.Sprites;
 
-public abstract class Character {
+import java.awt.*;
+
+public abstract class Entity extends AGameObject {
     public Sprites sprites;
     public String name;
     public double speed;
@@ -15,9 +18,9 @@ public abstract class Character {
     public int level;
 
 
-    public Character() {}
+    public Entity() {}
 
-    public void attack(Character character) {
+    public void attack(Entity entity) {
         //TODO add implementation of attack
     }
 
@@ -33,5 +36,5 @@ public abstract class Character {
         //TODO add implementation of movement
     }
 
-    public abstract void draw();
+    public abstract void draw(Graphics graphics);
 }

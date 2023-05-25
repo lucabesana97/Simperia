@@ -1,16 +1,17 @@
 package game.characters;
 
-public class NPC extends Character{
+import java.awt.*;
 
-//    String dialog;
+public class NPC {
+
+    String dialog;
 //    Quest[] quests;
 
     public void loadDialog() {
         //TODO there is a file somewhere with all the dialogs for the NPCs
     }
 
-    @Override
-    public void draw() {
+    public void draw(Graphics graphics) {
 
     }
 }
