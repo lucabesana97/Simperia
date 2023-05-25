@@ -1,14 +1,14 @@
 package gui;
 
-import game.AGameObject;
+import game.GameObject;
 
-public class GamePanel extends APanel {
+public class GamePanel extends Panel {
 
 	public GamePanel() {
 		super();
 	}
 
-	public void draw(AGameObject object) {
+	public void draw(GameObject object) {
 		object.draw(graphics);
 	}
 

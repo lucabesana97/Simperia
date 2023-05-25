@@ -1,6 +1,6 @@
 package gui;
 
-public class HomePanel extends APanel {
+public class HomePanel extends Panel {
 
     public void newGameClicked() {
 

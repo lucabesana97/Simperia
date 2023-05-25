@@ -1,6 +1,6 @@
 import gui.Frame;
 import gui.GamePanel;
-import gui.APanel;
+import gui.Panel;
 import input.KeyHandler;
 
 public class Game {
@@ -8,7 +8,7 @@ public class Game {
 	final private KeyHandler keyHandler;
 
 	private Gameplay gameplay;
-	private APanel panel;
+	private Panel panel;
 
 	public Game() {
 		frame = new Frame("Simperia");

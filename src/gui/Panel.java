@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class APanel extends JPanel {
+public abstract class Panel extends JPanel {
 
     public static final int WIDTH = 1000;
     public static final int HEIGHT = 800;
@@ -13,7 +13,7 @@ public abstract class APanel extends JPanel {
     public Graphics graphics;
     final private BufferedImage imageBuffer;
 
-    public APanel() {
+    public Panel() {
 
         //Initiate panel variables
         this.setSize(WIDTH, HEIGHT);

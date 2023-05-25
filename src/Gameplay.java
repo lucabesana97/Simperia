@@ -4,7 +4,7 @@ import java.util.Set;
 
 import game.characters.Player;
 import gui.GamePanel;
-import gui.APanel;
+import gui.Panel;
 import input.Command;
 import input.KeyHandler;
 import input.Keys;
@@ -19,7 +19,7 @@ public class Gameplay {
     private Player player;
 
 
-    public Gameplay(APanel panel, KeyHandler keyHandler) {
+    public Gameplay(Panel panel, KeyHandler keyHandler) {
         this.panel = (GamePanel) panel;
         this.keyHandler = keyHandler;
     }

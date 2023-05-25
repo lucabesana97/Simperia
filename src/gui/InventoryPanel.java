@@ -1,6 +1,6 @@
 package gui;
 
-public class InventoryPanel extends APanel {
+public class InventoryPanel extends Panel {
 
     public void useItemClicked() {
 

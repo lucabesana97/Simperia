@@ -9,7 +9,7 @@ public class Frame extends JFrame{
 	public static final int WIDTH = 1000;
 	public static final int HEIGHT = 800;
 
-	private APanel panel;
+	private Panel panel;
 	
 	public Frame(String title) {
 		// Set window properties
@@ -22,7 +22,7 @@ public class Frame extends JFrame{
 		setVisible(true);
 	}
 	
-    public void setPanel(APanel panel) {
+    public void setPanel(Panel panel) {
         if (this.panel != null) {
             remove(this.panel);
         }

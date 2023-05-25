@@ -1,12 +1,12 @@
 package game.characters;
 
-import game.AGameObject;
+import game.GameObject;
 import game.Coordinates;
 import game.Sprites;
 
 import java.awt.*;
 
-public abstract class Entity extends AGameObject {
+public abstract class Entity extends GameObject {
     public Sprites sprites;
     public String name;
     public double speed;

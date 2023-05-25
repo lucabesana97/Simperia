@@ -3,7 +3,7 @@ package gui;
 /**
  * The pause panel that appears when the game is paused.
  */
-public class PausePanel extends APanel {
+public class PausePanel extends Panel {
 
     public void resumeClicked() {
 
