@@ -1,6 +1,8 @@
 package game.characters;
 
-public class NPC extends Character{
+import java.awt.*;
+
+public class NPC extends Entity {
 
 //    String dialog;
 //    Quest[] quests;
@@ -10,7 +12,7 @@ public class NPC extends Character{
     }
 
     @Override
-    public void draw() {
+    public void draw(Graphics g) {
 
     }
 }

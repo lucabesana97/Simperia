@@ -18,6 +18,11 @@ public class Game {
 	public void init() {
 		panel = new GamePanel();
 		gameFrame.setPanel(panel);
+		try {
+			Thread.sleep(1000);
+		}catch(Exception e){
+
+		}
 	}
 
 	public void start() {

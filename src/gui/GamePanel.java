@@ -1,5 +1,7 @@
 package gui;
 
+import game.characters.Entity;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.GraphicsConfiguration;
@@ -36,4 +38,9 @@ public class GamePanel extends JPanel {
 	public void redraw() {
 		this.getGraphics().drawImage(imageBuffer, 0, 0, this);
 	}
+
+	public void draw(Entity entity){
+		entity.draw(graphics);
+	}
+
 }
