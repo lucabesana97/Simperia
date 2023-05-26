@@ -1,11 +1,12 @@
-package game.characters;
+package game.entities;
 
+import game.GameObject;
 import game.Coordinates;
 import game.Sprites;
 
-import java.awt.*;
+import java.awt.Graphics;
 
-public abstract class Entity {
+public abstract class Entity extends GameObject {
     public Sprites sprites;
     public String name;
     public double speed;
@@ -15,7 +16,6 @@ public abstract class Entity {
     public int attack;
     public int defense;
     public int level;
-
 
     public Entity() {}
 
@@ -35,7 +35,5 @@ public abstract class Entity {
         //TODO add implementation of movement
     }
 
-    public void draw(Graphics g) {
-        g.fillRoundRect((int)coordinates.x, (int)coordinates.y,coordinates.size,coordinates.size,4,4);
-    }
+    public abstract void draw(Graphics graphics);
 }

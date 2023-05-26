@@ -1,78 +1,68 @@
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.List;
 import java.util.Set;
 
-import game.characters.Player;
+import game.entities.Player;
 import gui.GamePanel;
+import gui.Panel;
 import input.Command;
 import input.KeyHandler;
 import input.Keys;
 
 public class Gameplay {
 
-	int pos_x, pos_y;
+    int pos_x, pos_y;
 
-	final GamePanel panel;
-	final KeyHandler keyHandler;
-	private BufferedImage backBuffer;
-	public Player player;
+    final GamePanel panel;
+    final KeyHandler keyHandler;
 
-	public Gameplay(GamePanel panel, KeyHandler keyHandler) {
-		this.panel = (GamePanel) panel;
-		this.keyHandler = keyHandler;
-		this.panel.addKeyListener(keyHandler);
-		this.panel.addMouseListener(keyHandler);
-	}
+    private Player player;
 
-	public void init() {
-		backBuffer = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_ARGB);
-		player = new Player();
-	}
 
-	public void run() {
+    public Gameplay(Panel panel, KeyHandler keyHandler) {
+        this.panel = (GamePanel) panel;
+        this.keyHandler = keyHandler;
+    }
 
-		long lastTick = System.currentTimeMillis();
+    public void init() {
+        player = new Player();
+    }
 
-		while (true) {
-			long currentTick = System.currentTimeMillis();
-			double diffSeconds = (currentTick - lastTick) / 100.0;
-			lastTick = currentTick;
+    public void run() {
 
-			panel.clear();
+        long lastTick = System.currentTimeMillis();
 
-			try {
-				handleUserInput();
-			} catch (Exception e) {
-				System.out.println(e.getCause());
-			}
+        while (true) {
+            long currentTick = System.currentTimeMillis();
+            double diffSeconds = (currentTick - lastTick) / 100.0;
+            lastTick = currentTick;
 
-			drawElements();
 
+//			try {
+//				handleUserInput();
+//			} catch (Exception e) {
+//				System.out.println(e.getCause());
+//			}
+//
 			update(diffSeconds);
 
+			panel.clear();
+			drawElements();
 			panel.redraw();
 			System.out.flush();
 
-			panel.getGraphics().drawImage(backBuffer, 0, 0, null);
-		}
-	}
+        }
+    }
 
 	private void update(double diffSeconds) {
 		player.move(diffSeconds);
 	}
 
-	private void drawElements() {
-		Graphics g = (Graphics) backBuffer.getGraphics();
+    private void drawElements() {
 		panel.draw(player);
-		g.dispose();
-	}
 
-	private void handleUserInput() {
-		final Set<Keys> pressedKeys = keyHandler.getKeys();
+    }
+
+    private void handleUserInput() {
+        final Set<Keys> pressedKeys = keyHandler.getKeys();
 		final Set<Keys> pressedMouseButtons = keyHandler.getMouseButtons();
 
 		for (Keys keyCode : pressedKeys) {

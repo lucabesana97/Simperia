@@ -1,11 +1,9 @@
 package gui;
 
-import javax.swing.*;
-
 /**
  * The pause panel that appears when the game is paused.
  */
-public class PausePanel extends JPanel {
+public class PausePanel extends Panel {
 
     public void resumeClicked() {
 

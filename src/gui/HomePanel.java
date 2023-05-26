@@ -1,8 +1,6 @@
 package gui;
 
-import javax.swing.*;
-
-public class HomePanel extends JPanel {
+public class HomePanel extends Panel {
 
     public void newGameClicked() {
 

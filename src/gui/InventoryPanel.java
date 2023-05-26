@@ -1,8 +1,6 @@
 package gui;
 
-import javax.swing.*;
-
-public class InventoryPanel extends JPanel {
+public class InventoryPanel extends Panel {
 
     public void useItemClicked() {
 
