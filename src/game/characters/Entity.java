@@ -3,7 +3,9 @@ package game.characters;
 import game.Coordinates;
 import game.Sprites;
 
-public abstract class Character {
+import java.awt.*;
+
+public abstract class Entity {
     public Sprites sprites;
     public String name;
     public double speed;
@@ -15,9 +17,9 @@ public abstract class Character {
     public int level;
 
 
-    public Character() {}
+    public Entity() {}
 
-    public void attack(Character character) {
+    public void attack(Entity entity) {
         //TODO add implementation of attack
     }
 
@@ -29,9 +31,11 @@ public abstract class Character {
         //TODO add implementation of dying
     }
 
-    public void move() {
+    public void move(double diffSeconds) {
         //TODO add implementation of movement
     }
 
-    public abstract void draw();
+    public void draw(Graphics g) {
+        g.fillRoundRect((int)coordinates.x, (int)coordinates.y,coordinates.size,coordinates.size,4,4);
+    }
 }

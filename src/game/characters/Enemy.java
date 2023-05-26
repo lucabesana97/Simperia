@@ -2,13 +2,15 @@ package game.characters;
 
 import game.inventory.InventoryItem;
 
-public class Enemy extends Character{
+import java.awt.*;
+
+public class Enemy extends Entity {
     InventoryItem loot;
     int experienceOnKill;
     int moneyOnKill;
 
     @Override
-    public void draw() {
+    public void draw(Graphics g) {
 
     }
 }

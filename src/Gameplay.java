@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import java.util.List;
 import java.util.Set;
 
+import game.characters.Player;
 import gui.GamePanel;
 import input.Command;
 import input.KeyHandler;
@@ -18,15 +19,18 @@ public class Gameplay {
 	final GamePanel panel;
 	final KeyHandler keyHandler;
 	private BufferedImage backBuffer;
-
+	public Player player;
 
 	public Gameplay(GamePanel panel, KeyHandler keyHandler) {
 		this.panel = (GamePanel) panel;
 		this.keyHandler = keyHandler;
+		this.panel.addKeyListener(keyHandler);
+		this.panel.addMouseListener(keyHandler);
 	}
 
 	public void init() {
 		backBuffer = new BufferedImage(panel.getWidth(), panel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		player = new Player();
 	}
 
 	public void run() {
@@ -38,16 +42,18 @@ public class Gameplay {
 			double diffSeconds = (currentTick - lastTick) / 100.0;
 			lastTick = currentTick;
 
+			panel.clear();
+
 			try {
 				handleUserInput();
 			} catch (Exception e) {
 				System.out.println(e.getCause());
 			}
 
+			drawElements();
+
 			update(diffSeconds);
 
-			panel.clear();
-			drawElements();
 			panel.redraw();
 			System.out.flush();
 
@@ -56,31 +62,31 @@ public class Gameplay {
 	}
 
 	private void update(double diffSeconds) {
-
+		player.move(diffSeconds);
 	}
 
 	private void drawElements() {
 		Graphics g = (Graphics) backBuffer.getGraphics();
+		panel.draw(player);
 		g.dispose();
 	}
 
 	private void handleUserInput() {
 		final Set<Keys> pressedKeys = keyHandler.getKeys();
+		final Set<Keys> pressedMouseButtons = keyHandler.getMouseButtons();
 
-		// Create a list to store the commands to execute
-		List<Command> commandsToExecute = new ArrayList<>();
-
-		// Iterate over the pressed keys
 		for (Keys keyCode : pressedKeys) {
 			Command command = keyCode.getCommand();
 			if (command != null) {
-				commandsToExecute.add(command);
+				command.execute(keyCode);
 			}
 		}
 
-		// Execute the commands
-		for (Command command : commandsToExecute) {
-			command.execute();
+		for (Keys mouseCode : pressedMouseButtons) {
+			Command command = mouseCode.getCommand();
+			if (command != null) {
+				command.execute(mouseCode, keyHandler.mouseX, keyHandler.mouseY);
+			}
 		}
 	}
 }
