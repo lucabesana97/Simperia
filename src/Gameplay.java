@@ -36,12 +36,12 @@ public class Gameplay {
             lastTick = currentTick;
 
 
-//			try {
-//				handleUserInput();
-//			} catch (Exception e) {
-//				System.out.println(e.getCause());
-//			}
-//
+			try {
+				handleUserInput();
+			} catch (Exception e) {
+				System.out.println(e.getCause());
+			}
+
 			update(diffSeconds);
 
 			panel.clear();
