@@ -29,6 +29,8 @@ public class Player extends Entity implements Movable {
     }
 
     public void draw(Graphics graphics) {
+        //TODO edit so it draws different sprites depending on the direction of the movement
+
         URL url48 = getClass().getResource("/sprites/enemies/Test-48.png");
         URL url64 = getClass().getResource("/sprites/enemies/Test-64.png");
         URL url128 = getClass().getResource("/sprites/enemies/Test-128.png");
@@ -46,7 +48,7 @@ public class Player extends Entity implements Movable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //TODO add implementation of drawing
+
         graphics.drawImage(image48, 100, 100, null);
         graphics.drawImage(image64, 200, 100, null);
         graphics.drawImage(image128, 100, 300, null);
@@ -58,6 +60,7 @@ public class Player extends Entity implements Movable {
 
     @Override
     public void move(double diffSeconds) {
+        //TODO edit so player moves with keys pressed
         coordinates.moveX(20 * diffSeconds);
     }
 
