@@ -12,10 +12,10 @@ public class Sprites {
 
     public BufferedImage current;
 
-    public Sprites(BufferedImage side) {
-        this.side = new BufferedImage[1];
-        this.side[0] = side;
-        this.current = side;
+    public Sprites() {
+//        this.side = new BufferedImage[1];
+//        this.side[0] = side;
+//        this.current = side;
     }
 
     //TODO add implementation of sprite changing

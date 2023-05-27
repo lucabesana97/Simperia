@@ -2,7 +2,6 @@ package game.entities;
 
 import game.Coordinates;
 import game.Movable;
-import game.Sprites;
 import gui.Frame;
 
 import javax.imageio.ImageIO;
@@ -10,6 +9,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.BufferOverflowException;
+
+import static helperFunctions.utility.resize;
 
 public class Player extends Entity implements Movable {
     public int money;
@@ -17,51 +19,36 @@ public class Player extends Entity implements Movable {
     public int experienceToNextLevel;
 
     public Player() {
-
-//        try {
-////            URL url = getClass().getResource("/sprites/enemies/Octopus-mad-down-1.png");
-////            sprites = new Sprites(ImageIO.read(url));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        coordinates = new Coordinates(Frame.WIDTH / 2, Frame.HEIGHT / 2, 100, 100);
-    }
-
-    public void draw(Graphics graphics) {
-        //TODO edit so it draws different sprites depending on the direction of the movement
-
-        URL url48 = getClass().getResource("/sprites/enemies/Test-48.png");
-        URL url64 = getClass().getResource("/sprites/enemies/Test-64.png");
-        URL url128 = getClass().getResource("/sprites/enemies/Test-128.png");
-        URL url256 = getClass().getResource("/sprites/enemies/Test-256.png");
-        BufferedImage image48;
-        BufferedImage image64;
-        BufferedImage image128;
-        BufferedImage image256;
-        try {
-            image48 = ImageIO.read(url48);
-            image64 = ImageIO.read(url64);
-            image128 = ImageIO.read(url128);
-            image256 = ImageIO.read(url256);
-
+        URL url = getClass().getResource("/sprites/player/Idle-1.png");
+        BufferedImage image;
+        try{
+            image = ImageIO.read(url);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        graphics.drawImage(image48, 100, 100, null);
-        graphics.drawImage(image64, 200, 100, null);
-        graphics.drawImage(image128, 100, 300, null);
-        graphics.drawImage(image256, 200, 300, null);
-//        graphics.drawImage(sprites.current, (int) coordinates.center_x, (int) coordinates.center_y, null);
+        sprites.current = resize(image);
+        coordinates = new Coordinates(Frame.WIDTH / 2 - 24, Frame.HEIGHT / 2 - 24, 48, 48);
+    }
 
+    public void draw(Graphics graphics) {
+        //TODO edit so it draws different sprites depending on the direction of the movement
+        int x = (int)(coordinates.topLeftCorner_x);
+        int y = (int)(coordinates.topLeftCorner_y);
+        graphics.drawImage(sprites.current, x, y, null);
+        // draw circle around player
+        graphics.setColor(Color.RED);
+        graphics.drawRect(x, y, 48, 48);
+        graphics.drawLine(0, Frame.HEIGHT/2, Frame.WIDTH, Frame.HEIGHT/2);
+        graphics.drawLine(Frame.WIDTH/2, 0, Frame.WIDTH/2, Frame.HEIGHT);
+        graphics.drawRect(0, 0, Frame.WIDTH-1, Frame.HEIGHT-1);
+//        graphics.drawRect(0, 0, Frame.WIDTH, Frame.HEIGHT);
 
     }
 
     @Override
     public void move(double diffSeconds) {
         //TODO edit so player moves with keys pressed
-        coordinates.moveX(20 * diffSeconds);
+//        coordinates.moveX(20 * diffSeconds);
     }
-
 }

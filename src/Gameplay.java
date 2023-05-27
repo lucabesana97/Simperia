@@ -1,5 +1,7 @@
 import java.util.Set;
 
+import game.entities.Enemy;
+import game.entities.Octopus;
 import game.entities.Player;
 import gui.GamePanel;
 import gui.Panel;
@@ -15,6 +17,7 @@ public class Gameplay {
     final KeyHandler keyHandler;
 
     private Player player;
+	private Enemy[] enemy = new Enemy[10];
 
 
     public Gameplay(Panel panel, KeyHandler keyHandler) {
@@ -29,7 +32,7 @@ public class Gameplay {
     public void run() {
 
         long lastTick = System.currentTimeMillis();
-
+		enemy[0] = new Octopus();
         while (true) {
             long currentTick = System.currentTimeMillis();
             double diffSeconds = (currentTick - lastTick) / 100.0;
@@ -54,10 +57,14 @@ public class Gameplay {
 
 	private void update(double diffSeconds) {
 		player.move(diffSeconds);
+		enemy[0].move(diffSeconds, player.coordinates);
 	}
 
     private void drawElements() {
+
+		panel.draw(enemy[0]);
 		panel.draw(player);
+//		panel.draw(player);
 
     }
 

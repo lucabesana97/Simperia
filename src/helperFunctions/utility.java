@@ -1,0 +1,32 @@
+package helperFunctions;
+import java.lang.Math;
+
+import game.Coordinates;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+public class utility {
+    public static BufferedImage resize(BufferedImage img) {
+        int newW = 48;
+        int newH = 48;
+        Image tmp = img.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+        BufferedImage dimg = new BufferedImage(newW, newH, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2d = dimg.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+
+        return dimg;
+    }
+
+    public static int distanceBetweenCoordinates(Coordinates a, Coordinates b) {
+
+        int aCenterX = (int) (a.topLeftCorner_x + a.bottomRightCorner_x) / 2;
+        int aCenterY = (int) (a.topLeftCorner_y + a.bottomRightCorner_y) / 2;
+        int bCenterX = (int) (b.topLeftCorner_x + b.bottomRightCorner_x) / 2;
+        int bCenterY = (int) (b.topLeftCorner_y + b.bottomRightCorner_y) / 2;
+
+        return (int) Math.sqrt(Math.pow(aCenterX - bCenterX, 2) + Math.pow(aCenterY - bCenterY, 2));
+    }
+}

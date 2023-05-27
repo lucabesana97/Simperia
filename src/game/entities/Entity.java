@@ -17,7 +17,17 @@ public abstract class Entity extends GameObject {
     public int defense;
     public int level;
 
-    public Entity() {}
+    public Entity() {
+        super();
+        this.coordinates = new Coordinates(0, 0, 100, 100);
+
+        this.health = 100;
+        this.maxHealth = 100;
+        this.attack = 10;
+        this.defense = 10;
+        this.level = 1;
+        this.sprites = new Sprites();
+    }
 
     public void attack(Entity entity) {
         //TODO add implementation of attack
