@@ -1,22 +1,30 @@
 package game.entities;
 import game.Coordinates;
 import objState.EnemyState;
+import objState.MovingState;
 
 import java.lang.Math;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.URL;
+import java.util.Random;
 
+import static helperFunctions.utility.createFlipped;
 import static helperFunctions.utility.distanceBetweenCoordinates;
 
 public class Octopus extends Enemy{
     public Octopus() {
         super();
-        this.speed = 10;
+        this.speed = 5;
         this.name = "Octopus";
-        this.coordinates = new Coordinates(300, 650, 48, 31);
+        // Coordinates fixed for now, will be changed later
+        int x = 300;
+        int y = 300;
+        this.coordinates = new Coordinates(x, y, 48, 31);
+        this.whereToMove = getNewCoordinates(); // Random coordinates to move to when roaming around
 
+        // Loading the sprites
         URL idle_down_1 = getClass().getResource("/sprites/enemies/Octopus-idle-down-1.png");
         URL idle_down_2 = getClass().getResource("/sprites/enemies/Octopus-idle-down-2.png");
         URL idle_up_1 = getClass().getResource("/sprites/enemies/Octopus-idle-up-1.png");
@@ -48,34 +56,38 @@ public class Octopus extends Enemy{
             throw new RuntimeException(e);
         }
 
-        sprites.idle = new BufferedImage[4];
+        sprites.idle = new BufferedImage[1];
         sprites.idle[0] = image_idle_down_1;
-        sprites.idle[1] = image_idle_down_2;
-        sprites.idle[2] = image_idle_up_1;
-        sprites.idle[3] = image_idle_up_2;
 
-        sprites.up = new BufferedImage[4];
-        sprites.up[0] = image_idle_up_1;
-        sprites.up[1] = image_idle_up_2;
-        sprites.up[2] = image_mad_up_1;
-        sprites.up[3] = image_mad_up_2;
+        sprites.up_left = new BufferedImage[2];
+        sprites.up_left[0] = image_idle_up_1;
+        sprites.up_left[1] = image_idle_up_2;
 
-        sprites.down = new BufferedImage[4];
-        sprites.down[0] = image_idle_down_1;
-        sprites.down[1] = image_idle_down_2;
-        sprites.down[2] = image_mad_down_1;
-        sprites.down[3] = image_mad_down_2;
+        sprites.up_right = new BufferedImage[2];
+        sprites.up_right[0] = createFlipped(image_idle_up_1);
+        sprites.up_right[1] = createFlipped(image_idle_up_2);
+
+        sprites.down_left = new BufferedImage[2];
+        sprites.down_left[0] = image_idle_down_1;
+        sprites.down_left[1] = image_idle_down_2;
+
+        sprites.down_right = new BufferedImage[2];
+        sprites.down_right[0] = createFlipped(image_idle_down_1);
+        sprites.down_right[1] = createFlipped(image_idle_down_2);
 
         sprites.current = sprites.idle[0];
     }
 
     public void move(double diffSeconds, Coordinates playerCoordinates) {
-        //TODO edit so player moves with keys pressed
+        // Calculate the distance between the player and the enemy
         int distance = distanceBetweenCoordinates(this.coordinates, playerCoordinates);
 
-        if (distance < 2) {
-            if (distance < 2){
-                this.enemyState = EnemyState.ATTACKING;
+        // If the player is within x pixels, the enemy is hostile
+        // If the player is within y pixels, the enemy is shooting
+        // Otherwise the enemy is friendly
+        if (distance < 200) {
+            if (distance < 50){
+                this.enemyState = EnemyState.SHOOTING;
             }else{
                 this.enemyState = EnemyState.HOSTILE;
             }
@@ -83,18 +95,29 @@ public class Octopus extends Enemy{
             this.enemyState = EnemyState.FRIENDLY;
         }
 
-        if (this.enemyState != EnemyState.HOSTILE){
-            runTowardsPlayer(diffSeconds, playerCoordinates);
+        // If the enemy is hostile, run towards the player
+        // If the enemy is friendly, run towards a random point
+        if (this.enemyState == EnemyState.HOSTILE){
+            runTowardsCoordinates(diffSeconds, playerCoordinates);
+            this.whereToMove = getNewCoordinates();
+        } else if (this.enemyState == EnemyState.FRIENDLY){
+            runTowardsCoordinates(diffSeconds, this.whereToMove);
+            if (distanceBetweenCoordinates(this.coordinates, this.whereToMove) < 3){
+                this.whereToMove = getNewCoordinates();
+            }
         }
+        // Recalculate which sprite to show
+        this.sprites.calculateSprite(this.movingState, diffSeconds);
     }
 
-    public void runTowardsPlayer(double diffSeconds, Coordinates playerCoordinates){
+
+    private void runTowardsCoordinates(double diffSeconds, Coordinates goalCoordinates){
 
         int aCenterX = (int) (this.coordinates.topLeftCorner_x + this.coordinates.bottomRightCorner_x) / 2;
         int aCenterY = (int) (this.coordinates.topLeftCorner_y + this.coordinates.bottomRightCorner_y) / 2;
 
-        int bCenterX = (int) (playerCoordinates.topLeftCorner_x + playerCoordinates.bottomRightCorner_x) / 2;
-        int bCenterY = (int) (playerCoordinates.topLeftCorner_y + playerCoordinates.bottomRightCorner_y) / 2;
+        int bCenterX = (int) (goalCoordinates.topLeftCorner_x + goalCoordinates.bottomRightCorner_x) / 2;
+        int bCenterY = (int) (goalCoordinates.topLeftCorner_y + goalCoordinates.bottomRightCorner_y) / 2;
 
         double xDistance = aCenterX - bCenterX;
         double yDistance = aCenterY - bCenterY;
@@ -102,7 +125,22 @@ public class Octopus extends Enemy{
         double xSpeed = -1 * (xDistance / totalDistance);
         double ySpeed = -1 * (yDistance / totalDistance);
 
+        calculateOrientation(xSpeed, ySpeed);
+
         this.coordinates.moveX(xSpeed * this.speed * diffSeconds);
         this.coordinates.moveY(ySpeed * this.speed * diffSeconds);
     }
+
+    private void calculateOrientation(double xSpeed, double ySpeed) {
+        if (xSpeed < 0 && ySpeed < 0) {
+            this.movingState = MovingState.UP_LEFT;
+        } else if (xSpeed > 0 && ySpeed < 0) {
+            this.movingState = MovingState.UP_RIGHT;
+        } else if (xSpeed < 0 && ySpeed > 0) {
+            this.movingState = MovingState.DOWN_LEFT;
+        } else if (xSpeed > 0 && ySpeed > 0) {
+            this.movingState = MovingState.DOWN_RIGHT;
+        }
+        }
+
 }
