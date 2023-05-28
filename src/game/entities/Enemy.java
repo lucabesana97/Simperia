@@ -41,33 +41,13 @@ public class Enemy extends Entity implements Movable {
         int y = rand.nextInt(2 * pixelsToMove) - pixelsToMove + (int) (this.coordinates.topLeftCorner_y + this.coordinates.bottomRightCorner_y)/2;
         return new Coordinates(x, y, 0, 0);
     }
+    @Override
+    public void die(){
+        super.die();
+        this.enemyState = EnemyState.DEAD;
+    }
 
-    public void move(double diffSeconds, Coordinates playerCoordinates) {
-        //TODO add implementation of movement
-        // check the distance between the player and the enemy
-        // if the distance is less than 100 pixels, the enemy becomes hostile
-        // if the enemy is hostile, it moves towards the player
-
-//        if (enemyState == EnemyState.HOSTILE) {
-//            if (movingState == MovingState.STILL) {
-//                movingState = MovingState.;
-//            }
-//            if (movingState == MovingState.MOVING) {
-//                if (coordinates.topLeftCorner_x < playerCoordinates.topLeftCorner_x) {
-//                    coordinates.moveX(speed * diffSeconds);
-//                }
-//                if (coordinates.topLeftCorner_x > playerCoordinates.topLeftCorner_x) {
-//                    coordinates.moveX(-speed * diffSeconds);
-//                }
-//                if (coordinates.topLeftCorner_y < playerCoordinates.topLeftCorner_y) {
-//                    coordinates.moveY(speed * diffSeconds);
-//                }
-//                if (coordinates.topLeftCorner_y > playerCoordinates.topLeftCorner_y) {
-//                    coordinates.moveY(-speed * diffSeconds);
-//                }
-//            }
-//    }
-
+    public void move(double diffSeconds, Player player) {
     }
 }
 

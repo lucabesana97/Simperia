@@ -28,7 +28,8 @@ public class Player extends Entity implements Movable {
         }
 
         sprites.current = resize(image);
-        coordinates = new Coordinates(Frame.WIDTH / 2 - 24, Frame.HEIGHT / 2 - 24, 48, 48);
+        this.name = "Player";
+        this.coordinates = new Coordinates(Frame.WIDTH / 2 - 24, Frame.HEIGHT / 2 - 24, 48, 48);
     }
 
     public void draw(Graphics graphics) {
@@ -48,6 +49,7 @@ public class Player extends Entity implements Movable {
 
     @Override
     public void move(double diffSeconds) {
+        this.invincibilityTimer += diffSeconds;
         //TODO edit so player moves with keys pressed
 //        coordinates.moveX(20 * diffSeconds);
     }

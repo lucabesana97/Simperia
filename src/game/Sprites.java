@@ -1,15 +1,21 @@
 package game;
 
+import objState.EnemyState;
 import objState.MovingState;
 
 import java.awt.image.BufferedImage;
 
 public class Sprites {
-    public BufferedImage[] idle;
-    public BufferedImage[] up_left;
-    public BufferedImage[] up_right;
-    public BufferedImage[] down_left;
-    public BufferedImage[] down_right;
+    public BufferedImage[] friendly_idle;
+    public BufferedImage[] friendly_up_left;
+    public BufferedImage[] friendly_up_right;
+    public BufferedImage[] friendly_down_left;
+    public BufferedImage[] friendly_down_right;
+    public BufferedImage[] hostile_idle;
+    public BufferedImage[] hostile_up_left;
+    public BufferedImage[] hostile_up_right;
+    public BufferedImage[] hostile_down_left;
+    public BufferedImage[] hostile_down_right;
     public BufferedImage[] attack;
     public BufferedImage dead;
 
@@ -34,67 +40,75 @@ public class Sprites {
 
     // calculateSprite is called every frame from the Entity class (Octopus for example)
     // It is responsible for changing the sprite based on the current movingState and time passed since last changed sprite
-    public void calculateSprite(MovingState movingState, double diffSeconds) {
+    public void calculateSprite(EnemyState enemyState, MovingState movingState, double diffSeconds) {
         if (movingState == lastMovingState) {
             timeSinceLastFrame += diffSeconds;
             if (timeSinceLastFrame > timePerFrame) {
                 if (movingState == MovingState.STILL) {
-                    if (lastIndexFrame == 0) {
-                        current = idle[1];
-                        lastIndexFrame = 1;
-                    } else {
-                        current = idle[0];
-                        lastIndexFrame = 0;
-                    }
+                    chooseSprite(enemyState, friendly_idle, hostile_idle);
                 } else if (movingState == MovingState.UP_LEFT) {
-                    if (lastIndexFrame == 0) {
-                        current = up_left[1];
-                        lastIndexFrame = 1;
-                    } else {
-                        current = up_left[0];
-                        lastIndexFrame = 0;
-                    }
+                    chooseSprite(enemyState, friendly_up_left, hostile_up_left);
                 } else if (movingState == MovingState.UP_RIGHT) {
-                    if (lastIndexFrame == 0) {
-                        current = up_right[1];
-                        lastIndexFrame = 1;
-                    } else {
-                        current = up_right[0];
-                        lastIndexFrame = 0;
-                    }
+                    chooseSprite(enemyState, friendly_up_right, hostile_up_right);
                 } else if (movingState == MovingState.DOWN_LEFT) {
-                    if (lastIndexFrame == 0) {
-                        current = down_left[1];
-                        lastIndexFrame = 1;
-                    } else {
-                        current = down_left[0];
-                        lastIndexFrame = 0;
-                    }
+                    chooseSprite(enemyState, friendly_down_left, hostile_down_left);
                 } else if (movingState == MovingState.DOWN_RIGHT) {
-                    if (lastIndexFrame == 0) {
-                        current = down_right[1];
-                        lastIndexFrame = 1;
-                    } else {
-                        current = down_right[0];
-                        lastIndexFrame = 0;
-                    }
+                    chooseSprite(enemyState, friendly_down_right, hostile_down_right);
                 }
                 timeSinceLastFrame = 0;
             }
         } else {
 //            timeSinceLastFrame = 0;
             if (movingState == MovingState.STILL) {
-                current = idle[0];
+                if(enemyState == EnemyState.FRIENDLY){
+                    current = friendly_idle[0];
+                } else {
+                    current = hostile_idle[0];
+                }
             } else if (movingState == MovingState.UP_LEFT) {
-                current = up_left[0];
+                if(enemyState == EnemyState.FRIENDLY){
+                    current = friendly_up_left[0];
+                } else {
+                    current = hostile_up_left[0];
+                }
             } else if (movingState == MovingState.UP_RIGHT) {
-                current = up_right[0];
+                if(enemyState == EnemyState.FRIENDLY){
+                    current = friendly_up_right[0];
+                } else {
+                    current = hostile_up_right[0];
+                }
             } else if (movingState == MovingState.DOWN_LEFT) {
-                current = down_left[0];
+                if(enemyState == EnemyState.FRIENDLY){
+                    current = friendly_down_left[0];
+                } else {
+                    current = hostile_down_left[0];
+                }
             } else if (movingState == MovingState.DOWN_RIGHT) {
-                current = down_right[0];
+                if(enemyState == EnemyState.FRIENDLY){
+                    current = friendly_down_right[0];
+                } else {
+                    current = hostile_down_right[0];
+                }
             }
             lastMovingState = movingState;
+        }
+    }
+
+    private void chooseSprite(EnemyState enemyState, BufferedImage[] friendlyDownRight, BufferedImage[] hostileDownRight) {
+        if (lastIndexFrame == 0) {
+            if (enemyState == EnemyState.FRIENDLY) {
+                current = friendlyDownRight[1];
+            } else {
+                current = hostileDownRight[1];
+            }
+            lastIndexFrame = 1;
+        } else {
+            if (enemyState == EnemyState.FRIENDLY) {
+                current = friendlyDownRight[0];
+            } else {
+                current = hostileDownRight[0];
+            }
+            lastIndexFrame = 0;
         }
     }
 

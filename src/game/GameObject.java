@@ -4,12 +4,12 @@ import java.awt.*;
 
 public abstract class GameObject {
 
-    Coordinates coordinates;
+    public Coordinates coordinates;
 
     public abstract void draw(Graphics graphics);
 
     public boolean isColliding(GameObject other) {
-        return false;
+        return this.coordinates.intersects(other.coordinates);
     }
 
 }

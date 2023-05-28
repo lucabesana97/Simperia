@@ -1,5 +1,9 @@
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import game.entities.Bullet;
 import game.entities.Enemy;
 import game.entities.Octopus;
 import game.entities.Player;
@@ -8,6 +12,7 @@ import gui.Panel;
 import input.Command;
 import input.KeyHandler;
 import input.Keys;
+import objState.EnemyState;
 
 public class Gameplay {
 
@@ -17,7 +22,7 @@ public class Gameplay {
     final KeyHandler keyHandler;
 
     private Player player;
-	private Enemy[] enemy = new Enemy[10];
+	private List<Enemy> enemies = new ArrayList<>();
 
 
     public Gameplay(Panel panel, KeyHandler keyHandler) {
@@ -32,7 +37,7 @@ public class Gameplay {
     public void run() {
 
         long lastTick = System.currentTimeMillis();
-		enemy[0] = new Octopus();
+		enemies.add(new Octopus());
         while (true) {
             long currentTick = System.currentTimeMillis();
             double diffSeconds = (currentTick - lastTick) / 100.0;
@@ -57,12 +62,23 @@ public class Gameplay {
 
 	private void update(double diffSeconds) {
 		player.move(diffSeconds);
-		enemy[0].move(diffSeconds, player.coordinates);
+		Iterator<Enemy> enemyIter = enemies.iterator();
+		while (enemyIter.hasNext()) {
+			Enemy enemy = enemyIter.next();
+			if (enemy != null && enemy.enemyState == EnemyState.DEAD){
+				enemyIter.remove();
+			}
+		}
+		for (Enemy enemy : enemies) {
+			enemy.move(diffSeconds, player);
+		}
+		System.gc();
 	}
 
     private void drawElements() {
-
-		panel.draw(enemy[0]);
+		for (Enemy enemy : enemies) {
+			panel.draw(enemy);
+		}
 		panel.draw(player);
 //		panel.draw(player);
 

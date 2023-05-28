@@ -10,15 +10,17 @@ public abstract class Entity extends GameObject {
     public Sprites sprites;
     public String name;
     public double speed;
-    public Coordinates coordinates;
     public int health;
     public int maxHealth;
     public int attack;
     public int defense;
     public int level;
+    public double invincibilityCooldown = 5;
+    public double invincibilityTimer = 0;
 
     public Entity() {
         super();
+
         this.coordinates = new Coordinates(0, 0, 100, 100);
 
         this.health = 100;
@@ -30,15 +32,23 @@ public abstract class Entity extends GameObject {
     }
 
     public void attack(Entity entity) {
-        //TODO add implementation of attack
+        System.out.println(this.name + " attacked " + entity.name + " for " + this.attack + " damage.");
+        entity.takeDamage(this.attack);
     }
 
     public void takeDamage(int damage) {
-        //TODO add implementation of taking damage
+        if (this.invincibilityTimer < this.invincibilityCooldown) {
+            return;
+        }
+        this.invincibilityTimer = 0;
+        this.health -= damage;
+        if (this.health <= 0) {
+            this.die();
+        }
     }
 
     public void die() {
-        //TODO add implementation of dying
+        System.out.println(this.name + " died.");
     }
 
     public void move(double diffSeconds) {

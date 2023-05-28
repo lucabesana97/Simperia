@@ -33,4 +33,11 @@ public class Coordinates {
         topLeftCorner_y += amount;
         adjustCoordinates();
     }
+
+    public boolean intersects(Coordinates other) {
+        return this.topLeftCorner_x < other.bottomRightCorner_x &&
+                this.bottomRightCorner_x > other.topLeftCorner_x &&
+                this.topLeftCorner_y < other.bottomRightCorner_y &&
+                this.bottomRightCorner_y > other.topLeftCorner_y;
+    }
 }
