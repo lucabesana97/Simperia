@@ -27,7 +27,7 @@ public class Sprites {
 
     public Sprites() {
         this.timeSinceLastFrame = 0;
-        this.timePerFrame = 0.5;
+        this.timePerFrame = 1.75;
         this.lastMovingState = MovingState.STILL;
         this.lastIndexFrame = 1;
 
