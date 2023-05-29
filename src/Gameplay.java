@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -9,10 +10,13 @@ import game.entities.Octopus;
 import game.entities.Player;
 import gui.GamePanel;
 import gui.Panel;
+import gui.PausePanel;
 import input.Command;
 import input.KeyHandler;
 import input.Keys;
 import objState.EnemyState;
+
+import javax.swing.*;
 
 public class Gameplay {
 
@@ -23,7 +27,8 @@ public class Gameplay {
 
     private Player player;
 	private List<Enemy> enemies = new ArrayList<>();
-
+	private PausePanel pausePanel;
+	private JButton pauseButton;
 
     public Gameplay(Panel panel, KeyHandler keyHandler) {
         this.panel = (GamePanel) panel;
@@ -31,10 +36,44 @@ public class Gameplay {
     }
 
     public void init() {
-        player = new Player();
+		player = new Player();
+
+		panel.addKeyListener(keyHandler);
+		panel.addMouseListener(keyHandler);
+
+		initializePauseButton();
+		initializePausePanel();
+
+		//panel.setFocusable(true);
     }
 
-    public void run() {
+	private void initializePauseButton() {
+		pauseButton = new JButton("Pause");
+		pauseButton.setBounds(panel.getWidth() - 90, 10, 70, 50);
+		pauseButton.setBackground(new Color(0X593DB5));
+		pauseButton.addActionListener(e -> {
+			pausePanel.setVisible(true);
+			//pauseButton.setVisible(false);
+		});
+		panel.add(pauseButton);
+	}
+
+	private void initializePausePanel() {
+		pausePanel = new PausePanel();
+		pausePanel.setBackground(Color.pink);
+		pausePanel.setVisible(false);
+
+		// Calculate the position to center the pause panel
+		int pausePanelWidth = (int) (panel.getWidth() * 0.5);
+		int pausePanelHeight = (int) (panel.getHeight() * 0.5);
+		int panelX = (panel.getWidth() - pausePanelWidth) / 2;
+		int panelY = (panel.getHeight() - pausePanelHeight) / 2;
+
+		pausePanel.setBounds(panelX, panelY, pausePanelWidth, pausePanelHeight);
+		panel.add(pausePanel, BorderLayout.CENTER);
+	}
+
+	public void run() {
 
         long lastTick = System.currentTimeMillis();
 		enemies.add(new Octopus());
@@ -80,8 +119,8 @@ public class Gameplay {
 			panel.draw(enemy);
 		}
 		panel.draw(player);
-//		panel.draw(player);
-
+		pauseButton.repaint();
+		pausePanel.repaint();
     }
 
     private void handleUserInput() {
