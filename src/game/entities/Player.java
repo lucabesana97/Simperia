@@ -44,7 +44,7 @@ public class Player extends Entity implements Movable {
         graphics.drawImage(sprites.current, screenX, screenY, null);
         // draw circle around player
         graphics.setColor(Color.RED);
-        graphics.drawRect(x, y, 48, 48);
+        graphics.drawRect(screenX, screenY, 48, 48);
         graphics.drawLine(0, GameFrame.HEIGHT/2, GameFrame.WIDTH, GameFrame.HEIGHT/2);
         graphics.drawLine(GameFrame.WIDTH/2, 0, GameFrame.WIDTH/2, GameFrame.HEIGHT);
         graphics.drawRect(0, 0, GameFrame.WIDTH-1, GameFrame.HEIGHT-1);

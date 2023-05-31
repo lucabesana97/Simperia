@@ -37,7 +37,7 @@ public class Enemy extends Entity implements Movable {
             screenY <= GameFrame.HEIGHT + coordinates.size_Y
         ) {
             BufferedImage image = sprites.current;
-            g.drawImage(image, (int) screenX, (int)screenY, null);
+            g.drawImage(image, (int) screenX - 24, (int)screenY - 24, null);
         }
     }
     // Get a random coordinate to move to. This is used when the enemy is roaming around. It is calculated as a random position

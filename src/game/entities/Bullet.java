@@ -1,6 +1,8 @@
 package game.entities;
 
 import game.Coordinates;
+import gui.GameFrame;
+import main.Gameplay;
 import objState.EnemyState;
 
 import javax.imageio.ImageIO;
@@ -34,8 +36,10 @@ public class Bullet extends Enemy{
     }
     @Override
     public void draw(Graphics graphics) {
+        screenX = GameFrame.WIDTH/2 - (Gameplay.player.coordinates.topLeftCorner_x - coordinates.topLeftCorner_x);
+        screenY = GameFrame.HEIGHT/2 - (Gameplay.player.coordinates.topLeftCorner_y - coordinates.topLeftCorner_y);
         BufferedImage image = sprites.current;
-        graphics.drawImage(image, (int) coordinates.topLeftCorner_x, (int) coordinates.topLeftCorner_y, null);
+        graphics.drawImage(image, (int) screenX - 24, (int) screenY - 24, null);
     }
 
     public void move(double diffSeconds, Player player) {
