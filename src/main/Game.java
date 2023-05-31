@@ -1,24 +1,24 @@
-import gui.Frame;
+package main;
+
+import gui.GameFrame;
 import gui.GamePanel;
 import gui.Panel;
 import input.KeyHandler;
 
 public class Game {
-	final private Frame frame;
+	final private GameFrame frame;
 	final private KeyHandler keyHandler;
 
 	private Gameplay gameplay;
 	private Panel panel;
 
 	public Game() {
-		frame = new Frame("Simperia");
+		frame = new GameFrame("Simperia");
 		keyHandler = new KeyHandler();
 		frame.addKeyListener(keyHandler);
 	}
 
 	public void init() {
-//		panel = new HomePanel();
-//		frame.setPanel(panel);
 	}
 
 	public void start() {

@@ -5,6 +5,8 @@ public class Coordinates {
     public double topLeftCorner_y;
     public double bottomRightCorner_x;
     public double bottomRightCorner_y;
+    public double worldX;
+    public double worldY;
 
     public final double size_X;
     public final double size_Y;

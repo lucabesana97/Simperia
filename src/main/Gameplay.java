@@ -1,3 +1,5 @@
+package main;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +9,7 @@ import game.entities.Bullet;
 import game.entities.Enemy;
 import game.entities.Octopus;
 import game.entities.Player;
+import game.environment.GameMap;
 import gui.GamePanel;
 import gui.Panel;
 import input.Command;
@@ -21,7 +24,8 @@ public class Gameplay {
     final GamePanel panel;
     final KeyHandler keyHandler;
 
-    private Player player;
+    public static Player player;
+	private GameMap map;
 	private List<Enemy> enemies = new ArrayList<>();
 
 
@@ -32,6 +36,7 @@ public class Gameplay {
 
     public void init() {
         player = new Player();
+		map = new GameMap(player);
     }
 
     public void run() {
@@ -76,30 +81,13 @@ public class Gameplay {
 	}
 
     private void drawElements() {
+		panel.draw(map);
 		for (Enemy enemy : enemies) {
 			panel.draw(enemy);
 		}
 		panel.draw(player);
-//		panel.draw(player);
 
     }
 
-    private void handleUserInput() {
-        final Set<Keys> pressedKeys = keyHandler.getKeys();
-		final Set<Keys> pressedMouseButtons = keyHandler.getMouseButtons();
-
-		for (Keys keyCode : pressedKeys) {
-			Command command = keyCode.getCommand();
-			if (command != null) {
-				command.execute(keyCode);
-			}
-		}
-
-		for (Keys mouseCode : pressedMouseButtons) {
-			Command command = mouseCode.getCommand();
-			if (command != null) {
-				command.execute(mouseCode, keyHandler.mouseX, keyHandler.mouseY);
-			}
-		}
-	}
+    private void handleUserInput() {}
 }

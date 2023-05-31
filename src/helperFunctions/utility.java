@@ -1,9 +1,11 @@
 package helperFunctions;
 import java.awt.geom.AffineTransform;
-import java.awt.image.ImageObserver;
 import java.lang.Math;
 
 import game.Coordinates;
+import game.entities.Entity;
+import game.environment.GameMap;
+import gui.GameFrame;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -77,5 +79,21 @@ public class utility {
         g2d.dispose();
 
         return rotated;
+    }
+
+    public boolean WallCollision(Entity entity){
+        int xLeft = (int)(entity.coordinates.topLeftCorner_x / GameFrame.TILE_SIZE);
+        int yLeft = (int)(entity.coordinates.topLeftCorner_y / GameFrame.TILE_SIZE);
+        int xRight = (int)(entity.coordinates.topLeftCorner_x / GameFrame.TILE_SIZE);
+        int yRight = (int)(entity.coordinates.topLeftCorner_y / GameFrame.TILE_SIZE);
+
+
+        if(GameMap.mapCollision[xLeft][yLeft] == 1 ||
+                GameMap.mapCollision[xLeft][yRight] == 1 ||
+                GameMap.mapCollision[xRight][yLeft] == 1 ||
+                GameMap.mapCollision[xRight][yRight] == 1){
+            return true;
+        }
+        return false;
     }
 }
