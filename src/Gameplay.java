@@ -9,6 +9,7 @@ import game.entities.Enemy;
 import game.entities.Octopus;
 import game.entities.Player;
 import gui.GamePanel;
+import gui.InventoryPanel;
 import gui.Panel;
 import gui.PausePanel;
 import input.Command;
@@ -28,11 +29,16 @@ public class Gameplay {
     private Player player;
 	private List<Enemy> enemies = new ArrayList<>();
 	private PausePanel pausePanel;
+	private InventoryPanel inventoryPanel;
 	private JButton pauseButton;
+	private JButton inventoryButton;
+	private boolean paused;
+
 
     public Gameplay(Panel panel, KeyHandler keyHandler) {
         this.panel = (GamePanel) panel;
         this.keyHandler = keyHandler;
+		paused = false;
     }
 
     public void init() {
@@ -41,11 +47,28 @@ public class Gameplay {
 		panel.addKeyListener(keyHandler);
 		panel.addMouseListener(keyHandler);
 
+		// Temporary buttons for testing
 		initializePauseButton();
-		initializePausePanel();
+		initializeInventoryButton();
 
-		//panel.setFocusable(true);
-    }
+		// Pause panel
+		pausePanel = new PausePanel();
+		panel.add(pausePanel);
+
+		// Inventory panel
+		inventoryPanel = new InventoryPanel();
+		panel.add(inventoryPanel);
+	}
+
+	private void initializeInventoryButton() {
+		inventoryButton = new JButton("Inventory");
+		inventoryButton.setBounds(panel.getWidth() - 210, 10, 100, 50);
+		inventoryButton.setBackground(new Color(0X593DB5));
+		inventoryButton.addActionListener(e -> {
+			inventoryPanel.setVisible(true);
+		});
+		panel.add(inventoryButton);
+	}
 
 	private void initializePauseButton() {
 		pauseButton = new JButton("Pause");
@@ -53,24 +76,9 @@ public class Gameplay {
 		pauseButton.setBackground(new Color(0X593DB5));
 		pauseButton.addActionListener(e -> {
 			pausePanel.setVisible(true);
-			//pauseButton.setVisible(false);
+			pause(); // Pause the game
 		});
 		panel.add(pauseButton);
-	}
-
-	private void initializePausePanel() {
-		pausePanel = new PausePanel();
-		pausePanel.setBackground(Color.pink);
-		pausePanel.setVisible(false);
-
-		// Calculate the position to center the pause panel
-		int pausePanelWidth = (int) (panel.getWidth() * 0.5);
-		int pausePanelHeight = (int) (panel.getHeight() * 0.5);
-		int panelX = (panel.getWidth() - pausePanelWidth) / 2;
-		int panelY = (panel.getHeight() - pausePanelHeight) / 2;
-
-		pausePanel.setBounds(panelX, panelY, pausePanelWidth, pausePanelHeight);
-		panel.add(pausePanel, BorderLayout.CENTER);
 	}
 
 	public void run() {
@@ -100,6 +108,15 @@ public class Gameplay {
     }
 
 	private void update(double diffSeconds) {
+		// Workaround to resume the game
+		if (!pausePanel.isVisible()) {
+			resume();
+		}
+
+		if (paused) {
+			return;
+		}
+
 		player.move(diffSeconds);
 		Iterator<Enemy> enemyIter = enemies.iterator();
 		while (enemyIter.hasNext()) {
@@ -120,7 +137,9 @@ public class Gameplay {
 		}
 		panel.draw(player);
 		pauseButton.repaint();
+		inventoryButton.repaint();
 		pausePanel.repaint();
+		inventoryPanel.repaint();
     }
 
     private void handleUserInput() {
@@ -140,5 +159,17 @@ public class Gameplay {
 				command.execute(mouseCode, keyHandler.mouseX, keyHandler.mouseY);
 			}
 		}
+	}
+
+	public void pause() {
+		paused = true;
+	}
+
+	public void resume() {
+		paused = false;
+	}
+
+	public boolean isPaused() {
+		return paused;
 	}
 }

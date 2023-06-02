@@ -17,7 +17,7 @@ public class Frame extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(WIDTH, HEIGHT);
 		setResizable(false);
-		setLayout(new OverlayLayout(getContentPane()));
+		//setLayout(new OverlayLayout(getContentPane()));
 
 		// Set window to be visible
 		setVisible(true);

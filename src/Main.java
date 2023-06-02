@@ -5,7 +5,6 @@ public class Main {
 		Game game = new Game();
 		SwingUtilities.invokeLater(() -> {
 			game.init();
-
 		});
 		game.start();
 
