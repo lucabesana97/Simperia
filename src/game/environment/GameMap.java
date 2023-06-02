@@ -9,21 +9,23 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class GameMap {
-    public BufferedImage map;
+    public BufferedImage mapImage;
     public static int[][] mapCollision;
     public Player player;
 
-    public GameMap(Player player){
-        this.player = player;
+    public GameMap(){
         load();
     }
 
+    public void init(Player player){
+        this.player = player;
+    }
     private void load() {
         String str;
 
         str = "/sprites/maps/gameMap02.png";
         try {
-            map = ImageIO.read(getClass().getResourceAsStream(str));
+            mapImage = ImageIO.read(getClass().getResourceAsStream(str));
         } catch(Exception e) {System.out.println("Couldn't load player image: " + "\tReason: " + e.getCause());}
     }
 
@@ -37,10 +39,10 @@ public class GameMap {
 
         int startX = Math.max(x - regionWidth / 2, 0);
         int startY = Math.max(y - regionHeight / 2, 0);
-        int endX = Math.min(x + regionWidth / 2, map.getWidth());
-        int endY = Math.min(y + regionHeight / 2, map.getHeight());
+        int endX = Math.min(x + regionWidth / 2, mapImage.getWidth());
+        int endY = Math.min(y + regionHeight / 2, mapImage.getHeight());
 
         //g.drawImage(map, 0, 0, null); // Draw the entire map
-        g.drawImage(map.getSubimage(startX, startY, endX - startX, endY - startY), 0, 0, null);
+        g.drawImage(mapImage.getSubimage(startX, startY, endX - startX, endY - startY), 0, 0, null);
     }
 }

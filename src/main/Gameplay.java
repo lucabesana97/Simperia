@@ -5,10 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import game.entities.Bullet;
-import game.entities.Enemy;
-import game.entities.Octopus;
-import game.entities.Player;
+import game.Coordinates;
+import game.entities.*;
 import game.environment.GameMap;
 import gui.GamePanel;
 import gui.Panel;
@@ -25,8 +23,9 @@ public class Gameplay {
     final KeyHandler keyHandler;
 
     public static Player player;
-	private GameMap map;
+	public static GameMap map;
 	private List<Enemy> enemies = new ArrayList<>();
+	private List<Warp> warps = new ArrayList<>();
 
 
     public Gameplay(Panel panel, KeyHandler keyHandler) {
@@ -35,14 +34,16 @@ public class Gameplay {
     }
 
     public void init() {
-        player = new Player();
-		map = new GameMap(player);
+		map = new GameMap();
+		player = new Player();
+		map.init(player);
     }
 
     public void run() {
 
         long lastTick = System.currentTimeMillis();
 		enemies.add(new Octopus());
+		warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
         while (true) {
             long currentTick = System.currentTimeMillis();
             double diffSeconds = (currentTick - lastTick) / 100.0;
@@ -77,13 +78,25 @@ public class Gameplay {
 		for (Enemy enemy : enemies) {
 			enemy.move(diffSeconds, player);
 		}
+		Iterator<Warp> warpIter = warps.iterator();
+		while (warpIter.hasNext()) {
+			Warp warp = warpIter.next();
+			if (warp != null){
+				if(player.isColliding(warp)) {
+					player.teleport(warp);
+				}
+			}
+		}
 		System.gc();
 	}
 
     private void drawElements() {
 		panel.draw(map);
-		for (Enemy enemy : enemies) {
+		for(Enemy enemy : enemies) {
 			panel.draw(enemy);
+		}
+		for(Warp warp: warps){
+			panel.draw(warp);
 		}
 		panel.draw(player);
 
