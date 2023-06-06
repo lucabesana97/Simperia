@@ -20,7 +20,8 @@ public class KeyHandler implements KeyListener, MouseListener {
 		int keyCode = e.getKeyCode();
 		Keys key = toKey(keyCode);
 		if (key != null) {
-			pressedKeys.add(key);
+			key.getCommand().execute(key, true);
+			//pressedKeys.add(key);
 		}
 	}
 
@@ -29,7 +30,8 @@ public class KeyHandler implements KeyListener, MouseListener {
 		int keyCode = e.getKeyCode();
 		Keys key = toKey(keyCode);
 		if (key != null) {
-			pressedKeys.remove(key);
+			key.getCommand().execute(key, false);
+			//pressedKeys.remove(key);
 		}
 	}
 

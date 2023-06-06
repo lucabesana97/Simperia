@@ -27,8 +27,8 @@ public class Octopus extends Enemy{
         this.name = "Octopus";
         this.attack = 20;
         // Coordinates fixed for now, will be changed later
-        int x = 300;
-        int y = 300;
+        int x = 1000;
+        int y = 1000;
         this.coordinates = new Coordinates(x, y, 48, 31);
         this.whereToMove = getNewCoordinates(); // Random coordinates to move to when roaming around
         this.bullets = new ArrayList<>();

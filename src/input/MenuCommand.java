@@ -2,7 +2,7 @@ package input;
 
 public class MenuCommand implements Command{
     @Override
-    public void execute(Keys key) {
+    public void execute(Keys key, boolean pressed) {
         System.out.println("menu command executed with key: " + key);
     }
 

@@ -1,13 +1,16 @@
+
+package main;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.swing.JButton;
 
-import game.entities.Bullet;
-import game.entities.Enemy;
-import game.entities.Octopus;
-import game.entities.Player;
+import game.Coordinates;
+import game.entities.*;
+import game.environment.GameMap;
 import gui.GamePanel;
 import gui.InventoryPanel;
 import gui.Panel;
@@ -17,8 +20,6 @@ import input.KeyHandler;
 import input.Keys;
 import objState.EnemyState;
 
-import javax.swing.*;
-
 public class Gameplay {
 
     int pos_x, pos_y;
@@ -26,13 +27,15 @@ public class Gameplay {
     final GamePanel panel;
     final KeyHandler keyHandler;
 
-    private Player player;
+    public static Player player;
+	public static GameMap map;
 	private List<Enemy> enemies = new ArrayList<>();
 	private PausePanel pausePanel;
 	private InventoryPanel inventoryPanel;
 	private JButton pauseButton;
 	private JButton inventoryButton;
 	private boolean paused;
+	private List<Warp> warps = new ArrayList<>();
 
 
     public Gameplay(Panel panel, KeyHandler keyHandler) {
@@ -42,7 +45,9 @@ public class Gameplay {
     }
 
     public void init() {
+		map = new GameMap();
 		player = new Player();
+		map.init(player);
 
 		panel.addKeyListener(keyHandler);
 		panel.addMouseListener(keyHandler);
@@ -85,6 +90,7 @@ public class Gameplay {
 
         long lastTick = System.currentTimeMillis();
 		enemies.add(new Octopus());
+		warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
         while (true) {
             long currentTick = System.currentTimeMillis();
             double diffSeconds = (currentTick - lastTick) / 100.0;
@@ -128,12 +134,25 @@ public class Gameplay {
 		for (Enemy enemy : enemies) {
 			enemy.move(diffSeconds, player);
 		}
+		Iterator<Warp> warpIter = warps.iterator();
+		while (warpIter.hasNext()) {
+			Warp warp = warpIter.next();
+			if (warp != null){
+				if(player.isColliding(warp)) {
+					player.teleport(warp);
+				}
+			}
+		}
 		System.gc();
 	}
 
     private void drawElements() {
-		for (Enemy enemy : enemies) {
+		panel.draw(map);
+		for(Enemy enemy : enemies) {
 			panel.draw(enemy);
+		}
+		for(Warp warp: warps){
+			panel.draw(warp);
 		}
 		panel.draw(player);
 		pauseButton.repaint();
@@ -141,24 +160,7 @@ public class Gameplay {
 		pausePanel.repaint();
 		inventoryPanel.repaint();
     }
-
-    private void handleUserInput() {
-        final Set<Keys> pressedKeys = keyHandler.getKeys();
-		final Set<Keys> pressedMouseButtons = keyHandler.getMouseButtons();
-
-		for (Keys keyCode : pressedKeys) {
-			Command command = keyCode.getCommand();
-			if (command != null) {
-				command.execute(keyCode);
-			}
-		}
-
-		for (Keys mouseCode : pressedMouseButtons) {
-			Command command = mouseCode.getCommand();
-			if (command != null) {
-				command.execute(mouseCode, keyHandler.mouseX, keyHandler.mouseY);
-			}
-		}
+	private void handleUserInput() {
 	}
 
 	public void pause() {
@@ -172,4 +174,5 @@ public class Gameplay {
 	public boolean isPaused() {
 		return paused;
 	}
+
 }

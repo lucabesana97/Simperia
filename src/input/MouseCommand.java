@@ -9,7 +9,7 @@ public class MouseCommand implements Command{
     }
 
     @Override
-    public void execute(Keys key) {
+    public void execute(Keys key, boolean pressed) {
 
     }
 }

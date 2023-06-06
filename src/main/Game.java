@@ -1,3 +1,5 @@
+
+package main;
 import gui.GameFrame;
 import gui.GamePanel;
 import gui.Panel;
@@ -17,8 +19,6 @@ public class Game {
 	}
 
 	public void init() {
-//		panel = new HomePanel();
-//		frame.setPanel(panel);
 	}
 
 	public void start() {
