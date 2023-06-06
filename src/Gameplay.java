@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,11 +9,15 @@ import game.entities.Enemy;
 import game.entities.Octopus;
 import game.entities.Player;
 import gui.GamePanel;
+import gui.InventoryPanel;
 import gui.Panel;
+import gui.PausePanel;
 import input.Command;
 import input.KeyHandler;
 import input.Keys;
 import objState.EnemyState;
+
+import javax.swing.*;
 
 public class Gameplay {
 
@@ -23,18 +28,60 @@ public class Gameplay {
 
     private Player player;
 	private List<Enemy> enemies = new ArrayList<>();
+	private PausePanel pausePanel;
+	private InventoryPanel inventoryPanel;
+	private JButton pauseButton;
+	private JButton inventoryButton;
+	private boolean paused;
 
 
     public Gameplay(Panel panel, KeyHandler keyHandler) {
         this.panel = (GamePanel) panel;
         this.keyHandler = keyHandler;
+		paused = false;
     }
 
     public void init() {
-        player = new Player();
-    }
+		player = new Player();
 
-    public void run() {
+		panel.addKeyListener(keyHandler);
+		panel.addMouseListener(keyHandler);
+
+		// Temporary buttons for testing
+		initializePauseButton();
+		initializeInventoryButton();
+
+		// Pause panel
+		pausePanel = new PausePanel();
+		panel.add(pausePanel);
+
+		// Inventory panel
+		inventoryPanel = new InventoryPanel();
+		panel.add(inventoryPanel);
+	}
+
+	private void initializeInventoryButton() {
+		inventoryButton = new JButton("Inventory");
+		inventoryButton.setBounds(panel.getWidth() - 210, 10, 100, 50);
+		inventoryButton.setBackground(new Color(0X593DB5));
+		inventoryButton.addActionListener(e -> {
+			inventoryPanel.setVisible(true);
+		});
+		panel.add(inventoryButton);
+	}
+
+	private void initializePauseButton() {
+		pauseButton = new JButton("Pause");
+		pauseButton.setBounds(panel.getWidth() - 90, 10, 70, 50);
+		pauseButton.setBackground(new Color(0X593DB5));
+		pauseButton.addActionListener(e -> {
+			pausePanel.setVisible(true);
+			pause(); // Pause the game
+		});
+		panel.add(pauseButton);
+	}
+
+	public void run() {
 
         long lastTick = System.currentTimeMillis();
 		enemies.add(new Octopus());
@@ -61,6 +108,15 @@ public class Gameplay {
     }
 
 	private void update(double diffSeconds) {
+		// Workaround to resume the game
+		if (!pausePanel.isVisible()) {
+			resume();
+		}
+
+		if (paused) {
+			return;
+		}
+
 		player.move(diffSeconds);
 		Iterator<Enemy> enemyIter = enemies.iterator();
 		while (enemyIter.hasNext()) {
@@ -80,8 +136,10 @@ public class Gameplay {
 			panel.draw(enemy);
 		}
 		panel.draw(player);
-//		panel.draw(player);
-
+		pauseButton.repaint();
+		inventoryButton.repaint();
+		pausePanel.repaint();
+		inventoryPanel.repaint();
     }
 
     private void handleUserInput() {
@@ -101,5 +159,17 @@ public class Gameplay {
 				command.execute(mouseCode, keyHandler.mouseX, keyHandler.mouseY);
 			}
 		}
+	}
+
+	public void pause() {
+		paused = true;
+	}
+
+	public void resume() {
+		paused = false;
+	}
+
+	public boolean isPaused() {
+		return paused;
 	}
 }

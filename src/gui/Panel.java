@@ -6,8 +6,8 @@ import java.awt.image.BufferedImage;
 
 public abstract class Panel extends JPanel {
 
-    public static final int WIDTH = Frame.WIDTH;
-    public static final int HEIGHT = Frame.HEIGHT;
+    public static final int WIDTH = GameFrame.WIDTH;
+    public static final int HEIGHT = GameFrame.HEIGHT;
 
     //Output objects
     public Graphics graphics;
