@@ -3,7 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 
-public class Frame extends JFrame{
+public class GameFrame extends JFrame{
 
 	//Dimensions of the window
 	public static final int WIDTH = 1024;
@@ -11,7 +11,7 @@ public class Frame extends JFrame{
 
 	private Panel panel;
 	
-	public Frame(String title) {
+	public GameFrame(String title) {
 		// Set window properties
 		setTitle(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -1,17 +1,13 @@
 package game.entities;
 
 import game.Movable;
-import game.Sprites;
 import game.inventory.InventoryItem;
-import gui.Frame;
 import objState.EnemyState;
 import objState.MovingState;
 import game.Coordinates;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.util.Random;
 
 public class Enemy extends Entity implements Movable {

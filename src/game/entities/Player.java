@@ -2,14 +2,13 @@ package game.entities;
 
 import game.Coordinates;
 import game.Movable;
-import gui.Frame;
+import gui.GameFrame;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.BufferOverflowException;
 
 import static helperFunctions.utility.resize;
 
@@ -29,7 +28,7 @@ public class Player extends Entity implements Movable {
 
         sprites.current = resize(image);
         this.name = "Player";
-        this.coordinates = new Coordinates(Frame.WIDTH / 2 - 24, Frame.HEIGHT / 2 - 24, 48, 48);
+        this.coordinates = new Coordinates(GameFrame.WIDTH / 2 - 24, GameFrame.HEIGHT / 2 - 24, 48, 48);
     }
 
     public void draw(Graphics graphics) {
@@ -40,9 +39,9 @@ public class Player extends Entity implements Movable {
         // draw circle around player
         graphics.setColor(Color.RED);
         graphics.drawRect(x, y, 48, 48);
-        graphics.drawLine(0, Frame.HEIGHT/2, Frame.WIDTH, Frame.HEIGHT/2);
-        graphics.drawLine(Frame.WIDTH/2, 0, Frame.WIDTH/2, Frame.HEIGHT);
-        graphics.drawRect(0, 0, Frame.WIDTH-1, Frame.HEIGHT-1);
+        graphics.drawLine(0, GameFrame.HEIGHT/2, GameFrame.WIDTH, GameFrame.HEIGHT/2);
+        graphics.drawLine(GameFrame.WIDTH/2, 0, GameFrame.WIDTH/2, GameFrame.HEIGHT);
+        graphics.drawRect(0, 0, GameFrame.WIDTH-1, GameFrame.HEIGHT-1);
 //        graphics.drawRect(0, 0, Frame.WIDTH, Frame.HEIGHT);
 
     }
