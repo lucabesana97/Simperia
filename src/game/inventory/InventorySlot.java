@@ -1,6 +1,6 @@
 package game.inventory;
 
-public class InventoryStack {
+public class InventorySlot {
     InventoryItem item;
     int quantity;
 }

@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import game.Coordinates;
 import game.entities.*;
 import game.environment.GameMap;
+import game.inventory.Inventory;
 import gui.GamePanel;
 import gui.InventoryPanel;
 import gui.Panel;
@@ -28,6 +29,7 @@ public class Gameplay {
     final KeyHandler keyHandler;
 
     public static Player player;
+	public static Inventory inventory;
 	public static GameMap map;
 	private List<Enemy> enemies = new ArrayList<>();
 	private PausePanel pausePanel;
@@ -46,8 +48,9 @@ public class Gameplay {
 
     public void init() {
 		map = new GameMap();
-		player = new Player();
 		map.init(player);
+		player = new Player();
+		inventory = new Inventory();
 
 		panel.addKeyListener(keyHandler);
 		panel.addMouseListener(keyHandler);
