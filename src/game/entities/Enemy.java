@@ -1,7 +1,7 @@
 package game.entities;
 
 import game.Movable;
-import game.inventory.InventoryItem;
+import game.inventory.Item;
 import gui.GameFrame;
 import main.Gameplay;
 import objState.EnemyState;
@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Enemy extends Entity implements Movable {
-    InventoryItem loot;
+    Item loot;
     int experienceOnKill;
     int moneyOnKill;
     public EnemyState enemyState; // Whether the enemy is friendly or hostile

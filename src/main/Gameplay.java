@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import game.Coordinates;
 import game.entities.*;
 import game.environment.GameMap;
+import game.inventory.HealthElixir;
 import game.inventory.Inventory;
 import gui.GamePanel;
 import gui.InventoryPanel;
@@ -31,6 +32,8 @@ public class Gameplay {
     public static Player player;
 	public static Inventory inventory;
 	public static GameMap map;
+	private NPC npc;
+	private HealthElixir healthElixir;
 	private List<Enemy> enemies = new ArrayList<>();
 	private PausePanel pausePanel;
 	private InventoryPanel inventoryPanel;
@@ -46,11 +49,19 @@ public class Gameplay {
 		paused = false;
     }
 
+
+
     public void init() {
+
+		//Don't change the order
 		map = new GameMap();
-		map.init(player);
 		player = new Player();
+		map.init(player);
+
+
 		inventory = new Inventory();
+		healthElixir = new HealthElixir(false, 1, new Coordinates(100, 100, 32, 32));
+		npc = new NPC(new Coordinates(100, 100, 32, 32));
 
 		panel.addKeyListener(keyHandler);
 		panel.addMouseListener(keyHandler);
@@ -90,6 +101,8 @@ public class Gameplay {
 	}
 
 	public void run() {
+
+
 
         long lastTick = System.currentTimeMillis();
 		enemies.add(new Octopus());
@@ -150,6 +163,7 @@ public class Gameplay {
 	}
 
     private void drawElements() {
+
 		panel.draw(map);
 		for(Enemy enemy : enemies) {
 			panel.draw(enemy);
@@ -162,6 +176,10 @@ public class Gameplay {
 		inventoryButton.repaint();
 		pausePanel.repaint();
 		inventoryPanel.repaint();
+
+		/////////
+		panel.draw(healthElixir);
+		panel.draw(npc);
     }
 	private void handleUserInput() {
 	}

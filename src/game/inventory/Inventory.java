@@ -2,10 +2,10 @@ package game.inventory;
 
 public class Inventory {
     public static int SLOTS = 12;
-    public InventorySlot[] slots;
+    public Item[] items;
 
     public Inventory() {
-        slots = new InventorySlot[SLOTS];
+        items = new Item[SLOTS];
     }
 
     /**
@@ -14,11 +14,11 @@ public class Inventory {
      * @param position The position of the item to use in the slots array.
      */
     public void useItem(int position) {
-        if (slots[position].item != null && slots[position].quantity > 0) {
-            slots[position].item.use();
-            slots[position].quantity--;
+        if (items[position] != null && items[position].stackAmount > 0) {
+            items[position].use();
+            items[position].stackAmount--;
 
-            if (slots[position].quantity <= 0) {
+            if (items[position].stackAmount <= 0) {
                 removeItem(position);
             }
         }
@@ -30,7 +30,7 @@ public class Inventory {
      * @param position The position of the item to remove in the slots array.
      */
     public void removeItem(int position) {
-        slots[position].item = null;
+        items[position] = null;
     }
 
     /**
@@ -43,25 +43,43 @@ public class Inventory {
      * @param item The item to add to the inventory
      * @return true if the item was added, false if it was not.
      */
-    public boolean addItem(InventoryItem item) {
+    public boolean addItem(Item item) {
         boolean full = true;
 
         for (int i = 0; i < SLOTS; i++) {
-            if (slots[i] == null) {
+            if (items[i] == null) {
                 full = false;
             }
 
-            if (slots[i].item == item && slots[i].quantity < item.maxStack) {
-                slots[i].quantity++;
+            if (items[i] == item && items[i].stackAmount < Item.MAX_STACK) {
+                items[i].stackAmount = items[i].stackAmount + item.stackAmount;
+
+                if (items[i].stackAmount > Item.MAX_STACK) {
+                    int remainder = items[i].stackAmount - Item.MAX_STACK;
+                    if (remainder == 0)
+                        return true;
+
+                    items[i].stackAmount = Item.MAX_STACK;
+                    item.stackAmount = remainder;
+                    addItem(item);
+                } else {
+                    item.stackAmount = 0;
+                }
+
+                // Calculate the amount of items that can be added to the stack and add
+                // only that amount to the current stack and keep adding int the next
+                // stack until the whole amount is added.
+
+
                 return true;
             }
         }
 
         if (!full) {
             for (int i = 0; i < SLOTS; i++) {
-                if (slots[i] == null) {
-                    slots[i].item = item;
-                    slots[i].quantity = 1;
+                if (items[i] == null) {
+                    items[i] = item;
+                    items[i].stackAmount = item.stackAmount;
                     return true;
                 }
             }

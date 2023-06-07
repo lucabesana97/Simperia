@@ -1,9 +1,13 @@
 package game.inventory;
 
-public class CarKey extends InventoryItem {
+import game.Coordinates;
 
-    public CarKey(String name, String description) {
-        super(name, description);
+import java.awt.*;
+
+public class CarKey extends Item {
+
+    public CarKey(String name, String description, boolean inInventory, Coordinates coordinates, int stackAmount) {
+        super(name, description, inInventory, coordinates, stackAmount);
     }
 
     @Override
@@ -11,7 +15,7 @@ public class CarKey extends InventoryItem {
     }
 
     @Override
-    public void draw(double x, double y) {
+    public void draw(Graphics graphics) {
 
     }
 

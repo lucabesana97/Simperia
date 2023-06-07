@@ -15,9 +15,10 @@ import java.net.URL;
 import static helperFunctions.utility.resize;
 
 public class Player extends Entity implements Movable {
-    public int money;
-    public int experience;
-    public int experienceToNextLevel;
+    public int coins;
+    public int xp;
+    public int xpToNextLevel;
+    public int levelXp;
     public MovingState xState;
     public MovingState yState;
     public int screenX = GameFrame.WIDTH / 2 - 24;
@@ -37,6 +38,10 @@ public class Player extends Entity implements Movable {
         yState = MovingState.STILL;
         sprites.current = resize(image);
         this.name = "Player";
+        this.coins = 0;
+        this.xp = 0;
+        levelXp = (level * level)/2 * 100;
+        this.xpToNextLevel = levelXp;
         mapHeight = Gameplay.map.mapImage.getHeight();
         mapWidth = Gameplay.map.mapImage.getWidth();
         this.coordinates = new Coordinates((int)(mapWidth/2), (int)(mapHeight/2), 48, 48);
@@ -93,4 +98,24 @@ public class Player extends Entity implements Movable {
         coordinates.topLeftCorner_x = warp.exit.topLeftCorner_x;
         coordinates.topLeftCorner_y = warp.exit.topLeftCorner_y;
     }
+
+    public void gainXp(int xp){
+        this.xp += xp;
+        if(this.xp >= xpToNextLevel){
+
+            int xpLeft = this.xp - xpToNextLevel;
+            this.xp = 0;
+
+            levelUp(xpLeft);
+        }
+    }
+
+    public void levelUp(int xpLeft){
+        level++;
+        levelXp = (level * level)/2 * 100;
+        xpToNextLevel = levelXp;
+        gainXp(xpLeft);
+    }
+
+
 }
