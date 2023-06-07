@@ -1,7 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class GameFrame extends JFrame{
 
@@ -19,6 +19,7 @@ public class GameFrame extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(WIDTH, HEIGHT);
 		setResizable(false);
+		//setLayout(new OverlayLayout(getContentPane()));
 
 		// Set window to be visible
 		setVisible(true);
@@ -29,6 +30,9 @@ public class GameFrame extends JFrame{
             remove(this.panel);
         }
         this.panel = panel;
-        this.add(panel, BorderLayout.SOUTH);
+        //this.add(panel, BorderLayout.SOUTH);
+
+		this.add(panel);
+		setLocationRelativeTo(null); // Center the window
     }
 }

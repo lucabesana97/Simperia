@@ -3,6 +3,7 @@ package game.entities;
 import game.Coordinates;
 import game.Movable;
 import gui.GameFrame;
+import main.Gameplay;
 import objState.MovingState;
 
 import javax.imageio.ImageIO;
@@ -21,6 +22,8 @@ public class Player extends Entity implements Movable {
     public MovingState yState;
     public int screenX = GameFrame.WIDTH / 2 - 24;
     public int screenY = GameFrame.HEIGHT / 2 - 24;
+    public int mapHeight;
+    public int mapWidth;
     public Player() {
         URL url = getClass().getResource("/sprites/player/Idle-1.png");
         BufferedImage image;
@@ -29,12 +32,14 @@ public class Player extends Entity implements Movable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        speed = 10;
+        speed = 30;
         xState = MovingState.STILL;
         yState = MovingState.STILL;
         sprites.current = resize(image);
         this.name = "Player";
-        this.coordinates = new Coordinates(1100, 1100, 48, 48);
+        mapHeight = Gameplay.map.mapImage.getHeight();
+        mapWidth = Gameplay.map.mapImage.getWidth();
+        this.coordinates = new Coordinates((int)(mapWidth/2), (int)(mapHeight/2), 48, 48);
     }
 
     public void draw(Graphics graphics) {
@@ -54,6 +59,7 @@ public class Player extends Entity implements Movable {
 
     @Override
     public void move(double diffSeconds) {
+        System.out.println(coordinates.topLeftCorner_x + "\t" + (int)(mapWidth - GameFrame.WIDTH/2));
         this.invincibilityTimer += diffSeconds;
 
         double moveBy = diffSeconds * speed;
@@ -68,5 +74,23 @@ public class Player extends Entity implements Movable {
         } else if (yState != MovingState.STILL){
             coordinates.moveY((yState == MovingState.DOWN) ? moveBy : -moveBy);
         }
+
+        if (coordinates.topLeftCorner_x < (int)(GameFrame.WIDTH/2)) {
+            coordinates.topLeftCorner_x = (int)(GameFrame.WIDTH/2);
+        }
+        if (coordinates.topLeftCorner_y < (int)(GameFrame.HEIGHT/2)) {
+            coordinates.topLeftCorner_y = (int)(GameFrame.HEIGHT/2);
+        }
+        if (coordinates.topLeftCorner_x > (int)(mapWidth - GameFrame.WIDTH/2)) {
+            coordinates.topLeftCorner_x = (int)(mapWidth - GameFrame.WIDTH/2);
+        }
+        if (coordinates.topLeftCorner_y > mapHeight - (int)(GameFrame.HEIGHT/2)) {
+            coordinates.topLeftCorner_y = mapHeight - (int)(GameFrame.HEIGHT/2);
+        }
+    }
+
+    public void teleport(Warp warp){
+        coordinates.topLeftCorner_x = warp.exit.topLeftCorner_x;
+        coordinates.topLeftCorner_y = warp.exit.topLeftCorner_y;
     }
 }

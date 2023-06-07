@@ -1,5 +1,5 @@
-package main;
 
+package main;
 import gui.GameFrame;
 import gui.GamePanel;
 import gui.Panel;
