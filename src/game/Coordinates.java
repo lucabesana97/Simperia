@@ -20,8 +20,9 @@ public class Coordinates {
 
         size_X = objectSize_x;
         size_Y = objectSize_y;
-
-        adjustCoordinates();
+        bottomRightCorner_x = topLeftCorner_x + size_X;
+        bottomRightCorner_y = topLeftCorner_y + size_Y;
+        //adjustCoordinates();
     }
 
     private void adjustCoordinates(){
