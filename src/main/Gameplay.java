@@ -172,8 +172,10 @@ public class Gameplay {
 			panel.draw(warp);
 		}
 		panel.draw(player);
-		pauseButton.repaint();
-		inventoryButton.repaint();
+		panel.draw(pauseButton);
+		panel.draw(inventoryButton);
+		//pauseButton.repaint();
+		//inventoryButton.repaint();
 		pausePanel.repaint();
 		inventoryPanel.repaint();
 

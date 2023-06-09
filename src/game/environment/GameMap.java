@@ -23,7 +23,7 @@ public class GameMap {
     private void load() {
         String str;
 
-        str = "/sprites/maps/gameMap02.png";
+        str = "/sprites/maps/gameMap03.png";
         try {
             mapImage = ImageIO.read(getClass().getResourceAsStream(str));
         } catch(Exception e) {System.out.println("Couldn't load map image: " + "\tReason: " + e.getCause());}

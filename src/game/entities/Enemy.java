@@ -19,8 +19,6 @@ public class Enemy extends Entity implements Movable {
     public EnemyState enemyState; // Whether the enemy is friendly or hostile
     public MovingState movingState; // Direction the enemy is moving in (helpful for sprites)
     public Coordinates whereToMove; // Random coordinates to move to when roaming around
-    public double screenX;
-    public double screenY;
 
     public Enemy() {
         super();
@@ -29,15 +27,9 @@ public class Enemy extends Entity implements Movable {
     }
     @Override
     public void draw(Graphics g) {
-        screenX = GameFrame.WIDTH/2 - (Gameplay.player.coordinates.topLeftCorner_x - coordinates.topLeftCorner_x);
-        screenY = GameFrame.HEIGHT/2 - (Gameplay.player.coordinates.topLeftCorner_y - coordinates.topLeftCorner_y);
-        if(screenX >= -coordinates.size_X &&
-            screenX <= GameFrame.WIDTH + coordinates.size_X &&
-            screenY >= -coordinates.size_Y &&
-            screenY <= GameFrame.HEIGHT + coordinates.size_Y
-        ) {
+        if(coordinates.inScreen()) {
             BufferedImage image = sprites.current;
-            g.drawImage(image, (int) screenX - 24, (int)screenY - 24, null);
+            g.drawImage(image, (int) coordinates.screenX - 24, (int)coordinates.screenY - 24, null);
         }
     }
     // Get a random coordinate to move to. This is used when the enemy is roaming around. It is calculated as a random position
