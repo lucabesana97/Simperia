@@ -21,6 +21,7 @@ import input.Command;
 import input.KeyHandler;
 import input.Keys;
 import objState.EnemyState;
+import objState.MovingState;
 
 public class Gameplay {
 
@@ -64,7 +65,6 @@ public class Gameplay {
 		npc = new NPC(new Coordinates(100, 100, 32, 32));
 
 		panel.addKeyListener(keyHandler);
-		panel.addMouseListener(keyHandler);
 
 		// Temporary buttons for testing
 		initializePauseButton();
@@ -184,6 +184,45 @@ public class Gameplay {
 		/////////
     }
 	private void handleUserInput() {
+
+
+		final Set<Keys> pressedKeys = keyHandler.getKeys();
+			boolean horStill = true;
+			boolean verStill = true;
+			for (Keys keyCode : pressedKeys) {
+				switch (keyCode) {
+					case PAUSE:
+						break;
+					case LEFT:
+						player.xState = MovingState.LEFT;
+						horStill = false;
+						break;
+					case RIGHT:
+						player.xState = MovingState.RIGHT;
+						horStill = false;
+						break;
+					case UP:
+						player.yState = MovingState.UP;
+						verStill = false;
+						break;
+					case DOWN:
+						player.yState = MovingState.DOWN;
+						verStill = false;
+						break;
+					case SHOOT:
+						break;
+					default:
+						break;
+				}
+			}
+			System.out.println(player.yState + "\t" + player.xState);
+			if (horStill) {
+				player.xState = MovingState.STILL;
+			}
+			if (verStill){
+				player.yState = MovingState.STILL;
+			}
+
 	}
 
 	public void pause() {
