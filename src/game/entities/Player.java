@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import static helperFunctions.utility.resize;
+import static helperFunctions.utility.createFlipped;
 
 public class Player extends Entity implements Movable {
     public int coins;
@@ -25,7 +26,15 @@ public class Player extends Entity implements Movable {
     public int screenY = GameFrame.HEIGHT / 2 - 24;
     public int mapHeight;
     public int mapWidth;
+    public boolean sword;
+    private BufferedImage[] spritesDown;
+    private BufferedImage[] spritesUp;
+    private BufferedImage[] spritesSide;
+
     public Player() {
+        spritesDown = loadSprites("/sprites/player/Down-", 2);
+        spritesUp = loadSprites("/sprites/player/Up-", 2);
+        spritesSide = loadSprites("/sprites/player/Side-", 4);
         URL url = getClass().getResource("/sprites/player/Idle-1.png");
         BufferedImage image;
         try{
@@ -48,10 +57,26 @@ public class Player extends Entity implements Movable {
     }
 
     public void draw(Graphics graphics) {
-        //TODO edit so it draws different sprites depending on the direction of the movement
-        int x = (int)(coordinates.topLeftCorner_x);
-        int y = (int)(coordinates.topLeftCorner_y);
-        graphics.drawImage(sprites.current, screenX, screenY, null);
+        BufferedImage currentSprite;
+
+        if (xState == MovingState.LEFT) {
+            currentSprite = createFlipped(spritesSide[(int) (System.currentTimeMillis() / 200 % 4)]);
+        } else if (xState == MovingState.RIGHT) {
+            currentSprite = spritesSide[(int) (System.currentTimeMillis() / 200 % 4)];
+        } else if (yState == MovingState.DOWN) {
+            currentSprite = spritesDown[(int) (System.currentTimeMillis() / 200 % 2)];
+        } else if (yState == MovingState.UP) {
+            currentSprite = spritesUp[(int) (System.currentTimeMillis() / 200 % 2)];
+        } else {
+            currentSprite = sprites.current;
+        }
+        currentSprite = resize(currentSprite);
+
+        // Draw the current sprite
+        int x = (int) (coordinates.topLeftCorner_x);
+        int y = (int) (coordinates.topLeftCorner_y);
+        graphics.drawImage(currentSprite, screenX, screenY, null);
+
         // draw circle around player
         graphics.setColor(Color.RED);
         graphics.drawRect(screenX, screenY, 48, 48);
@@ -94,9 +119,27 @@ public class Player extends Entity implements Movable {
         }
     }
 
+    private BufferedImage[] loadSprites(String prefix, int count) {
+        BufferedImage[] sprites = new BufferedImage[count];
+        try {
+            for (int i = 0; i < count; i++) {
+                URL url = getClass().getResource(prefix + (i + 1) + ".png");
+                sprites[i] = ImageIO.read(url);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return sprites;
+    }
+
     public void teleport(Warp warp){
         coordinates.topLeftCorner_x = warp.exit.topLeftCorner_x;
         coordinates.topLeftCorner_y = warp.exit.topLeftCorner_y;
+    }
+
+    public void loadSword() {
+        spritesDown = loadSprites("/sprites/player/Down-sword-", 2);
+        spritesSide = loadSprites("/sprites/player/Side-sword-", 4);
     }
 
     public void gainXp(int xp){
