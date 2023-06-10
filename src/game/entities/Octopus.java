@@ -175,14 +175,10 @@ public class Octopus extends Enemy{
             }
         }
 
-
-
-
     }
 
 
     private void runTowardsCoordinates(double diffSeconds, Coordinates goalCoordinates){
-
         int aCenterX = (int) (this.coordinates.topLeftCorner_x + this.coordinates.bottomRightCorner_x) / 2;
         int aCenterY = (int) (this.coordinates.topLeftCorner_y + this.coordinates.bottomRightCorner_y) / 2;
 
@@ -222,9 +218,6 @@ public class Octopus extends Enemy{
         this.bullets.add(new Bullet(225, this.coordinates));
         this.bullets.add(new Bullet(270, this.coordinates));
         this.bullets.add(new Bullet(315, this.coordinates));
-
-
-
     }
 
 }

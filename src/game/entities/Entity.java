@@ -36,12 +36,23 @@ public abstract class Entity extends GameObject {
         entity.takeDamage(this.attack);
     }
 
-    public void takeDamage(int damage) {
+    /**
+     * Heal the entity by the given amount, but not more than the max health.
+     * @param amount The amount to heal by.
+     */
+    public void heal(int amount) {
+        this.health += amount;
+        if (this.health > this.maxHealth) {
+            this.health = this.maxHealth;
+        }
+    }
+
+    public void takeDamage(int amount) {
         if (this.invincibilityTimer < this.invincibilityCooldown) {
             return;
         }
         this.invincibilityTimer = 0;
-        this.health -= damage;
+        this.health -= amount;
         if (this.health <= 0) {
             this.die();
         }

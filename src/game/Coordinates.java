@@ -25,7 +25,7 @@ public class Coordinates {
         //adjustCoordinates();
     }
 
-    private void adjustCoordinates(){
+    public void adjustCoordinates(){
         bottomRightCorner_x = topLeftCorner_x + size_X;
         bottomRightCorner_y = topLeftCorner_y + size_Y;
         screenX = GameFrame.WIDTH/2 - (Gameplay.player.coordinates.topLeftCorner_x - topLeftCorner_x);
@@ -50,6 +50,7 @@ public class Coordinates {
     }
 
     public boolean inScreen(){
+        adjustCoordinates();
         if(screenX >= -size_X &&
                 screenX <= GameFrame.WIDTH + size_X &&
                 screenY >= -size_Y &&
