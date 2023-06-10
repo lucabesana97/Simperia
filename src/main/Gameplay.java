@@ -60,7 +60,7 @@ public class Gameplay {
 
 
 		inventory = new Inventory();
-		healthElixir = new HealthElixir(false, 1, new Coordinates(100, 100, 32, 32));
+		healthElixir = new HealthElixir(false, 1, new Coordinates(1000, 1000, 32, 32));
 		npc = new NPC(new Coordinates(100, 100, 32, 32));
 
 		panel.addKeyListener(keyHandler);
@@ -171,6 +171,8 @@ public class Gameplay {
 		for(Warp warp: warps){
 			panel.draw(warp);
 		}
+		panel.draw(healthElixir);
+		panel.draw(npc);
 		panel.draw(player);
 		panel.draw(pauseButton);
 		panel.draw(inventoryButton);
@@ -180,8 +182,6 @@ public class Gameplay {
 		inventoryPanel.repaint();
 
 		/////////
-		panel.draw(healthElixir);
-		panel.draw(npc);
     }
 	private void handleUserInput() {
 	}

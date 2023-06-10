@@ -45,9 +45,8 @@ public class HealthElixir extends Item {
 
     @Override
     public void draw(Graphics graphics) {
-        graphics.drawImage(sprite, (int)coordinates.topLeftCorner_x, (int)coordinates.topLeftCorner_y, null);
-
-
-
+        if(coordinates.inScreen()) {
+            graphics.drawImage(sprite, (int) coordinates.screenX, (int) coordinates.screenY, null);
+        }
     }
 }

@@ -29,7 +29,4 @@ public class Quest {
         Gameplay.player.gainXp(xpReward);
     }
 
-
-
-
 }

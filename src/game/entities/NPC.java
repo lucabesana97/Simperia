@@ -14,8 +14,6 @@ import java.util.Objects;
 
 public class NPC extends GameObject {
 
-    public int screenX = GameFrame.WIDTH / 2 - 24;
-    public int screenY = GameFrame.HEIGHT / 2 - 24;
     public BufferedImage sprite;
     public Coordinates coordinates;
     Quest quest;
@@ -50,9 +48,8 @@ public class NPC extends GameObject {
     }
 
     public void draw(Graphics graphics) {
-        int x = (int) (coordinates.topLeftCorner_x);
-        int y = (int) (coordinates.topLeftCorner_y);
-        graphics.drawImage(sprite, screenX, screenY, null);
-
+        if(coordinates.inScreen()) {
+            graphics.drawImage(sprite, (int) coordinates.screenX, (int) coordinates.screenY, null);
+        }
     }
 }

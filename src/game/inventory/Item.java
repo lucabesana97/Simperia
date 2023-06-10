@@ -29,6 +29,7 @@ public abstract class Item {
 
     public abstract void use();
 
-    public abstract void draw(Graphics graphics);
+    public void draw(Graphics graphics){
+    }
 
 }
