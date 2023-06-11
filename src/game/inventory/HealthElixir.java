@@ -14,24 +14,19 @@ public class HealthElixir extends Item {
 
     /**
      * Constructor for HealthElixir item.
-     * @param inInventory True if in inventory, false if floating in world.
-     * @param stackAmount Amount of items in stack.
+     *
      * @param coordinates Coordinates of item. If in inventory, coordinates specify position to draw in inventory panel.
      *                    If floating in world, coordinates specify position to draw in world.
      */
-    public HealthElixir(boolean inInventory, int stackAmount, Coordinates coordinates) {
-        super("Health Elixir", "Restores 30 health.", inInventory, coordinates, stackAmount);
+    public HealthElixir(Coordinates coordinates) {
+        super("Health Elixir", "Restores 30 health.", coordinates);
         initSprite();
     }
 
     public void initSprite() {
 
         try {
-            if (inInventory){
-                this.sprite = ImageIO.read(Objects.requireNonNull(getClass().getResource("/sprites/inventory/elixir_128.png")));
-            } else {
-                this.sprite = ImageIO.read(Objects.requireNonNull(getClass().getResource("/sprites/inventory/elixir_16.png")));
-            }
+            this.sprite = ImageIO.read(Objects.requireNonNull(getClass().getResource("/sprites/inventory/elixir_16.png")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -45,7 +40,7 @@ public class HealthElixir extends Item {
 
     @Override
     public void draw(Graphics graphics) {
-        if(coordinates.inScreen()) {
+        if (coordinates.inScreen()) {
             graphics.drawImage(sprite, (int) coordinates.screenX, (int) coordinates.screenY, null);
         }
     }

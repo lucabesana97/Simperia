@@ -31,8 +31,6 @@ public class NPC extends GameObject {
                 "Well done. Here is your reward.",
                 500,
                 new HealthElixir(
-                        true,
-                        5,
                         new Coordinates(0, 0, 0, 0)
                 ),
                 100

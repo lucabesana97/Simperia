@@ -25,7 +25,7 @@ public class CaveMap extends GameMap{
         enemies.add(new Octopus(1400,1100));
         enemies.add(new Octopus(1500,1200));
         enemies.add(new Octopus(1800,1700));
-        items.add(new HealthElixir(false, 1, new Coordinates(1000, 1000, 32, 32)));
+//        items.add(new HealthElixir(new Coordinates(1000, 1000, 32, 32)));
         warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
         warps.add(new Warp(new Coordinates(450,700,32,32), new Coordinates(800,1100,32,32), player));
     }

@@ -1,6 +1,7 @@
 package game;
 
 import game.inventory.Item;
+import game.inventory.ItemStack;
 import main.Gameplay;
 
 public class Quest {
@@ -24,7 +25,7 @@ public class Quest {
 
         //Reward is given to the player instantly (doesnt wait till the player talks
         //to the NPC again)
-        Gameplay.inventory.addItem(itemReward);
+        Gameplay.inventory.addStack(new ItemStack(itemReward, 1, true));
         Gameplay.player.coins += coinsReward;
         Gameplay.player.gainXp(xpReward);
     }

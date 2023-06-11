@@ -2,7 +2,7 @@ package game.entities;
 
 import game.Coordinates;
 import game.Movable;
-import game.inventory.Item;
+import game.inventory.ItemStack;
 import gui.GameFrame;
 import helperFunctions.Utility;
 import main.Gameplay;
@@ -14,8 +14,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import static helperFunctions.Utility.*;
 
@@ -195,6 +193,11 @@ public class Player extends Entity implements Movable {
         xpToNextLevel = levelXp;
         gainXp(xpLeft);
     }
+
+    public boolean isColliding(ItemStack itemStack){
+        return this.coordinates.intersects(itemStack.item.coordinates);
+    }
+
 
 
     private void setShooting(double diffSeconds) {
