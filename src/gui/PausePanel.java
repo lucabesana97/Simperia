@@ -8,54 +8,67 @@ import java.awt.*;
  */
 public class PausePanel extends Panel {
 
+    private JButton resumeButton;
+    private JButton quitButton;
+    private JButton muteButton;
+
+
     public PausePanel() {
-        super();
-        //setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Make the buttons appear vertically
+
+        // Use GridBagLayout for precise positioning
+        setLayout(new GridBagLayout());
         setBackground(Color.pink);
         setVisible(false);
 
         // Calculate the position to center the pause panel
-        int pausePanelWidth = (int) (this.getWidth() * 0.5);
-        int pausePanelHeight = (int) (this.getHeight() * 0.5);
-        int panelX = (this.getWidth() - pausePanelWidth) / 2;
-        int panelY = (this.getHeight() - pausePanelHeight) / 2;
+        int pausePanelWidth = (int) (getWidth() * 0.6);
+        int pausePanelHeight = (int) (getHeight() * 0.6);
+        int panelX = (getWidth() - pausePanelWidth) / 2;
+        int panelY = (getHeight() - pausePanelHeight) / 2;
 
         setBounds(panelX, panelY, pausePanelWidth, pausePanelHeight);
 
         // Buttons
-        JButton resumeButton = new JButton("Resume");
-        resumeButton.addActionListener(e -> { resumeClicked(); });
-        add(resumeButton);
+        resumeButton = new JButton("Resume");
+        quitButton = new JButton("Quit");
+        muteButton = new JButton("Mute");
 
-        JButton quitButton = new JButton("Quit");
-        quitButton.addActionListener(e -> { quitClicked(); });
-        add(quitButton);
+        // Set button sizes
+        Dimension buttonSize = new Dimension(150, 50); // Adjust the width and height as needed
+        resumeButton.setPreferredSize(buttonSize);
+        quitButton.setPreferredSize(buttonSize);
+        muteButton.setPreferredSize(buttonSize);
 
-        JButton muteButton = new JButton("Mute");
-        muteButton.addActionListener(e -> { muteClicked(); });
-        add(muteButton);
+        // Add buttons to the panel
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 0, 10, 0); // Add spacing between buttons
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(resumeButton, gbc);
 
-        // Set the buttons to the middle of the panel
-        resumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        muteButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-    }
+        gbc.gridy = 1;
+        add(quitButton, gbc);
 
-    public void resumeClicked() {
-        setVisible(false);
-    }
-
-    public void quitClicked() {
-        // TODO: Go back to the home panel
-    }
-
-    public void muteClicked() {
-        // TODO: Mute the game
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.PAGE_END; // Align mute button to the bottom
+        gbc.insets = new Insets(50, 0, 0, 0); // Add spacing between buttons and bottom edge
+        add(muteButton, gbc);
     }
 
     public void draw() {
 
     }
 
+    public JButton getResumeButton() {
+        return resumeButton;
+    }
 
+    public JButton getQuitButton() {
+        return quitButton;
+    }
+
+    public JButton getMuteButton() {
+        return muteButton;
+    }
 }

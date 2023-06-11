@@ -1,27 +1,25 @@
 
 package main;
 
-import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
+import javax.swing.*;
 
 import game.GameObject;
 import game.environment.AsteroidMap;
 import game.inventory.Item;
 import game.Coordinates;
+import game.GameState;
 import game.entities.*;
 import game.environment.GameMap;
 import game.inventory.Inventory;
 import game.inventory.ItemStack;
-import gui.GamePanel;
-import gui.InventoryPanel;
-import gui.Panel;
-import gui.PausePanel;
+import gui.*;
 import helperFunctions.Utility;
 import input.KeyHandler;
 import input.Keys;
@@ -50,8 +48,7 @@ public class Gameplay {
     private Warp warpDestination;
     private PausePanel pausePanel;
     private InventoryPanel inventoryPanel;
-    private JButton pauseButton;
-    private JButton inventoryButton;
+    private GameState gameState;
     private boolean paused;
 
     private Item deletedItem;
@@ -59,10 +56,13 @@ public class Gameplay {
     Sound effects = new Sound();
 
 
-    public Gameplay(Panel panel, KeyHandler keyHandler) {
-        this.panel = (GamePanel) panel;
+    public Gameplay(GamePanel panel, KeyHandler keyHandler, GameFrame frame) {
+        //this.panel = (GamePanel) panel;
+        this.panel = panel;
         this.keyHandler = keyHandler;
-        paused = false;
+		gameState = GameState.PLAYING;
+        pausePanel = frame.getPausePanel();
+        inventoryPanel = frame.getInventoryPanel();
     }
 
 
@@ -78,46 +78,24 @@ public class Gameplay {
 
         panel.addKeyListener(keyHandler);
 
-        // Temporary buttons for testing
-        initializePauseButton();
-        initializeInventoryButton();
-
-        // Pause panel
-        pausePanel = new PausePanel();
-        panel.add(pausePanel);
-
-        // Inventory panel
-        inventoryPanel = new InventoryPanel();
-        panel.add(inventoryPanel);
-
         // Soundtrack
         soundtrack.stopMusic();
         soundtrack.playMusic(2);
         soundtrack.changeVolume(-20);
+
+        // Button actions
+        JButton resumeButton = pausePanel.getResumeButton();
+        resumeButton.addActionListener(e -> resume());
+
+        JButton muteButton = pausePanel.getMuteButton();
+        muteButton.addActionListener(e -> { muteGame(muteButton); });
+
+        JButton quitGameButton = pausePanel.getQuitButton();
+        quitGameButton.addActionListener(e -> quitGame());
+
     }
 
-    private void initializeInventoryButton() {
-        inventoryButton = new JButton("Inventory");
-        inventoryButton.setBounds(panel.getWidth() - 210, 10, 100, 50);
-        inventoryButton.setBackground(new Color(0X593DB5));
-        inventoryButton.addActionListener(e -> {
-            inventoryPanel.setVisible(true);
-        });
-        panel.add(inventoryButton);
-    }
-
-    private void initializePauseButton() {
-        pauseButton = new JButton("Pause");
-        pauseButton.setBounds(panel.getWidth() - 90, 10, 70, 50);
-        pauseButton.setBackground(new Color(0X593DB5));
-        pauseButton.addActionListener(e -> {
-            pausePanel.setVisible(true);
-            pause(); // Pause the game
-        });
-        panel.add(pauseButton);
-    }
-
-    public void run() {
+	public void run() {
 
         long lastTick = System.currentTimeMillis();
 
@@ -138,20 +116,24 @@ public class Gameplay {
             panel.clear();
             drawElements();
             panel.redraw();
+            //pausePanel.repaint();
+            //inventoryPanel.repaint();
+
             System.out.flush();
 
         }
     }
 
-    private void update(double diffSeconds) {
-        // Workaround to resume the game
-        if (!pausePanel.isVisible()) {
-            resume();
-        }
+	private void update(double diffSeconds) {
+		// Workaround to resume the game
+		if (!pausePanel.isVisible() && !inventoryPanel.isVisible()) {
+			resume();
+		}
 
-        if (paused) {
-            return;
-        }
+        // Pauses the game
+		if (gameState == GameState.PAUSED || gameState == GameState.INVENTORY) {
+			return;
+		}
 
         // Player
         player.move(diffSeconds);
@@ -181,7 +163,7 @@ public class Gameplay {
             enemy.move(diffSeconds, player);
         }
         if (player.isColliding(beginnerNPC)){
-            // Player is talking the NPC
+            // Player is talking to the NPC
             String text = beginnerNPC.interact();
             System.out.println(text);
         }else{
@@ -245,7 +227,7 @@ public class Gameplay {
 
                     if (remainder == null) { //The item was added, it has to be deleted from the world
                         stacksOnWorld.remove(i);
-                    } else { //There are items that didn't fit int he inventory.
+                    } else { //There are items that didn't fit in the inventory.
                         stacksOnWorld.get(i).amount = remainder.amount;
                     }
 
@@ -290,14 +272,10 @@ public class Gameplay {
         }
         panel.draw(beginnerNPC);
         panel.draw(player);
-        panel.draw(pauseButton);
-        panel.draw(inventoryButton);
-        //pauseButton.repaint();
-        //inventoryButton.repaint();
-        pausePanel.repaint();
-        inventoryPanel.repaint();
 
-        /////////
+        //pausePanel.repaint();
+        //inventoryPanel.repaint();
+
     }
 
     private void handleUserInput() {
@@ -323,8 +301,6 @@ public class Gameplay {
                         }
                     }
                     break;
-                case PAUSE:
-                    break;
                 case LEFT:
                     player.xState = MovingState.LEFT;
                     horStill = false;
@@ -344,6 +320,20 @@ public class Gameplay {
                 case SWITCH:
                     player.switchWeapon();
                     break;
+                case PAUSE:
+                    if (!pausePanel.isVisible()) {
+                        pause();
+                    } else {
+                        resume();
+                    }
+                    break;
+                case INVENTORY:
+                    if (!inventoryPanel.isVisible()) {
+                        openInventory();
+                    } else {
+                        closeInventory();
+                    }
+                    break;
                 case SPRINT:
                     player.sprint();
                     sprintStill = false;
@@ -362,19 +352,46 @@ public class Gameplay {
         if (sprintStill) {
             player.slowDown();
         }
+    }
 
+    private void openInventory() {
+        inventoryPanel.setVisible(true);
+        gameState = GameState.INVENTORY;
+        inventoryPanel.repaint();
+    }
+
+    private void closeInventory() {
+        inventoryPanel.setVisible(false);
+        gameState = GameState.PLAYING;
+        inventoryPanel.repaint();
     }
 
     public void pause() {
-        paused = true;
+        pausePanel.setVisible(true);
+        gameState = GameState.PAUSED;
+        pausePanel.repaint();
     }
 
-    public void resume() {
-        paused = false;
+	public void resume() {
+        pausePanel.setVisible(false);
+        gameState = GameState.PLAYING;
+        pausePanel.repaint();
     }
 
-    public boolean isPaused() {
-        return paused;
+	public boolean isPaused() {	return gameState == GameState.PAUSED; }
+
+    public void muteGame (JButton muteButton) {
+        if (soundtrack.isMusicPlaying()) {
+            soundtrack.stopMusic();
+            muteButton.setText("Unmute");
+        } else {
+            soundtrack.playMusic(2);
+            muteButton.setText("Mute");
+        }
+    }
+
+    public void quitGame() {
+        // TODO: go back to home screen
     }
 
     public void loadObjects() {
