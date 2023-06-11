@@ -54,8 +54,11 @@ public class KeyHandler implements KeyListener {
 			case KeyEvent.VK_SPACE:
 				returner = Keys.ATTACK;
 				break;
-			case KeyEvent.VK_ENTER:
+			case KeyEvent.VK_ENTER, KeyEvent.VK_P:
 				returner = Keys.PAUSE;
+				break;
+			case KeyEvent.VK_I:
+				returner = Keys.INVENTORY;
 				break;
 			case KeyEvent.VK_Q:
 				returner = Keys.SWITCH;
@@ -66,7 +69,6 @@ public class KeyHandler implements KeyListener {
 			default:
 				break;
 		}
-
 		return returner;
 	}
 

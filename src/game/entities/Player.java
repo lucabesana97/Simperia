@@ -136,7 +136,7 @@ public class Player extends Entity implements Movable {
             coordinates.topLeftCorner_y = mapHeight;
         }
         setSwitching(diffSeconds);
-        System.out.println(switchCounter + "\t" + switchState);
+        //System.out.println(switchCounter + "\t" + switchState);
     }
 
     private BufferedImage[] loadSprites(String prefix, int count) {

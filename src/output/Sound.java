@@ -69,4 +69,8 @@ public class Sound {
 		setFile(i);
 		play();
 	}
+
+	public boolean isMusicPlaying() {
+		return clip.isRunning();
+	}
 }

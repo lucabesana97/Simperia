@@ -2,7 +2,6 @@
 package main;
 import gui.GameFrame;
 import gui.GamePanel;
-import gui.Panel;
 import input.KeyHandler;
 
 public class Game {
@@ -10,7 +9,7 @@ public class Game {
 	final private KeyHandler keyHandler;
 
 	private Gameplay gameplay;
-	private Panel panel;
+	private GamePanel panel;
 
 	public Game() {
 		frame = new GameFrame("Simperia");
@@ -23,7 +22,7 @@ public class Game {
 
 	public void start() {
 		panel = new GamePanel();
-		gameplay = new Gameplay(panel, keyHandler);
+		gameplay = new Gameplay(panel, keyHandler, frame);
 
 		frame.setPanel(panel);
 
