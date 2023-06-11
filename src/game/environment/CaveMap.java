@@ -23,7 +23,7 @@ public class CaveMap extends GameMap {
         try {
             BufferedImage floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_inactive.png"));
 
-            objects.add(new GameObject(new Coordinates(280, 240, 32, 32), floorSymbol));
+            objects.add(new GameObject(new Coordinates(280, 240, 455, 453), floorSymbol));
         } catch (Exception e) {
             System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
 
