@@ -27,11 +27,11 @@ public class GameFrame extends JFrame{
 
 		pausePanel = new PausePanel();
 		pausePanel.setVisible(false);
-		layeredPane.add(pausePanel, 1);
+//		layeredPane.add(pausePanel, 1);
 
 		inventoryPanel = new InventoryPanel();
 		inventoryPanel.setVisible(false);
-		layeredPane.add(inventoryPanel, 2);
+//		layeredPane.add(inventoryPanel, 2);
 
 		// Add the layered pane to the main frame's content pane
 		getContentPane().add(layeredPane);
@@ -50,13 +50,17 @@ public class GameFrame extends JFrame{
 		//this.add(panel);
 
 		// Add the game panel to the bottom layer
-		layeredPane.add(gamePanel, 0);
+		layeredPane.add(gamePanel, JLayeredPane.DEFAULT_LAYER);
+		layeredPane.add(pausePanel, JLayeredPane.PALETTE_LAYER);
+		layeredPane.add(inventoryPanel, JLayeredPane.PALETTE_LAYER);
+//		pausePanel.setVisible(false);
 
-		layeredPane.setComponentZOrder(pausePanel, 1);
-		layeredPane.setComponentZOrder(inventoryPanel, 2);
+
+//		layeredPane.setComponentZOrder(pausePanel, JLayeredPane.PALETTE_LAYER);
+//		layeredPane.setComponentZOrder(inventoryPanel, JLayeredPane.PALETTE_LAYER);
 
 		layeredPane.revalidate();
-		layeredPane.repaint();
+//		layeredPane.repaint();
     }
 
 	public PausePanel getPausePanel() { return pausePanel; }

@@ -119,6 +119,7 @@ public class Octopus extends Enemy{
 
         int distance = distanceBetweenCoordinates(this.coordinates, player.coordinates);
 
+
         // If the player is within x pixels, the enemy is hostile
         // If the player is within y pixels, the enemy is shooting
         // Otherwise the enemy is friendly

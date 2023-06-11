@@ -16,7 +16,6 @@ public class GamePanel extends Panel {
 
 		//setLayout(null);
 	}
-
 	public void draw(GameObject object) {
 		object.draw(graphics);
 		// draw red rectangle around object

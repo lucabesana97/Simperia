@@ -2,7 +2,10 @@
 package main;
 import gui.GameFrame;
 import gui.GamePanel;
+import gui.PausePanel;
 import input.KeyHandler;
+
+import javax.swing.*;
 
 public class Game {
 	final private GameFrame frame;
@@ -10,6 +13,7 @@ public class Game {
 
 	private Gameplay gameplay;
 	private GamePanel panel;
+	PausePanel pausePanel;
 
 	public Game() {
 		frame = new GameFrame("Simperia");
@@ -23,6 +27,9 @@ public class Game {
 	public void start() {
 		panel = new GamePanel();
 		gameplay = new Gameplay(panel, keyHandler, frame);
+
+//		pausePanel = new PausePanel();
+//		panel.add(pausePanel, JLayeredPane.PALETTE_LAYER);
 
 		frame.setPanel(panel);
 

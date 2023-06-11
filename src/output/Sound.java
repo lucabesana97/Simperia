@@ -61,7 +61,7 @@ public class Sound {
 		try {
 			stop();
 		} catch(Exception e) {
-			System.out.println(e.getCause());
+			System.out.println("Error: " + e.getCause());
 		}
 	}
 

@@ -226,7 +226,7 @@ public class Player extends Entity implements Movable {
             } else {
                 alpha = -Math.atan2(enemy.coordinates.centerY - coordinates.centerY, enemy.coordinates.centerX - coordinates.centerX);
             }
-            System.out.println(alpha);
+            System.out.println("Alpha: " + alpha);
             switch (xState) {
                 case RIGHT:
                     switch (yState) {
