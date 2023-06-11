@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.BorderLayout;
 import javax.swing.*;
 
 public class GameFrame extends JFrame{
@@ -11,7 +10,10 @@ public class GameFrame extends JFrame{
 	public static final int TILE_SIZE = 64;
 
 
-	private Panel panel;
+	private GamePanel gamePanel;
+	private PausePanel pausePanel;
+	private InventoryPanel inventoryPanel;
+	private JLayeredPane layeredPane;
 	
 	public GameFrame(String title) {
 		// Set window properties
@@ -19,20 +21,46 @@ public class GameFrame extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(WIDTH, HEIGHT);
 		setResizable(false);
-		//setLayout(new OverlayLayout(getContentPane()));
 
-		// Set window to be visible
+		// Create a layered pane to hold different panels
+		layeredPane = new JLayeredPane();
+
+		pausePanel = new PausePanel();
+		pausePanel.setVisible(false);
+		layeredPane.add(pausePanel, 1);
+
+		inventoryPanel = new InventoryPanel();
+		inventoryPanel.setVisible(false);
+		layeredPane.add(inventoryPanel, 2);
+
+		// Add the layered pane to the main frame's content pane
+		getContentPane().add(layeredPane);
+
+		setLocationRelativeTo(null); // Center the window
 		setVisible(true);
+
 	}
 	
-    public void setPanel(Panel panel) {
-        if (this.panel != null) {
-            remove(this.panel);
+    public void setPanel(GamePanel gamePanel) {
+        if (this.gamePanel != null) {
+            remove(this.gamePanel);
         }
-        this.panel = panel;
-        //this.add(panel, BorderLayout.SOUTH);
+        this.gamePanel = gamePanel;
 
-		this.add(panel);
-		setLocationRelativeTo(null); // Center the window
+		//this.add(panel);
+
+		// Add the game panel to the bottom layer
+		layeredPane.add(gamePanel, 0);
+
+		layeredPane.setComponentZOrder(pausePanel, 1);
+		layeredPane.setComponentZOrder(inventoryPanel, 2);
+
+		layeredPane.revalidate();
+		layeredPane.repaint();
     }
+
+	public PausePanel getPausePanel() { return pausePanel; }
+	public InventoryPanel getInventoryPanel() { return inventoryPanel; }
+
+
 }

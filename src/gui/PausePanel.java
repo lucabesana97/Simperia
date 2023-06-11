@@ -8,6 +8,11 @@ import java.awt.*;
  */
 public class PausePanel extends Panel {
 
+    private JButton resumeButton;
+    private JButton quitButton;
+    private JButton muteButton;
+
+
     public PausePanel() {
         super();
         //setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Make the buttons appear vertically
@@ -15,24 +20,21 @@ public class PausePanel extends Panel {
         setVisible(false);
 
         // Calculate the position to center the pause panel
-        int pausePanelWidth = (int) (this.getWidth() * 0.5);
-        int pausePanelHeight = (int) (this.getHeight() * 0.5);
-        int panelX = (this.getWidth() - pausePanelWidth) / 2;
-        int panelY = (this.getHeight() - pausePanelHeight) / 2;
+        int pausePanelWidth = (int) (getWidth() * 0.5);
+        int pausePanelHeight = (int) (getHeight() * 0.5);
+        int panelX = (getWidth() - pausePanelWidth) / 2;
+        int panelY = (getHeight() - pausePanelHeight) / 2;
 
         setBounds(panelX, panelY, pausePanelWidth, pausePanelHeight);
 
         // Buttons
-        JButton resumeButton = new JButton("Resume");
-        resumeButton.addActionListener(e -> { resumeClicked(); });
+        resumeButton = new JButton("Resume");
         add(resumeButton);
 
-        JButton quitButton = new JButton("Quit");
-        quitButton.addActionListener(e -> { quitClicked(); });
+        quitButton = new JButton("Quit");
         add(quitButton);
 
-        JButton muteButton = new JButton("Mute");
-        muteButton.addActionListener(e -> { muteClicked(); });
+        muteButton = new JButton("Mute");
         add(muteButton);
 
         // Set the buttons to the middle of the panel
@@ -41,21 +43,37 @@ public class PausePanel extends Panel {
         muteButton.setAlignmentX(Component.CENTER_ALIGNMENT);
     }
 
-    public void resumeClicked() {
-        setVisible(false);
-    }
-
-    public void quitClicked() {
-        // TODO: Go back to the home panel
-    }
-
-    public void muteClicked() {
-        // TODO: Mute the game
-    }
-
     public void draw() {
 
     }
 
+    public JButton getResumeButton() {
+        return resumeButton;
+    }
+
+    public JButton getQuitButton() {
+        return quitButton;
+    }
+
+    public JButton getMuteButton() {
+        return muteButton;
+    }
+
+
+//    @Override
+//    protected void paintComponent(Graphics g) {
+//        super.paintComponent(g);
+//
+//        // Calculate the position to center the pause panel
+//        int pausePanelWidth = (int) (getWidth() * 0.5);
+//        int pausePanelHeight = (int) (getHeight() * 0.5);
+//        int panelX = (getWidth() - pausePanelWidth) / 2;
+//        int panelY = (getHeight() - pausePanelHeight) / 2;
+//
+//        setBounds(panelX, panelY, pausePanelWidth, pausePanelHeight);
+//
+//        g.setColor(getBackground());
+//        g.fillRect(0, 0, getWidth(), getHeight());
+//    }
 
 }

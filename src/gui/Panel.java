@@ -30,8 +30,6 @@ public abstract class Panel extends JPanel {
         graphics.fillRect(0, 0, WIDTH, HEIGHT);
     }
 
-    public void redraw() {
-        this.getGraphics().drawImage(imageBuffer, 0, 0, this);
-    }
+    public void redraw() { this.getGraphics().drawImage(imageBuffer, 0, 0, this); }
 
 }

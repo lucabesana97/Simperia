@@ -2,7 +2,110 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+public class InventoryPanel extends Panel {
+
+    private JLabel selectedSlotLabel;
+    private boolean[] slotSelected;
+
+    public InventoryPanel() {
+        setLayout(new BorderLayout());
+        setBackground(Color.WHITE);
+        setVisible(false);
+
+        // Calculate the position to center the inventory panel
+        int panelWidth = (int) (GameFrame.WIDTH * 0.6);
+        int panelHeight = (int) (GameFrame.HEIGHT * 0.6);
+        int panelX = (getWidth() - panelWidth) / 2;
+        int panelY = (getHeight() - panelHeight) / 2;
+
+        setBounds(panelX, panelY, panelWidth, panelHeight);
+
+        selectedSlotLabel = new JLabel("No slot selected");
+        selectedSlotLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        add(selectedSlotLabel, BorderLayout.NORTH);
+
+        JPanel slotsPanel = new JPanel(new GridLayout(3, 4, 10, 10));
+        slotsPanel.setBackground(Color.WHITE);
+        add(slotsPanel, BorderLayout.CENTER);
+
+        slotSelected = new boolean[12];
+        for (int i = 0; i < 12; i++) {
+            JButton slotButton = new JButton("Slot " + (i + 1));
+
+            //slotButton.setSize(40, 40);
+
+            final int slotIndex = i;
+            slotButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Clear selection for all slots
+                    for (int j = 0; j < 12; j++) {
+                        slotSelected[j] = false;
+                    }
+
+                    // Set the selected slot
+                    slotSelected[slotIndex] = true;
+
+                    // Update the label with the selected slot name
+                    selectedSlotLabel.setText("Selected Slot: " + (slotIndex + 1));
+                }
+            });
+
+            slotsPanel.add(slotButton);
+        }
+
+        JPanel buttonsPanel = new JPanel(new FlowLayout());
+        buttonsPanel.setBackground(Color.WHITE);
+        add(buttonsPanel, BorderLayout.SOUTH);
+
+        JButton useItemButton = new JButton("Use Item");
+        useItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle "Use Item" button click
+                int selectedSlot = getSelectedSlot();
+                if (selectedSlot != -1) {
+                    // Use the item in the selected slot
+                    System.out.println("Using item in slot " + selectedSlot);
+                } else {
+                    System.out.println("No slot selected");
+                }
+            }
+        });
+        buttonsPanel.add(useItemButton);
+
+        JButton throwItemButton = new JButton("Throw Item Away");
+        throwItemButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle "Throw Item Away" button click
+                int selectedSlot = getSelectedSlot();
+                if (selectedSlot != -1) {
+                    // Throw away the item in the selected slot
+                    System.out.println("Throwing away item in slot " + selectedSlot);
+                } else {
+                    System.out.println("No slot selected");
+                }
+            }
+        });
+        buttonsPanel.add(throwItemButton);
+    }
+
+    private int getSelectedSlot() {
+        for (int i = 0; i < 12; i++) {
+            if (slotSelected[i]) {
+                return i + 1;
+            }
+        }
+        return -1; // No slot selected
+    }
+}
+
+
+/*
 public class InventoryPanel extends Panel {
 
     public InventoryPanel() {
@@ -30,18 +133,11 @@ public class InventoryPanel extends Panel {
         JButton closeButton = new JButton("Close");
         closeButton.addActionListener(e -> { closeInventory(); });
         add(closeButton);
-        
-        JButton throwAwayButton = new JButton("Throw Away");
-        throwAwayButton.addActionListener(e -> { throwAwayClicked(); });
-        add(throwAwayButton);
 
         // Set the buttons to the middle of the panel
         useItemButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         dropItemButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         closeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-    }
-
-    private void throwAwayClicked() {
     }
 
     public void useItemClicked() {
@@ -60,3 +156,4 @@ public class InventoryPanel extends Panel {
 
     }
 }
+*/
