@@ -14,7 +14,7 @@ public class GamePanel extends Panel {
 		setBackground(Color.green);
 		//setLayout(new BorderLayout());
 
-		setLayout(null);
+		//setLayout(null);
 	}
 
 	public void draw(GameObject object) {
