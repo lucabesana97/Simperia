@@ -19,7 +19,7 @@ public class GameMap {
     public java.util.List<Enemy> enemies = new ArrayList<>();
     public List<Warp> warps = new ArrayList<>();
     public List<Warp> mapWarps = new ArrayList<>();
-    public List<NPC> npcs = new ArrayList<>();
+    public NPC beginnerNPC;
     public List<ItemStack> stacksOnWorld = new ArrayList<>();
     public List<GameObject> objects = new ArrayList<>();
 

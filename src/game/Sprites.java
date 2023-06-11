@@ -2,7 +2,7 @@ package game;
 
 import objState.EnemyState;
 import objState.MovingState;
-import static helperFunctions.utility.createFlipped;
+import static helperFunctions.Utility.createFlipped;
 import java.awt.image.BufferedImage;
 
 public class Sprites {

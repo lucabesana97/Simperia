@@ -68,7 +68,7 @@ public class Player extends Entity implements Movable {
         this.xpToNextLevel = levelXp;
         mapHeight = Gameplay.map.mapImage.getHeight();
         mapWidth = Gameplay.map.mapImage.getWidth();
-        this.coordinates = new Coordinates((int)(mapWidth/2), (int)(mapHeight/2), 48, 48);
+        this.coordinates = new Coordinates((int)(mapWidth/2) - 24, (int)(mapHeight/2) - 24, 48, 48);
     }
 
     public void draw(Graphics graphics) {
@@ -102,21 +102,7 @@ public class Player extends Entity implements Movable {
         } else {
             screenY = GameFrame.HEIGHT / 2 - 24;
         }
-
-
-        // Draw the current sprite
-        int x = (int) (coordinates.topLeftCorner_x);
-        int y = (int) (coordinates.topLeftCorner_y);
         graphics.drawImage(currentSprite, screenX, screenY, null);
-
-        // draw circle around player
-        graphics.setColor(Color.RED);
-        graphics.drawRect(screenX, screenY, 48, 48);
-        graphics.drawLine(0, GameFrame.HEIGHT/2, GameFrame.WIDTH, GameFrame.HEIGHT/2);
-        graphics.drawLine(GameFrame.WIDTH/2, 0, GameFrame.WIDTH/2, GameFrame.HEIGHT);
-        graphics.drawRect(0, 0, GameFrame.WIDTH-1, GameFrame.HEIGHT-1);
-//        graphics.drawRect(0, 0, Frame.WIDTH, Frame.HEIGHT);
-
     }
 
     @Override
@@ -196,6 +182,10 @@ public class Player extends Entity implements Movable {
 
     public boolean isColliding(ItemStack itemStack){
         return this.coordinates.intersects(itemStack.item.coordinates);
+    }
+
+    public boolean isColliding(NPC npc){
+        return this.coordinates.intersects(npc.coordinates);
     }
 
 
