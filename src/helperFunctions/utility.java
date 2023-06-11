@@ -99,7 +99,7 @@ public class Utility {
     }
 
     public static int getAimAngle(Player player){
-        int angle = 0;
+        int angle = 90;
         switch (player.xState) {
             case RIGHT -> {
                 switch (player.yState) {
@@ -110,6 +110,7 @@ public class Utility {
                         angle = 45;
                         break;
                     case STILL:
+                        angle = 0;
                         break;
                 }
             }
@@ -132,8 +133,6 @@ public class Utility {
                         angle = 270;
                         break;
                     case DOWN:
-                        angle = 90;
-                        break;
                     case STILL:
                         break;
                 }

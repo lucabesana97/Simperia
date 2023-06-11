@@ -11,7 +11,7 @@ public class CaveMap extends GameMap{
     private void load() {
         String str;
 
-        str = "/sprites/maps/gameMap03.png";
+        str = "/sprites/maps/cavernMap.png";
         try {
             mapImage = ImageIO.read(getClass().getResourceAsStream(str));
         } catch(Exception e) {System.out.println("Couldn't load map image: " + "\tReason: " + e.getCause());}

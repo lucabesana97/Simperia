@@ -1,11 +1,12 @@
 package game.inventory;
 
 import game.Coordinates;
+import game.GameObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class Item {
+public abstract class Item extends GameObject {
 
     public String name;
     public String description;
@@ -16,8 +17,6 @@ public abstract class Item {
     public boolean inInventory;
     public static int MAX_STACK = 16;
 
-    //
-    public Coordinates coordinates;
 
     public Item(String name, String description, boolean inInventory, Coordinates coordinates, int stackAmount) {
         this.name = name;
@@ -31,5 +30,6 @@ public abstract class Item {
 
     public void draw(Graphics graphics){
     }
+
 
 }

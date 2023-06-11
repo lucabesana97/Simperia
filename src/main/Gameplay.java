@@ -23,12 +23,10 @@ import input.KeyHandler;
 import input.Keys;
 import objState.EnemyState;
 import objState.MovingState;
-import objState.ShootingState;
+import objState.FightState;
+import output.Sound;
 
 public class Gameplay {
-
-    int pos_x, pos_y;
-
     final GamePanel panel;
     final KeyHandler keyHandler;
 
@@ -50,6 +48,10 @@ public class Gameplay {
 	private JButton pauseButton;
 	private JButton inventoryButton;
 	private boolean paused;
+
+	private Item deletedItem;
+	private Sound soundtrack = new Sound();
+	Sound effects = new Sound();
 
 
     public Gameplay(Panel panel, KeyHandler keyHandler) {
@@ -84,6 +86,11 @@ public class Gameplay {
 		// Inventory panel
 		inventoryPanel = new InventoryPanel();
 		panel.add(inventoryPanel);
+
+		// Soundtrack
+		soundtrack.stopMusic();
+		soundtrack.playMusic(2);
+		soundtrack.changeVolume(-20);
 	}
 
 	private void initializeInventoryButton() {
@@ -174,6 +181,18 @@ public class Gameplay {
 				}
 			}
 		}
+		/*
+		for(Item item : items){
+			if(player.isColliding(item)){
+				player.pickUp(item);
+				deletedItem = item;
+			}
+		}
+		if(deletedItem != null){
+			items.remove(deletedItem);
+			deletedItem = null;
+		}
+		*/
 		for (Warp warp : mapWarps) {
 			if (player.isColliding(warp)) {
 				changeMap = true;
@@ -186,6 +205,8 @@ public class Gameplay {
 			map = mapDestination;
 			loadObjects();
 			player.teleport(warpDestination);
+			player.mapHeight = map.mapImage.getHeight();
+			player.mapWidth = map.mapImage.getWidth();
 			mapDestination = null;
 			changeMap = false;
 		}
@@ -227,15 +248,22 @@ public class Gameplay {
 		final Set<Keys> pressedKeys = keyHandler.getKeys();
 			boolean horStill = true;
 			boolean verStill = true;
-			boolean shootVerStill = true;
-			boolean shootHorStill = true;
+			boolean sprintStill = true;
 			for (Keys keyCode : pressedKeys) {
 				switch (keyCode) {
-					case SHOOT:
-						if(player.shootState == ShootingState.READY) {
-							int angle = Utility.getAimAngle(player);
-							playerBullets.add(new Bullet(angle, player.coordinates, Bullet.PLAYER, 10, 15));
-							player.shootState = ShootingState.RELOADING;
+					case ATTACK:
+						if(player.currentWeapon == player.GUN) {
+							if (player.shootState == FightState.READY) {
+								int angle = Utility.getAimAngle(player);
+								playerBullets.add(new Bullet(angle, player.coordinates, Bullet.PLAYER, 10, 15));
+								player.shootState = FightState.RELOADING;
+							}
+						} else if (player.currentWeapon == player.SWORD){
+							for(Enemy enemy : enemies){
+								if(player.inSlashRange(enemy)){
+									player.attack(enemy);
+								}
+							}
 						}
 						break;
 					case PAUSE:
@@ -256,6 +284,13 @@ public class Gameplay {
 						player.yState = MovingState.DOWN;
 						verStill = false;
 						break;
+					case SWITCH:
+						player.switchWeapon();
+						break;
+					case SPRINT:
+						player.sprint();
+						sprintStill = false;
+						break;
 					default:
 						break;
 				}
@@ -267,11 +302,8 @@ public class Gameplay {
 			if (verStill){
 				player.yState = MovingState.STILL;
 			}
-			if(shootVerStill){
-				player.aimY = MovingState.STILL;
-			}
-			if(shootHorStill){
-				player.aimX = MovingState.STILL;
+			if (sprintStill){
+				player.slowDown();
 			}
 
 	}

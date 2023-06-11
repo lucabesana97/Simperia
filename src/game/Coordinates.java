@@ -33,8 +33,20 @@ public class Coordinates {
         bottomRightCorner_y = topLeftCorner_y + size_Y;
         centerX = topLeftCorner_x + size_X/2;
         centerY = topLeftCorner_y + size_Y/2;
-        screenX = (double) GameFrame.WIDTH /2 - (Gameplay.player.coordinates.topLeftCorner_x - topLeftCorner_x);
-        screenY = (double) GameFrame.HEIGHT /2 - (Gameplay.player.coordinates.topLeftCorner_y - topLeftCorner_y);
+        if(Gameplay.player.closeToDownWall()){
+            screenY = topLeftCorner_y + GameFrame.HEIGHT - Gameplay.map.mapImage.getHeight();
+        } else if(Gameplay.player.closeToUpWall()){
+            screenY = topLeftCorner_y;
+        } else {
+            screenY = (double) GameFrame.HEIGHT /2 - (Gameplay.player.coordinates.topLeftCorner_y - topLeftCorner_y);
+        }
+        if(Gameplay.player.closeToRightWall()){
+            screenX = topLeftCorner_x + GameFrame.WIDTH - Gameplay.map.mapImage.getWidth();
+        } else if(Gameplay.player.closeToLeftWall()){
+            screenX = topLeftCorner_x;
+        } else {
+            screenX = (double) GameFrame.WIDTH /2 - (Gameplay.player.coordinates.topLeftCorner_x - topLeftCorner_x);
+        }
     }
 
     public void moveX(double amount) {
