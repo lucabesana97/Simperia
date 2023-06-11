@@ -32,6 +32,9 @@ public class GamePanel extends Panel {
 
 	public void draw(GameObject object) {
 		object.draw(graphics);
+		// draw red rectangle around object
+		graphics.setColor(Color.red);
+		graphics.drawRect((int) object.coordinates.topLeftCorner_x, (int) object.coordinates.topLeftCorner_y, (int) object.coordinates.size_X, (int) object.coordinates.size_Y);
 	}
 
 	public void draw(GameMap object) {

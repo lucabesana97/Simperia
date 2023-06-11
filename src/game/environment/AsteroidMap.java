@@ -3,6 +3,7 @@ package game.environment;
 import game.Coordinates;
 import game.GameObject;
 import game.entities.Enemy;
+import game.entities.NPC;
 import game.entities.Octopus;
 import game.entities.Warp;
 import game.inventory.HealthElixir;
@@ -30,6 +31,7 @@ public class AsteroidMap extends GameMap {
     public AsteroidMap() {
         load();
         enemies.add(new Octopus(1000, 1000));
+        beginnerNPC = new NPC(new Coordinates(100, 100, 37, 64));
         //enemies.add(new Octopus(800,700));
 //        warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
         mapWarps.add(new Warp(new CaveMap(), new Coordinates(600, 930, 32, 32), new Coordinates(200, 3150, 32, 32), player));

@@ -38,7 +38,7 @@ public class Gameplay {
     public static Inventory inventory;
     public static GameMap map;
     private boolean changeMap = false;
-    private NPC npc;
+    private NPC beginnerNPC;
     private List<ItemStack> stacksOnWorld = new ArrayList<>();
     private List<Enemy> enemies = new ArrayList<>();
     private List<Bullet> playerBullets = new ArrayList<>();
@@ -75,7 +75,6 @@ public class Gameplay {
 
         loadObjects();
         inventory = new Inventory();
-        npc = new NPC(new Coordinates(100, 100, 32, 32));
 
         panel.addKeyListener(keyHandler);
 
@@ -181,6 +180,14 @@ public class Gameplay {
         for (Enemy enemy : enemies) {
             enemy.move(diffSeconds, player);
         }
+        if (player.isColliding(beginnerNPC)){
+            // Player is talking the NPC
+            String text = beginnerNPC.interact();
+            System.out.println(text);
+        }else{
+            // Player is not talking to the NPC
+            beginnerNPC.stopInteracting();
+        }
         for (Warp warp : warps) {
             if (player.isColliding(warp)) {
                 player.teleport(warp);
@@ -256,8 +263,15 @@ public class Gameplay {
     private void drawElements() {
 
         panel.draw(map);
+        int killedEnemies = 0;
         for (Enemy enemy : enemies) {
             panel.draw(enemy);
+            if (enemy.enemyState == EnemyState.DEAD) {
+                killedEnemies++;
+            }
+        }
+        if (killedEnemies == 1) {
+            beginnerNPC.quest.completed = true;
         }
         for (Bullet bullet : playerBullets) {
             panel.draw(bullet);
@@ -274,7 +288,7 @@ public class Gameplay {
         for (GameObject object : objects) {
             panel.draw(object);
         }
-        panel.draw(npc);
+        panel.draw(beginnerNPC);
         panel.draw(player);
         panel.draw(pauseButton);
         panel.draw(inventoryButton);
@@ -369,12 +383,14 @@ public class Gameplay {
         warps.removeAll(warps);
         mapWarps.removeAll(mapWarps);
         objects.removeAll(objects);
+        beginnerNPC = null;
 
         enemies.addAll(map.enemies);
         stacksOnWorld.addAll(map.stacksOnWorld);
         warps.addAll(map.warps);
         mapWarps.addAll(map.mapWarps);
         objects.addAll(map.objects);
+        beginnerNPC = map.beginnerNPC;
     }
 
 }

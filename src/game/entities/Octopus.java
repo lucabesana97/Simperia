@@ -62,45 +62,23 @@ public class Octopus extends Enemy{
             throw new RuntimeException(e);
         }
 
-        sprites.friendly_idle = new BufferedImage[1];
-        sprites.friendly_idle[0] = image_idle_down_1;
+        sprites.friendly_down = new BufferedImage[2];
+        sprites.friendly_down[0] = image_idle_down_1;
+        sprites.friendly_down[1] = image_idle_down_2;
 
-        sprites.friendly_up_left = new BufferedImage[2];
-        sprites.friendly_up_left[0] = image_idle_up_1;
-        sprites.friendly_up_left[1] = image_idle_up_2;
+        sprites.friendly_up = new BufferedImage[2];
+        sprites.friendly_up[0] = image_idle_up_1;
+        sprites.friendly_up[1] = image_idle_up_2;
 
-        sprites.friendly_up_right = new BufferedImage[2];
-        sprites.friendly_up_right[0] = createFlipped(image_idle_up_1);
-        sprites.friendly_up_right[1] = createFlipped(image_idle_up_2);
+        sprites.hostile_down = new BufferedImage[2];
+        sprites.hostile_down[0] = image_mad_down_1;
+        sprites.hostile_down[1] = image_mad_down_2;
 
-        sprites.friendly_down_left = new BufferedImage[2];
-        sprites.friendly_down_left[0] = image_idle_down_1;
-        sprites.friendly_down_left[1] = image_idle_down_2;
+        sprites.hostile_up = new BufferedImage[2];
+        sprites.hostile_up[0] = image_mad_up_1;
+        sprites.hostile_up[1] = image_mad_up_2;
 
-        sprites.friendly_down_right = new BufferedImage[2];
-        sprites.friendly_down_right[0] = createFlipped(image_idle_down_1);
-        sprites.friendly_down_right[1] = createFlipped(image_idle_down_2);
-
-        sprites.hostile_idle = new BufferedImage[1];
-        sprites.hostile_idle[0] = image_mad_down_1;
-
-        sprites.hostile_up_left = new BufferedImage[2];
-        sprites.hostile_up_left[0] = image_mad_up_1;
-        sprites.hostile_up_left[1] = image_mad_up_2;
-
-        sprites.hostile_up_right = new BufferedImage[2];
-        sprites.hostile_up_right[0] = createFlipped(image_mad_up_1);
-        sprites.hostile_up_right[1] = createFlipped(image_mad_up_2);
-
-        sprites.hostile_down_left = new BufferedImage[2];
-        sprites.hostile_down_left[0] = image_mad_down_1;
-        sprites.hostile_down_left[1] = image_mad_down_2;
-
-        sprites.hostile_down_right = new BufferedImage[2];
-        sprites.hostile_down_right[0] = createFlipped(image_mad_down_1);
-        sprites.hostile_down_right[1] = createFlipped(image_mad_down_2);
-
-        sprites.current = sprites.friendly_idle[0];
+        sprites.current = image_idle_down_1;
     }
 
     @Override

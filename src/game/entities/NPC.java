@@ -4,7 +4,9 @@ import game.Coordinates;
 import game.GameObject;
 import game.Quest;
 import game.inventory.HealthElixir;
+import game.inventory.ItemStack;
 import gui.GameFrame;
+import main.Gameplay;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -15,7 +17,9 @@ import java.util.Objects;
 public class NPC extends GameObject {
 
     public BufferedImage sprite;
-    Quest quest;
+    public Quest quest;
+    public boolean rewardGiven = false;
+    private boolean npcDone = false;
 
     public NPC(Coordinates coordinates) {
         super(coordinates);
@@ -36,16 +40,39 @@ public class NPC extends GameObject {
 
     }
 
-    public void interact() {
-        //TODO if quest.completed == false, shows the initial text,
-        // if quest.completed == true, shows the final text
+    public String interact() {
+        String toBeReturned = "";
+        if (quest.completed) {
+            if (!rewardGiven) {
+                rewardGiven = true;
+                Gameplay.player.gainXp(quest.xpReward);
+                Gameplay.player.coins += quest.coinsReward;
+                Gameplay.inventory.addStack(new ItemStack(quest.itemReward, 1, true));
+                toBeReturned = quest.finalText;
+            }else if (rewardGiven && !npcDone){
+                toBeReturned = quest.finalText;
+            }else if (npcDone){
+                toBeReturned = "I have nothing more to say to you.";
+            }
+        }else{
+            toBeReturned = quest.initialText;
+        }
+        return toBeReturned;
 
+    }
 
+    public void stopInteracting(){
+        if (quest.completed && rewardGiven) {
+            npcDone = true;
+        }
     }
 
     public void draw(Graphics graphics) {
         if(coordinates.inScreen()) {
             graphics.drawImage(sprite, (int) coordinates.screenX, (int) coordinates.screenY, null);
         }
+        // draw circle around player
+//        graphics.setColor(Color.RED);
+//        graphics.drawRect((int) coordinates.topLeftCorner_x, (int) coordinates.topLeftCorner_y, (int) coordinates.size_X,(int)  coordinates.size_Y);
     }
 }

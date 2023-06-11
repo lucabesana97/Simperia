@@ -2,20 +2,14 @@ package game;
 
 import objState.EnemyState;
 import objState.MovingState;
-
+import static helperFunctions.Utility.createFlipped;
 import java.awt.image.BufferedImage;
 
 public class Sprites {
-    public BufferedImage[] friendly_idle;
-    public BufferedImage[] friendly_up_left;
-    public BufferedImage[] friendly_up_right;
-    public BufferedImage[] friendly_down_left;
-    public BufferedImage[] friendly_down_right;
-    public BufferedImage[] hostile_idle;
-    public BufferedImage[] hostile_up_left;
-    public BufferedImage[] hostile_up_right;
-    public BufferedImage[] hostile_down_left;
-    public BufferedImage[] hostile_down_right;
+    public BufferedImage[] friendly_down;
+    public BufferedImage[] friendly_up;
+    public BufferedImage[] hostile_down;
+    public BufferedImage[] hostile_up;
     public BufferedImage[] attack;
     public BufferedImage dead;
 
@@ -33,9 +27,7 @@ public class Sprites {
 
         this.current = null;
     }
-//        this.side = new BufferedImage[1];
-//        this.side[0] = side;
-//        this.current = side;
+
 
 
     // calculateSprite is called every frame from the Entity class (Octopus for example)
@@ -43,51 +35,73 @@ public class Sprites {
     public void calculateSprite(EnemyState enemyState, MovingState movingState, double diffSeconds) {
         if (movingState == lastMovingState) {
             timeSinceLastFrame += diffSeconds;
+
             if (timeSinceLastFrame > timePerFrame) {
+                this.lastIndexFrame = (this.lastIndexFrame + 1) % this.friendly_down.length;
                 if (movingState == MovingState.STILL) {
-                    chooseSprite(enemyState, friendly_idle, hostile_idle);
+                    if (enemyState == EnemyState.FRIENDLY) {
+                        this.current = this.friendly_down[this.lastIndexFrame];
+                    } else {
+                        this.current = this.hostile_down[this.lastIndexFrame];
+                    }
                 } else if (movingState == MovingState.UP_LEFT) {
-                    chooseSprite(enemyState, friendly_up_left, hostile_up_left);
+                    if (enemyState == EnemyState.FRIENDLY) {
+                        this.current = this.friendly_up[this.lastIndexFrame];
+                    } else {
+                        this.current = this.hostile_up[this.lastIndexFrame];
+                    }
                 } else if (movingState == MovingState.UP_RIGHT) {
-                    chooseSprite(enemyState, friendly_up_right, hostile_up_right);
+                    if (enemyState == EnemyState.FRIENDLY) {
+                        this.current = createFlipped(this.friendly_up[this.lastIndexFrame]);
+                    } else {
+                        this.current = createFlipped(this.hostile_up[this.lastIndexFrame]);
+                    }
                 } else if (movingState == MovingState.DOWN_LEFT) {
-                    chooseSprite(enemyState, friendly_down_left, hostile_down_left);
+                    if (enemyState == EnemyState.FRIENDLY) {
+                        this.current = this.friendly_down[this.lastIndexFrame];
+                    } else {
+                        this.current = this.hostile_down[this.lastIndexFrame];
+                    }
                 } else if (movingState == MovingState.DOWN_RIGHT) {
-                    chooseSprite(enemyState, friendly_down_right, hostile_down_right);
+                    if (enemyState == EnemyState.FRIENDLY) {
+                        this.current = createFlipped(this.friendly_down[this.lastIndexFrame]);
+                    } else {
+                        this.current = createFlipped(this.hostile_down[this.lastIndexFrame]);
+                    }
                 }
                 timeSinceLastFrame = 0;
             }
+
         } else {
-//            timeSinceLastFrame = 0;
             if (movingState == MovingState.STILL) {
                 if(enemyState == EnemyState.FRIENDLY){
-                    current = friendly_idle[0];
+                    current = friendly_down[0];
                 } else {
-                    current = hostile_idle[0];
+                    current = hostile_down[0];
                 }
             } else if (movingState == MovingState.UP_LEFT) {
                 if(enemyState == EnemyState.FRIENDLY){
-                    current = friendly_up_left[0];
+                    current = friendly_up[0];
                 } else {
-                    current = hostile_up_left[0];
+                    current = hostile_up[0];
                 }
             } else if (movingState == MovingState.UP_RIGHT) {
                 if(enemyState == EnemyState.FRIENDLY){
-                    current = friendly_up_right[0];
+                    current = createFlipped(friendly_up[0]);
                 } else {
-                    current = hostile_up_right[0];
+                    current = createFlipped(hostile_up[0]);
                 }
             } else if (movingState == MovingState.DOWN_LEFT) {
                 if(enemyState == EnemyState.FRIENDLY){
-                    current = friendly_down_left[0];
+                    current = friendly_down[0];
                 } else {
-                    current = hostile_down_left[0];
+                    current = hostile_down[0];
                 }
             } else if (movingState == MovingState.DOWN_RIGHT) {
                 if(enemyState == EnemyState.FRIENDLY){
-                    current = friendly_down_right[0];
+                    current = createFlipped(friendly_down[0]);
                 } else {
-                    current = hostile_down_right[0];
+                    current = createFlipped(hostile_down[0]);
                 }
             }
             lastMovingState = movingState;
