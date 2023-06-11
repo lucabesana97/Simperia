@@ -8,20 +8,22 @@ import java.util.List;
 import java.util.Set;
 import javax.swing.JButton;
 
+import game.environment.AsteroidMap;
+import game.inventory.Item;
+import helperFunctions.Utility;
 import game.Coordinates;
 import game.entities.*;
 import game.environment.GameMap;
-import game.inventory.HealthElixir;
 import game.inventory.Inventory;
 import gui.GamePanel;
 import gui.InventoryPanel;
 import gui.Panel;
 import gui.PausePanel;
-import input.Command;
 import input.KeyHandler;
 import input.Keys;
 import objState.EnemyState;
 import objState.MovingState;
+import objState.ShootingState;
 
 public class Gameplay {
 
@@ -33,15 +35,21 @@ public class Gameplay {
     public static Player player;
 	public static Inventory inventory;
 	public static GameMap map;
+	private boolean changeMap = false;
 	private NPC npc;
-	private HealthElixir healthElixir;
+	private List<Item> items = new ArrayList<>();
 	private List<Enemy> enemies = new ArrayList<>();
+
+	private List<Bullet> playerBullets = new ArrayList<>();
+	private List<Warp> warps = new ArrayList<>();
+	private List<Warp> mapWarps = new ArrayList<>();
+	private GameMap mapDestination;
+	private Warp warpDestination;
 	private PausePanel pausePanel;
 	private InventoryPanel inventoryPanel;
 	private JButton pauseButton;
 	private JButton inventoryButton;
 	private boolean paused;
-	private List<Warp> warps = new ArrayList<>();
 
 
     public Gameplay(Panel panel, KeyHandler keyHandler) {
@@ -55,13 +63,12 @@ public class Gameplay {
     public void init() {
 
 		//Don't change the order
-		map = new GameMap();
+		map = new AsteroidMap();
 		player = new Player();
 		map.init(player);
 
-
+		loadObjects();
 		inventory = new Inventory();
-		healthElixir = new HealthElixir(false, 1, new Coordinates(1000, 1000, 32, 32));
 		npc = new NPC(new Coordinates(100, 100, 32, 32));
 
 		panel.addKeyListener(keyHandler);
@@ -105,8 +112,6 @@ public class Gameplay {
 
 
         long lastTick = System.currentTimeMillis();
-		enemies.add(new Octopus());
-		warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
         while (true) {
             long currentTick = System.currentTimeMillis();
             double diffSeconds = (currentTick - lastTick) / 100.0;
@@ -150,14 +155,39 @@ public class Gameplay {
 		for (Enemy enemy : enemies) {
 			enemy.move(diffSeconds, player);
 		}
-		Iterator<Warp> warpIter = warps.iterator();
-		while (warpIter.hasNext()) {
-			Warp warp = warpIter.next();
-			if (warp != null){
-				if(player.isColliding(warp)) {
-					player.teleport(warp);
+		for(Warp warp : warps){
+			if(player.isColliding(warp)) {
+				player.teleport(warp);
+			}
+		}
+		Iterator<Bullet> bulletIterator = playerBullets.iterator();
+		while(bulletIterator.hasNext()){
+			Bullet bullet = bulletIterator.next();
+			bullet.move(diffSeconds, player);
+			if (bullet.enemyState == EnemyState.DEAD) {
+				bulletIterator.remove();
+			}
+			for(Enemy enemy : enemies){
+				if (enemy.isColliding(bullet)){
+					System.out.println(enemy.health);
+					bullet.attack(enemy);
 				}
 			}
+		}
+		for (Warp warp : mapWarps) {
+			if (player.isColliding(warp)) {
+				changeMap = true;
+				mapDestination = warp.map;
+				warpDestination = warp;
+			}
+		}
+		if(changeMap){
+			warpDestination.map.player = player;
+			map = mapDestination;
+			loadObjects();
+			player.teleport(warpDestination);
+			mapDestination = null;
+			changeMap = false;
 		}
 		System.gc();
 	}
@@ -168,10 +198,18 @@ public class Gameplay {
 		for(Enemy enemy : enemies) {
 			panel.draw(enemy);
 		}
+		for(Bullet bullet : playerBullets){
+			panel.draw(bullet);
+		}
 		for(Warp warp: warps){
 			panel.draw(warp);
 		}
-		panel.draw(healthElixir);
+		for(Warp warp: mapWarps){
+			panel.draw(warp);
+		}
+		for(Item item : items) {
+			panel.draw(item);
+		}
 		panel.draw(npc);
 		panel.draw(player);
 		panel.draw(pauseButton);
@@ -189,8 +227,17 @@ public class Gameplay {
 		final Set<Keys> pressedKeys = keyHandler.getKeys();
 			boolean horStill = true;
 			boolean verStill = true;
+			boolean shootVerStill = true;
+			boolean shootHorStill = true;
 			for (Keys keyCode : pressedKeys) {
 				switch (keyCode) {
+					case SHOOT:
+						if(player.shootState == ShootingState.READY) {
+							int angle = Utility.getAimAngle(player);
+							playerBullets.add(new Bullet(angle, player.coordinates, Bullet.PLAYER, 10, 15));
+							player.shootState = ShootingState.RELOADING;
+						}
+						break;
 					case PAUSE:
 						break;
 					case LEFT:
@@ -209,18 +256,22 @@ public class Gameplay {
 						player.yState = MovingState.DOWN;
 						verStill = false;
 						break;
-					case SHOOT:
-						break;
 					default:
 						break;
 				}
 			}
-			System.out.println(player.yState + "\t" + player.xState);
+			//System.out.println(player.yState + "\t" + player.xState);
 			if (horStill) {
 				player.xState = MovingState.STILL;
 			}
 			if (verStill){
 				player.yState = MovingState.STILL;
+			}
+			if(shootVerStill){
+				player.aimY = MovingState.STILL;
+			}
+			if(shootHorStill){
+				player.aimX = MovingState.STILL;
 			}
 
 	}
@@ -235,6 +286,17 @@ public class Gameplay {
 
 	public boolean isPaused() {
 		return paused;
+	}
+
+	public void loadObjects(){
+		enemies.removeAll(enemies);
+		items.removeAll(items);
+		warps.removeAll(warps);
+		mapWarps.removeAll(mapWarps);
+		enemies.addAll(map.enemies);
+		items.addAll(map.items);
+		warps.addAll(map.warps);
+		mapWarps.addAll(map.mapWarps);
 	}
 
 }

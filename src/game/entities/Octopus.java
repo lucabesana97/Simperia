@@ -12,23 +12,20 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
-import static helperFunctions.utility.createFlipped;
-import static helperFunctions.utility.distanceBetweenCoordinates;
+import static helperFunctions.Utility.createFlipped;
+import static helperFunctions.Utility.distanceBetweenCoordinates;
 
 public class Octopus extends Enemy{
     public double shootingCooldown = 30;
     public double timeSinceLastShot = 30;
     List<Bullet> bullets;
-    public Octopus() {
+    public Octopus(int x, int y) {
         super();
+        invincibilityCooldown = 0;
         this.speed = 5;
         this.name = "Octopus";
         this.attack = 20;
-        // Coordinates fixed for now, will be changed later
-        int x = 1000;
-        int y = 1000;
         this.coordinates = new Coordinates(x, y, 48, 31);
         this.whereToMove = getNewCoordinates(); // Random coordinates to move to when roaming around
         this.bullets = new ArrayList<>();
@@ -210,14 +207,14 @@ public class Octopus extends Enemy{
     }
 
     public void shoot() {
-        this.bullets.add(new Bullet(0, this.coordinates));
-        this.bullets.add(new Bullet(45, this.coordinates));
-        this.bullets.add(new Bullet(90, this.coordinates));
-        this.bullets.add(new Bullet(135, this.coordinates));
-        this.bullets.add(new Bullet(180, this.coordinates));
-        this.bullets.add(new Bullet(225, this.coordinates));
-        this.bullets.add(new Bullet(270, this.coordinates));
-        this.bullets.add(new Bullet(315, this.coordinates));
+        this.bullets.add(new Bullet(0, this.coordinates, Bullet.ENEMY, 3, 6));
+        this.bullets.add(new Bullet(45, this.coordinates, Bullet.ENEMY, 3, 6));
+        this.bullets.add(new Bullet(90, this.coordinates, Bullet.ENEMY, 3, 6));
+        this.bullets.add(new Bullet(135, this.coordinates, Bullet.ENEMY, 3, 6));
+        this.bullets.add(new Bullet(180, this.coordinates, Bullet.ENEMY, 3, 6));
+        this.bullets.add(new Bullet(225, this.coordinates, Bullet.ENEMY, 3, 6));
+        this.bullets.add(new Bullet(270, this.coordinates, Bullet.ENEMY, 3, 6));
+        this.bullets.add(new Bullet(315, this.coordinates, Bullet.ENEMY, 3, 6));
     }
 
 }

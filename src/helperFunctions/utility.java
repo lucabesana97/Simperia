@@ -2,6 +2,7 @@ package helperFunctions;
 import java.awt.geom.AffineTransform;
 import java.lang.Math;
 
+import game.entities.Player;
 import game.Coordinates;
 import game.entities.Entity;
 import game.environment.GameMap;
@@ -10,7 +11,7 @@ import gui.GameFrame;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class utility {
+public class Utility {
     public static BufferedImage resize(BufferedImage img) {
         int newW = 48;
         int newH = 48;
@@ -95,5 +96,49 @@ public class utility {
             return true;
         }
         return false;
+    }
+
+    public static int getAimAngle(Player player){
+        int angle = 0;
+        switch (player.xState) {
+            case RIGHT -> {
+                switch (player.yState) {
+                    case UP:
+                        angle = 315;
+                        break;
+                    case DOWN:
+                        angle = 45;
+                        break;
+                    case STILL:
+                        break;
+                }
+            }
+            case LEFT -> {
+                switch (player.yState) {
+                    case UP:
+                        angle = 225;
+                        break;
+                    case DOWN:
+                        angle = 135;
+                        break;
+                    case STILL:
+                        angle = 180;
+                        break;
+                }
+            }
+            case STILL -> {
+                switch (player.yState) {
+                    case UP:
+                        angle = 270;
+                        break;
+                    case DOWN:
+                        angle = 90;
+                        break;
+                    case STILL:
+                        break;
+                }
+            }
+        }
+    return angle;
     }
 }

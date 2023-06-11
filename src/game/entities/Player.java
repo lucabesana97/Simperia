@@ -5,6 +5,7 @@ import game.Movable;
 import gui.GameFrame;
 import main.Gameplay;
 import objState.MovingState;
+import objState.ShootingState;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,10 +13,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
-import static helperFunctions.utility.resize;
-import static helperFunctions.utility.createFlipped;
+import static helperFunctions.Utility.resize;
+import static helperFunctions.Utility.createFlipped;
 
 public class Player extends Entity implements Movable {
+    public static final double MAX_TIMER = 2;
     public int coins;
     public int xp;
     public int xpToNextLevel;
@@ -27,6 +29,9 @@ public class Player extends Entity implements Movable {
     public int mapHeight;
     public int mapWidth;
     public boolean sword;
+    public MovingState aimX,aimY;
+    public ShootingState shootState;
+    private double shootCounter = 0;
     private BufferedImage[] spritesDown;
     private BufferedImage[] spritesUp;
     private BufferedImage[] spritesSide;
@@ -45,6 +50,7 @@ public class Player extends Entity implements Movable {
         speed = 30;
         xState = MovingState.STILL;
         yState = MovingState.STILL;
+        shootState = ShootingState.READY;
         sprites.current = resize(image);
         this.name = "Player";
         this.coins = 0;
@@ -89,7 +95,8 @@ public class Player extends Entity implements Movable {
 
     @Override
     public void move(double diffSeconds) {
-        System.out.println(coordinates.topLeftCorner_x + "\t" + (int)(mapWidth - GameFrame.WIDTH/2));
+        //System.out.println(coordinates.topLeftCorner_x + "\t" + (int)(mapWidth - GameFrame.WIDTH/2));
+        setShooting(diffSeconds);
         this.invincibilityTimer += diffSeconds;
 
         double moveBy = diffSeconds * speed;
@@ -161,4 +168,13 @@ public class Player extends Entity implements Movable {
     }
 
 
+    private void setShooting(double diffSeconds) {
+        if(shootState == ShootingState.RELOADING && shootCounter < MAX_TIMER) {
+            shootCounter += diffSeconds;
+        }
+        else if (shootState == ShootingState.RELOADING && shootCounter >= MAX_TIMER) {
+            shootCounter = 0;
+            shootState = ShootingState.READY;
+        }
+    }
 }
