@@ -2,11 +2,12 @@ package game.entities;
 
 import game.Coordinates;
 import game.Movable;
-import game.inventory.Item;
 import game.inventory.ItemStack;
 import gui.GameFrame;
+import helperFunctions.Utility;
 import main.Gameplay;
 import objState.MovingState;
+import objState.FightState;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,14 +15,21 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
-import static helperFunctions.utility.resize;
-import static helperFunctions.utility.createFlipped;
+import static helperFunctions.Utility.*;
 
 public class Player extends Entity implements Movable {
+    public static final int SWORD = 0;
+    public static final int GUN = 1;
+    public static final double RELOAD_TIMER = 2;
+    public static final double SWITCH_WEAPON_TIMER = 1;
     public int coins;
     public int xp;
     public int xpToNextLevel;
     public int levelXp;
+    public int currentWeapon = GUN;
+    public double switchCounter = 0;
+    public FightState switchState = FightState.READY;
+    int slashRange;
     public MovingState xState;
     public MovingState yState;
     public int screenX = GameFrame.WIDTH / 2 - 24;
@@ -29,9 +37,12 @@ public class Player extends Entity implements Movable {
     public int mapHeight;
     public int mapWidth;
     public boolean sword;
+    public FightState shootState;
+    private double shootCounter = 0;
     private BufferedImage[] spritesDown;
     private BufferedImage[] spritesUp;
     private BufferedImage[] spritesSide;
+    //public List<Item> items = new ArrayList<>();
 
     public Player() {
         spritesDown = loadSprites("/sprites/player/Down-", 2);
@@ -47,6 +58,8 @@ public class Player extends Entity implements Movable {
         speed = 30;
         xState = MovingState.STILL;
         yState = MovingState.STILL;
+        shootState = FightState.READY;
+        slashRange = 40;
         sprites.current = resize(image);
         this.name = "Player";
         this.coins = 0;
@@ -74,6 +87,23 @@ public class Player extends Entity implements Movable {
         }
         currentSprite = resize(currentSprite);
 
+
+        if (closeToLeftWall()) {
+            screenX = (int)coordinates.topLeftCorner_x - 24;
+        } else if (closeToRightWall()) {
+            screenX = (int)(coordinates.topLeftCorner_x - mapWidth + GameFrame.WIDTH) - 24;
+        } else {
+            screenX = GameFrame.WIDTH / 2 - 24;
+        }
+        if (closeToUpWall()) {
+            screenY = (int)coordinates.topLeftCorner_y - 24;
+        } else if (closeToDownWall()) {
+            screenY = (int)(coordinates.topLeftCorner_y - mapHeight + GameFrame.HEIGHT) - 24;
+        } else {
+            screenY = GameFrame.HEIGHT / 2 - 24;
+        }
+
+
         // Draw the current sprite
         int x = (int) (coordinates.topLeftCorner_x);
         int y = (int) (coordinates.topLeftCorner_y);
@@ -91,12 +121,12 @@ public class Player extends Entity implements Movable {
 
     @Override
     public void move(double diffSeconds) {
-        System.out.println(coordinates.topLeftCorner_x + "\t" + (int)(mapWidth - GameFrame.WIDTH/2));
+        //System.out.println(coordinates.topLeftCorner_x + "\t" + (int)(mapWidth - GameFrame.WIDTH/2));
+        setShooting(diffSeconds);
         this.invincibilityTimer += diffSeconds;
 
         double moveBy = diffSeconds * speed;
 
-        //TODO edit so player moves with keys pressed
         if(xState != MovingState.STILL && yState != MovingState.STILL){
             moveBy *= Math.sqrt(2) / 2;
             coordinates.moveX((xState == MovingState.RIGHT) ? moveBy : -moveBy);
@@ -107,18 +137,20 @@ public class Player extends Entity implements Movable {
             coordinates.moveY((yState == MovingState.DOWN) ? moveBy : -moveBy);
         }
 
-        if (coordinates.topLeftCorner_x < (int)(GameFrame.WIDTH/2)) {
-            coordinates.topLeftCorner_x = (int)(GameFrame.WIDTH/2);
+        if (coordinates.topLeftCorner_x <= 0) {
+            coordinates.topLeftCorner_x = 0;
         }
-        if (coordinates.topLeftCorner_y < (int)(GameFrame.HEIGHT/2)) {
-            coordinates.topLeftCorner_y = (int)(GameFrame.HEIGHT/2);
+        if (coordinates.topLeftCorner_y <= 0) {
+            coordinates.topLeftCorner_y = 0;
         }
-        if (coordinates.topLeftCorner_x > (int)(mapWidth - GameFrame.WIDTH/2)) {
-            coordinates.topLeftCorner_x = (int)(mapWidth - GameFrame.WIDTH/2);
+        if (coordinates.topLeftCorner_x > mapWidth) {
+            coordinates.topLeftCorner_x = mapWidth;
         }
-        if (coordinates.topLeftCorner_y > mapHeight - (int)(GameFrame.HEIGHT/2)) {
-            coordinates.topLeftCorner_y = mapHeight - (int)(GameFrame.HEIGHT/2);
+        if (coordinates.topLeftCorner_y > mapHeight) {
+            coordinates.topLeftCorner_y = mapHeight;
         }
+        setSwitching(diffSeconds);
+        System.out.println(switchCounter + "\t" + switchState);
     }
 
     private BufferedImage[] loadSprites(String prefix, int count) {
@@ -168,4 +200,123 @@ public class Player extends Entity implements Movable {
 
 
 
+    private void setShooting(double diffSeconds) {
+        if(shootState == FightState.RELOADING && shootCounter < RELOAD_TIMER) {
+            shootCounter += diffSeconds;
+        }
+        else if (shootState == FightState.RELOADING && shootCounter >= RELOAD_TIMER) {
+            shootCounter = 0;
+            shootState = FightState.READY;
+        }
+    }
+
+    private void setSwitching(double diffSeconds) {
+        if(switchState == FightState.RELOADING && shootCounter < RELOAD_TIMER) {
+            switchCounter += diffSeconds;
+        }
+        else if (switchState == FightState.RELOADING && shootCounter >= RELOAD_TIMER) {
+            shootCounter = 0;
+            switchState = FightState.READY;
+        }
+    }
+    public void switchWeapon(){
+        if(switchState == FightState.READY){
+            if (currentWeapon == Player.GUN) {
+                currentWeapon = Player.SWORD;
+            } else if (currentWeapon == Player.SWORD) {
+                currentWeapon = Player.GUN;
+            }
+        }
+    }
+    public boolean inSlashRange(Enemy enemy) {
+        if (Utility.distanceBetweenCoordinates(coordinates, enemy.coordinates) <= slashRange) {
+            double alpha;
+            if (enemy.coordinates.centerY == coordinates.centerY) {
+                alpha = 1.6;
+            } else {
+                alpha = -Math.atan2(enemy.coordinates.centerY - coordinates.centerY, enemy.coordinates.centerX - coordinates.centerX);
+            }
+            System.out.println(alpha);
+            switch (xState) {
+                case RIGHT:
+                    switch (yState) {
+                        case UP:
+                            if (alpha <= Math.PI / 2 && alpha >= 0) return true;
+                            break;
+                        case DOWN:
+                            if (alpha >= -Math.PI / 2 && alpha <= 0) return true;
+                            break;
+                        case STILL:
+                            if (alpha <= Math.PI / 4 && alpha >= -Math.PI / 4) return true;
+                            break;
+                    }
+                    break;
+                case LEFT:
+                    switch (yState) {
+                        case UP:
+                            if (alpha <= Math.PI && alpha >= Math.PI / 2) return true;
+                            break;
+                        case DOWN:
+                            if (alpha <= -Math.PI / 2 && alpha >= -Math.PI) return true;
+                            break;
+                        case STILL:
+                            if (alpha >= Math.PI *3 / 4 || alpha <= -Math.PI * 3 / 4) return true;
+                            break;
+                    }
+                    break;
+                case STILL:
+                    switch (yState) {
+                        case UP:
+                            if (alpha <= Math.PI * 3 / 4 && alpha >= Math.PI / 4) return true;
+                            break;
+                        case DOWN:
+                        case STILL:
+                            if (alpha >= -Math.PI * 3 / 4 && alpha <= -Math.PI / 4) return true;
+                            break;
+                    }
+                    break;
+            }
+        }
+        return false;
+    }
+
+    public void sprint() {
+        speed = 45;
+        sprites.speedUp();
+    }
+    public void slowDown(){
+        speed = 30;
+        sprites.speedDown();
+    }
+
+    /*public void pickUp(Item pickup){
+        for(Item item : items){
+            if(item.name == pickup.name){
+                item.stackAmount += pickup.stackAmount;
+            }
+            else{
+                items.add(pickup);
+                break;
+            }
+        }
+    }*/
+
+    public boolean closeToLeftWall(){
+        if(coordinates.topLeftCorner_x < (int)(GameFrame.WIDTH/2)){return true;}
+        return false;
+    }
+
+    public boolean closeToRightWall(){
+        if(coordinates.topLeftCorner_x > (int)(mapWidth - GameFrame.WIDTH/2)){return true;}
+        return false;
+    }
+
+    public boolean closeToUpWall(){
+        if(coordinates.topLeftCorner_y < (int)(GameFrame.HEIGHT/2)){return true;}
+        return false;
+    }
+    public boolean closeToDownWall(){
+        if(coordinates.topLeftCorner_y > mapHeight - (int)(GameFrame.HEIGHT/2)){return true;}
+        return false;
+    }
 }

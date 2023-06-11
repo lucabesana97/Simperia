@@ -8,6 +8,7 @@ public class Coordinates {
     public double topLeftCorner_y;
     public double bottomRightCorner_x;
     public double bottomRightCorner_y;
+    public double centerX,centerY;
     public double worldX;
     public double worldY;
 
@@ -22,14 +23,30 @@ public class Coordinates {
         size_Y = objectSize_y;
         bottomRightCorner_x = topLeftCorner_x + size_X;
         bottomRightCorner_y = topLeftCorner_y + size_Y;
+        centerX = topLeftCorner_x + size_X/2;
+        centerY = topLeftCorner_y + size_Y/2;
         //adjustCoordinates();
     }
 
     public void adjustCoordinates(){
         bottomRightCorner_x = topLeftCorner_x + size_X;
         bottomRightCorner_y = topLeftCorner_y + size_Y;
-        screenX = GameFrame.WIDTH/2 - (Gameplay.player.coordinates.topLeftCorner_x - topLeftCorner_x);
-        screenY = GameFrame.HEIGHT/2 - (Gameplay.player.coordinates.topLeftCorner_y - topLeftCorner_y);
+        centerX = topLeftCorner_x + size_X/2;
+        centerY = topLeftCorner_y + size_Y/2;
+        if(Gameplay.player.closeToDownWall()){
+            screenY = topLeftCorner_y + GameFrame.HEIGHT - Gameplay.map.mapImage.getHeight();
+        } else if(Gameplay.player.closeToUpWall()){
+            screenY = topLeftCorner_y;
+        } else {
+            screenY = (double) GameFrame.HEIGHT /2 - (Gameplay.player.coordinates.topLeftCorner_y - topLeftCorner_y);
+        }
+        if(Gameplay.player.closeToRightWall()){
+            screenX = topLeftCorner_x + GameFrame.WIDTH - Gameplay.map.mapImage.getWidth();
+        } else if(Gameplay.player.closeToLeftWall()){
+            screenX = topLeftCorner_x;
+        } else {
+            screenX = (double) GameFrame.WIDTH /2 - (Gameplay.player.coordinates.topLeftCorner_x - topLeftCorner_x);
+        }
     }
 
     public void moveX(double amount) {

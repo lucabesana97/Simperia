@@ -8,11 +8,5 @@ public class Main {
 			game.init();
 		});
 		game.start();
-
-//		Game game = new Game();
-//		game.init();
-//		game.start();
-
 	}
-
 }
