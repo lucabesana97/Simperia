@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public abstract class Panel extends JPanel {
+public abstract class Panel extends JLayeredPane {
 
     public static final int WIDTH = GameFrame.WIDTH;
     public static final int HEIGHT = GameFrame.HEIGHT;

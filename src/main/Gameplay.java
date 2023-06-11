@@ -59,10 +59,11 @@ public class Gameplay {
     public Gameplay(GamePanel panel, KeyHandler keyHandler, GameFrame frame) {
         //this.panel = (GamePanel) panel;
         this.panel = panel;
+        this.pausePanel = frame.getPausePanel();
+        this.inventoryPanel = frame.getInventoryPanel();
+
         this.keyHandler = keyHandler;
 		gameState = GameState.PLAYING;
-        pausePanel = frame.getPausePanel();
-        inventoryPanel = frame.getInventoryPanel();
     }
 
 
@@ -105,19 +106,34 @@ public class Gameplay {
             lastTick = currentTick;
 
 
-            try {
-                handleUserInput();
-            } catch (Exception e) {
-                System.out.println(e.getCause());
+            this.panel.requestFocusInWindow();
+            if (gameState == GameState.PAUSED){
+                pausePanel.setVisible(true);
+                pausePanel.repaint();
+            } else if (gameState == GameState.INVENTORY) {
+                inventoryPanel.setVisible(true);
+                inventoryPanel.repaint();
+            } else {
+                pausePanel.setVisible(false);
+                inventoryPanel.setVisible(false);
+
+                update(diffSeconds);
+
+
+                panel.clear();
+                drawElements();
+                panel.redraw();
+                try {
+
+                    handleUserInput();
+                } catch (Exception e) {
+                    System.out.println("Error: " + e.getCause());
+                }
             }
 
-            update(diffSeconds);
 
-            panel.clear();
-            drawElements();
-            panel.redraw();
-            //pausePanel.repaint();
-            //inventoryPanel.repaint();
+//            pausePanel.repaint();
+//            inventoryPanel.repaint();
 
             System.out.flush();
 
@@ -126,11 +142,11 @@ public class Gameplay {
 
 	private void update(double diffSeconds) {
 		// Workaround to resume the game
-		if (!pausePanel.isVisible() && !inventoryPanel.isVisible()) {
-			resume();
-		}
-
-        // Pauses the game
+//		if (!pausePanel.isVisible() && !inventoryPanel.isVisible()) {
+//			resume();
+//		}
+//
+//        // Pauses the game
 		if (gameState == GameState.PAUSED || gameState == GameState.INVENTORY) {
 			return;
 		}
@@ -165,7 +181,7 @@ public class Gameplay {
         if (player.isColliding(beginnerNPC)){
             // Player is talking to the NPC
             String text = beginnerNPC.interact();
-            System.out.println(text);
+            System.out.println("Text: " + text);
         }else{
             // Player is not talking to the NPC
             beginnerNPC.stopInteracting();
@@ -184,7 +200,7 @@ public class Gameplay {
             }
             for (Enemy enemy : enemies) {
                 if (enemy.isColliding(bullet)) {
-                    System.out.println(enemy.health);
+                    System.out.println("Enemy health: " + enemy.health);
                     bullet.attack(enemy);
                 }
             }
@@ -245,6 +261,7 @@ public class Gameplay {
     private void drawElements() {
 
         panel.draw(map);
+        panel.draw(beginnerNPC);
         int killedEnemies = 0;
         for (Enemy enemy : enemies) {
             panel.draw(enemy);
@@ -270,21 +287,21 @@ public class Gameplay {
         for (GameObject object : objects) {
             panel.draw(object);
         }
-        panel.draw(beginnerNPC);
         panel.draw(player);
 
-        //pausePanel.repaint();
+//        pausePanel.repaint();
         //inventoryPanel.repaint();
 
     }
 
     private void handleUserInput() {
-
+        System.out.println("Handling user input");
         final Set<Keys> pressedKeys = keyHandler.getKeys();
         boolean horStill = true;
         boolean verStill = true;
         boolean sprintStill = true;
         for (Keys keyCode : pressedKeys) {
+            System.out.println("Key pressed: " + keyCode);
             switch (keyCode) {
                 case ATTACK:
                     if (player.currentWeapon == player.GUN) {
@@ -321,7 +338,8 @@ public class Gameplay {
                     player.switchWeapon();
                     break;
                 case PAUSE:
-                    if (!pausePanel.isVisible()) {
+                    System.out.println("Pause");
+                    if (!pausePanel.isVisible() && this.gameState != GameState.PAUSED) {
                         pause();
                     } else {
                         resume();
@@ -342,7 +360,7 @@ public class Gameplay {
                     break;
             }
         }
-        //System.out.println(player.yState + "\t" + player.xState);
+//        System.out.println(player.yState + "\t" + player.xState);
         if (horStill) {
             player.xState = MovingState.STILL;
         }
@@ -357,25 +375,25 @@ public class Gameplay {
     private void openInventory() {
         inventoryPanel.setVisible(true);
         gameState = GameState.INVENTORY;
-        inventoryPanel.repaint();
+        inventoryPanel.redraw();
     }
 
     private void closeInventory() {
         inventoryPanel.setVisible(false);
         gameState = GameState.PLAYING;
-        inventoryPanel.repaint();
+        inventoryPanel.redraw();
     }
 
     public void pause() {
         pausePanel.setVisible(true);
         gameState = GameState.PAUSED;
-        pausePanel.repaint();
+//        pausePanel.repaint();
     }
 
 	public void resume() {
         pausePanel.setVisible(false);
         gameState = GameState.PLAYING;
-        pausePanel.repaint();
+//        pausePanel.repaint();
     }
 
 	public boolean isPaused() {	return gameState == GameState.PAUSED; }
