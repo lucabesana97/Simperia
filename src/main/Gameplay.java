@@ -5,7 +5,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import javax.swing.JButton;
 
 import game.Coordinates;
@@ -13,13 +12,13 @@ import game.entities.*;
 import game.environment.GameMap;
 import game.inventory.HealthElixir;
 import game.inventory.Inventory;
+import game.inventory.Item;
+import game.inventory.ItemStack;
 import gui.GamePanel;
 import gui.InventoryPanel;
 import gui.Panel;
 import gui.PausePanel;
-import input.Command;
 import input.KeyHandler;
-import input.Keys;
 import objState.EnemyState;
 
 public class Gameplay {
@@ -33,7 +32,7 @@ public class Gameplay {
 	public static Inventory inventory;
 	public static GameMap map;
 	private NPC npc;
-	private HealthElixir healthElixir;
+	private List<ItemStack> stacksOnWorld = new ArrayList<>();
 	private List<Enemy> enemies = new ArrayList<>();
 	private PausePanel pausePanel;
 	private InventoryPanel inventoryPanel;
@@ -60,7 +59,6 @@ public class Gameplay {
 
 
 		inventory = new Inventory();
-		healthElixir = new HealthElixir(false, 1, new Coordinates(1000, 1000, 32, 32));
 		npc = new NPC(new Coordinates(100, 100, 32, 32));
 
 		panel.addKeyListener(keyHandler);
@@ -102,12 +100,13 @@ public class Gameplay {
 
 	public void run() {
 
-
-
         long lastTick = System.currentTimeMillis();
+
 		enemies.add(new Octopus());
+		inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(500,500,16,16)), 1, false));
 		warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
-        while (true) {
+
+		while (true) {
             long currentTick = System.currentTimeMillis();
             double diffSeconds = (currentTick - lastTick) / 100.0;
             lastTick = currentTick;
@@ -139,7 +138,10 @@ public class Gameplay {
 			return;
 		}
 
+		// Player
 		player.move(diffSeconds);
+
+		//Enemies
 		Iterator<Enemy> enemyIter = enemies.iterator();
 		while (enemyIter.hasNext()) {
 			Enemy enemy = enemyIter.next();
@@ -147,9 +149,12 @@ public class Gameplay {
 				enemyIter.remove();
 			}
 		}
+
 		for (Enemy enemy : enemies) {
 			enemy.move(diffSeconds, player);
 		}
+
+		//Warps
 		Iterator<Warp> warpIter = warps.iterator();
 		while (warpIter.hasNext()) {
 			Warp warp = warpIter.next();
@@ -159,6 +164,23 @@ public class Gameplay {
 				}
 			}
 		}
+
+		//Items
+		for (int i = 0; i < stacksOnWorld.size(); i++) {
+			if (stacksOnWorld.get(i) != null) {
+				if(player.isColliding(stacksOnWorld.get(i))) {
+					ItemStack remainder = inventory.addStack(stacksOnWorld.get(i));
+
+					if(remainder == null) { //The item was added, it has to be deleted from the world
+						stacksOnWorld.remove(i);
+					} else { //There are items that didn't fit int he inventory.
+						stacksOnWorld.get(i).amount = remainder.amount;
+					}
+
+				}
+			}
+		}
+
 		System.gc();
 	}
 
@@ -171,7 +193,9 @@ public class Gameplay {
 		for(Warp warp: warps){
 			panel.draw(warp);
 		}
-		panel.draw(healthElixir);
+		for(ItemStack item: stacksOnWorld){
+			panel.draw(item.item);
+		}
 		panel.draw(npc);
 		panel.draw(player);
 		panel.draw(pauseButton);

@@ -2,6 +2,8 @@ package game.entities;
 
 import game.Coordinates;
 import game.Movable;
+import game.inventory.Item;
+import game.inventory.ItemStack;
 import gui.GameFrame;
 import main.Gameplay;
 import objState.MovingState;
@@ -159,6 +161,11 @@ public class Player extends Entity implements Movable {
         xpToNextLevel = levelXp;
         gainXp(xpLeft);
     }
+
+    public boolean isColliding(ItemStack itemStack){
+        return this.coordinates.intersects(itemStack.item.coordinates);
+    }
+
 
 
 }

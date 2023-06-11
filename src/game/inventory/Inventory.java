@@ -1,11 +1,11 @@
 package game.inventory;
 
 public class Inventory {
-    public static int SLOTS = 12;
-    public Item[] items;
+    public static int NUMBER_OF_SLOTS = 12;
+    public ItemStack[] slots;
 
     public Inventory() {
-        items = new Item[SLOTS];
+        slots = new ItemStack[NUMBER_OF_SLOTS];
     }
 
     /**
@@ -14,11 +14,11 @@ public class Inventory {
      * @param position The position of the item to use in the slots array.
      */
     public void useItem(int position) {
-        if (items[position] != null && items[position].stackAmount > 0) {
-            items[position].use();
-            items[position].stackAmount--;
+        if (slots[position] != null && slots[position].amount > 0) {
+            slots[position].amount--;
+            slots[position].item.use();
 
-            if (items[position].stackAmount <= 0) {
+            if (slots[position].amount <= 0) {
                 removeItem(position);
             }
         }
@@ -29,62 +29,60 @@ public class Inventory {
      *
      * @param position The position of the item to remove in the slots array.
      */
-    public void removeItem(int position) {
-        items[position] = null;
+    public void removeItem(int position) { // Also for dropping items
+        slots[position] = null;
     }
 
     /**
-     * Adds an item to the inventory
-     * <p>
-     * If the item is already in the inventory, it will increase the quantity of that item.
-     * If the item is not in the inventory, it will add it to the first available slot.
-     * If there are no available slots, it will not add the item.
      *
-     * @param item The item to add to the inventory
-     * @return true if the item was added, false if it was not.
+     * @param itemStack
+     * @return the remainder after adding the stack if there's no more free available space.
+     *  null if all the items were added successfully.
      */
-    public boolean addItem(Item item) {
-        boolean full = true;
+    public ItemStack addStack(ItemStack itemStack) {
 
-        for (int i = 0; i < SLOTS; i++) {
-            if (items[i] == null) {
-                full = false;
+        ItemStack remainder = null;
+        boolean added = false;
+        int firstAvailableSlot = -1;
+
+        for (int i = 0; i < NUMBER_OF_SLOTS; i++) {
+            if (slots[i] == null) {
+                firstAvailableSlot = i;
+            } else if (slots[i].item == itemStack.item && slots[i].amount <= ItemStack.MAX_STACK) {
+                slots[i].amount += itemStack.amount;
+                added = true;
+                adjustStackAmount(slots[i]);
             }
 
-            if (items[i] == item && items[i].stackAmount < Item.MAX_STACK) {
-                items[i].stackAmount = items[i].stackAmount + item.stackAmount;
-
-                if (items[i].stackAmount > Item.MAX_STACK) {
-                    int remainder = items[i].stackAmount - Item.MAX_STACK;
-                    if (remainder == 0)
-                        return true;
-
-                    items[i].stackAmount = Item.MAX_STACK;
-                    item.stackAmount = remainder;
-                    addItem(item);
-                } else {
-                    item.stackAmount = 0;
-                }
-
-                // Calculate the amount of items that can be added to the stack and add
-                // only that amount to the current stack and keep adding int the next
-                // stack until the whole amount is added.
-
-
-                return true;
-            }
         }
 
-        if (!full) {
-            for (int i = 0; i < SLOTS; i++) {
-                if (items[i] == null) {
-                    items[i] = item;
-                    items[i].stackAmount = item.stackAmount;
-                    return true;
-                }
-            }
+        // If it's full, it returns
+        if (firstAvailableSlot < 0) {
+            itemStack.inInventory = false;
+            return itemStack;
         }
 
-        return false;
+        //If it isn't full, it adds the items in the first new slot available
+        slots[firstAvailableSlot] = itemStack;
+        adjustStackAmount(slots[firstAvailableSlot]);
+
+        return remainder;
+
     }
+
+    public void adjustStackAmount(ItemStack itemStack) {
+
+        if (itemStack.amount < ItemStack.MAX_STACK) {
+            itemStack.inInventory = true;
+        } else {
+            int remainder = itemStack.amount - ItemStack.MAX_STACK;
+            itemStack.amount = ItemStack.MAX_STACK;
+            ItemStack newStack = new ItemStack(itemStack.item, remainder, true);
+            addStack(newStack);
+        }
+    }
+
 }
+
+
+
