@@ -1,6 +1,8 @@
 package gui;
 
 import game.GameObject;
+import game.environment.GameMap;
+import game.inventory.Item;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +31,17 @@ public class GamePanel extends Panel {
 	}
 
 	public void draw(GameObject object) {
+		object.draw(graphics);
+	}
+
+	public void draw(GameMap object) {
+		object.draw(graphics);
+	}
+	public void draw(JButton object) {
+		object.paint(graphics);
+	}
+
+	public void draw(Item object) {
 		object.draw(graphics);
 	}
 

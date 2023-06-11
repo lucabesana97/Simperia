@@ -1,19 +1,51 @@
 package game.entities;
 
+import game.Coordinates;
 import game.GameObject;
+import game.Quest;
+import game.inventory.HealthElixir;
+import gui.GameFrame;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 public class NPC extends GameObject {
 
-    String dialog;
-//    Quest[] quests;
+    public BufferedImage sprite;
+    Quest quest;
 
-    public void loadDialog() {
-        //TODO there is a file somewhere with all the dialogs for the NPCs
+    public NPC(Coordinates coordinates) {
+        super(coordinates);
+        try {
+            sprite = ImageIO.read(Objects.requireNonNull(getClass().getResource("/sprites/npcs/npc1_64.png")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        quest = new Quest(
+                "Kill the octopussies",
+                "Well done. Here is your reward.",
+                500,
+                new HealthElixir(
+                        new Coordinates(0, 0, 0, 0)
+                ),
+                100
+        );
+
+    }
+
+    public void interact() {
+        //TODO if quest.completed == false, shows the initial text,
+        // if quest.completed == true, shows the final text
+
+
     }
 
     public void draw(Graphics graphics) {
-
+        if(coordinates.inScreen()) {
+            graphics.drawImage(sprite, (int) coordinates.screenX, (int) coordinates.screenY, null);
+        }
     }
 }

@@ -26,7 +26,7 @@ public abstract class Panel extends JPanel {
     }
 
     public void clear() {
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(Color.BLACK);
         graphics.fillRect(0, 0, WIDTH, HEIGHT);
     }
 

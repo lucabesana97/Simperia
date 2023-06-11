@@ -1,7 +1,9 @@
 package game.entities;
 
 import game.Movable;
-import game.inventory.InventoryItem;
+import game.inventory.Item;
+import gui.GameFrame;
+import main.Gameplay;
 import objState.EnemyState;
 import objState.MovingState;
 import game.Coordinates;
@@ -11,7 +13,7 @@ import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Enemy extends Entity implements Movable {
-    InventoryItem loot;
+    Item loot;
     int experienceOnKill;
     int moneyOnKill;
     public EnemyState enemyState; // Whether the enemy is friendly or hostile
@@ -25,8 +27,10 @@ public class Enemy extends Entity implements Movable {
     }
     @Override
     public void draw(Graphics g) {
-        BufferedImage image = sprites.current;
-        g.drawImage(image, (int) coordinates.topLeftCorner_x, (int) coordinates.topLeftCorner_y, null);
+        if(coordinates.inScreen()) {
+            BufferedImage image = sprites.current;
+            g.drawImage(image, (int) coordinates.screenX - 24, (int)coordinates.screenY - 24, null);
+        }
     }
     // Get a random coordinate to move to. This is used when the enemy is roaming around. It is calculated as a random position
     // within 150 pixels of the enemy's current position.

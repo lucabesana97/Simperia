@@ -5,5 +5,9 @@ public enum MovingState {
     UP_LEFT,
     UP_RIGHT,
     DOWN_LEFT,
-    DOWN_RIGHT,s
+    DOWN_RIGHT,
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
 }

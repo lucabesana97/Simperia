@@ -133,5 +133,12 @@ public class Sprites {
     with the animations.
      */
 
+    public void speedUp(){
+        timePerFrame = 1.4;
+    }
+
+    public void speedDown(){
+        timePerFrame = 1.75;
+    }
 
 }
