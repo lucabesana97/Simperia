@@ -2,6 +2,7 @@ package game.environment;
 
 import game.entities.*;
 import game.inventory.Item;
+import game.inventory.ItemStack;
 import gui.GameFrame;
 
 import javax.imageio.ImageIO;
@@ -18,7 +19,7 @@ public class GameMap {
     public List<Warp> warps = new ArrayList<>();
     public List<Warp> mapWarps = new ArrayList<>();
     public List<NPC> npcs = new ArrayList<>();
-    public List<Item> items = new ArrayList<>();
+    public List<ItemStack> stacksOnWorld = new ArrayList<>();
 
     public GameMap(){
         load();

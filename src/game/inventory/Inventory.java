@@ -34,10 +34,9 @@ public class Inventory {
     }
 
     /**
-     *
      * @param itemStack
      * @return the remainder after adding the stack if there's no more free available space.
-     *  null if all the items were added successfully.
+     * null if all the items were added successfully.
      */
     public ItemStack addStack(ItemStack itemStack) {
 
@@ -47,8 +46,9 @@ public class Inventory {
 
         for (int i = 0; i < NUMBER_OF_SLOTS; i++) {
             if (slots[i] == null) {
-                firstAvailableSlot = i;
-            } else if (slots[i].item == itemStack.item && slots[i].amount <= ItemStack.MAX_STACK) {
+                if (firstAvailableSlot < 0)
+                    firstAvailableSlot = i;
+            } else if (slots[i].item == itemStack.item && slots[i].amount < ItemStack.MAX_STACK) {
                 slots[i].amount += itemStack.amount;
                 added = true;
                 adjustStackAmount(slots[i]);

@@ -1,5 +1,7 @@
 package game.inventory;
 
+import java.awt.*;
+
 public class ItemStack {
     public static int MAX_STACK = 16;
 
@@ -19,6 +21,9 @@ public class ItemStack {
         return (amount >= MAX_STACK);
     }
 
+    public void draw(Graphics graphics){
+        item.draw(graphics);
+    }
     /**
      *
      * @param itemStack
