@@ -15,20 +15,19 @@ import java.util.List;
 
 import static helperFunctions.Utility.createFlipped;
 import static helperFunctions.Utility.distanceBetweenCoordinates;
+import static helperFunctions.Utility.distanceBetweenCoordinates;
 
-public class Octopus extends Enemy{
-    public double shootingCooldown = 30;
-    public double timeSinceLastShot = 30;
-    List<Bullet> bullets;
-    public Octopus(int x, int y) {
+public class MeleeEnemy extends Enemy{
+    public double attackingCooldown = 30;
+    public double timeSinceLastAttack = 30;
+    public MeleeEnemy(int x, int y) {
         super();
         invincibilityCooldown = 0;
         this.speed = 5;
-        this.name = "Octopus";
+        this.name = "MeleeEnemy";
         this.attack = 20;
         this.coordinates = new Coordinates(x, y, 48, 31);
         this.whereToMove = getNewCoordinates(); // Random coordinates to move to when roaming around
-        this.bullets = new ArrayList<>();
 
         // Loading the sprites
         URL idle_down_1 = getClass().getResource("/sprites/enemies/Octopus-idle-down-1.png");
@@ -84,33 +83,18 @@ public class Octopus extends Enemy{
     @Override
     public void draw(Graphics g) {
         super.draw(g);
-        for (Bullet bullet : this.bullets) {
-            bullet.draw(g);
-        }
     }
 
     @Override
     public void move(double diffSeconds, Player player) {
         // Calculate the distance between the player and the enemy
-        Iterator<Bullet> iterator = this.bullets.iterator();
-        while (iterator.hasNext()) {
-            Bullet bullet = iterator.next();
-            bullet.move(diffSeconds, player);
-            if (bullet.enemyState == EnemyState.DEAD) {
-                iterator.remove();
-            }
-        }
         // Recalculate which sprite to show
         this.sprites.calculateSprite(this.enemyState, this.movingState, diffSeconds);
-        this.timeSinceLastShot += diffSeconds;
+        this.timeSinceLastAttack += diffSeconds;
         this.invincibilityTimer += diffSeconds;
 
 
         if(this.isColliding(player)){
-            if (this.timeSinceLastShot > this.shootingCooldown){
-                this.timeSinceLastShot = 0;
-                this.shoot();
-            }
             if(player.invincibilityTimer > player.invincibilityCooldown){
                 this.attack(player);
             }
@@ -122,8 +106,9 @@ public class Octopus extends Enemy{
         // If the player is within x pixels, the enemy is hostile
         // If the player is within y pixels, the enemy is shooting
         // Otherwise the enemy is friendly
-        if (distance < 500) {
-            if (distance < 100 && this.timeSinceLastShot > this.shootingCooldown){
+        if (distance < 700) {
+            this.speed = 9;
+            if (distance < 2 && this.timeSinceLastAttack > this.attackingCooldown){
                 this.enemyState = EnemyState.ATTACKING;
             }else{
                 this.enemyState = EnemyState.HOSTILE;
@@ -144,10 +129,6 @@ public class Octopus extends Enemy{
                 this.whereToMove = getNewCoordinates();
             }
         }else{
-            if (this.timeSinceLastShot > this.shootingCooldown){
-                this.timeSinceLastShot = 0;
-                this.shoot();
-            }
         }
 
     }
@@ -182,17 +163,6 @@ public class Octopus extends Enemy{
         } else if (xSpeed > 0 && ySpeed > 0) {
             this.movingState = MovingState.DOWN_RIGHT;
         }
-    }
-
-    public void shoot() {
-        this.bullets.add(new Bullet(0, this.coordinates, Bullet.ENEMY, 3, 6));
-        this.bullets.add(new Bullet(45, this.coordinates, Bullet.ENEMY, 3, 6));
-        this.bullets.add(new Bullet(90, this.coordinates, Bullet.ENEMY, 3, 6));
-        this.bullets.add(new Bullet(135, this.coordinates, Bullet.ENEMY, 3, 6));
-        this.bullets.add(new Bullet(180, this.coordinates, Bullet.ENEMY, 3, 6));
-        this.bullets.add(new Bullet(225, this.coordinates, Bullet.ENEMY, 3, 6));
-        this.bullets.add(new Bullet(270, this.coordinates, Bullet.ENEMY, 3, 6));
-        this.bullets.add(new Bullet(315, this.coordinates, Bullet.ENEMY, 3, 6));
     }
 
 }
