@@ -1,13 +1,14 @@
 package game.entities;
 
 import game.Coordinates;
+import game.GameObject;
 import game.environment.GameMap;
 import gui.GameFrame;
 import main.Gameplay;
 
 import java.awt.*;
 
-public class Warp extends Entity{
+public class Warp extends GameObject {
     public Coordinates exit;
     private Player player;
     public double screenXIn, screenYIn, screenXOut, screenYOut;
@@ -15,14 +16,14 @@ public class Warp extends Entity{
     public int frameHeight = GameFrame.HEIGHT/2;
     public GameMap map;
     public Warp(Coordinates coordinates, Coordinates exit, Player player){
-        this.coordinates = coordinates;
+        super(coordinates);
         this.exit = exit;
         this.player = player;
     }
 
     public Warp(GameMap map, Coordinates coordinates, Coordinates exit, Player player){
+        super(coordinates);
         this.map = map;
-        this.coordinates = coordinates;
         this.exit = exit;
         this.player = player;
     }

@@ -1,12 +1,26 @@
 package game;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
-public abstract class GameObject {
+public class GameObject {
 
     public Coordinates coordinates;
+    public BufferedImage image;
 
-    public abstract void draw(Graphics graphics);
+    public GameObject(Coordinates coordinates, BufferedImage image) {
+        this.coordinates = coordinates;
+        this.image = image;
+    }
+    public GameObject(Coordinates coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public void draw(Graphics graphics) {
+        if (coordinates.inScreen()) {
+            graphics.drawImage(image, (int) coordinates.screenX, (int) coordinates.screenY, null);
+        }
+    }
 
     public boolean isColliding(GameObject other) {
         return this.coordinates.intersects(other.coordinates);

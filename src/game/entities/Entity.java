@@ -19,9 +19,7 @@ public abstract class Entity extends GameObject {
     public double invincibilityTimer = 0;
 
     public Entity() {
-        super();
-
-        this.coordinates = new Coordinates(0, 0, 100, 100);
+        super(new Coordinates(0, 0, 100, 100));
 
         this.health = 100;
         this.maxHealth = 100;

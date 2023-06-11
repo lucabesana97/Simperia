@@ -12,12 +12,10 @@ public abstract class Item extends GameObject {
     public String description;
     public BufferedImage sprite;
 
-
-
     public Item(String name, String description, Coordinates coordinates) {
+        super(coordinates);
         this.name = name;
         this.description = description;
-        this.coordinates = coordinates;
     }
 
     public abstract void use();

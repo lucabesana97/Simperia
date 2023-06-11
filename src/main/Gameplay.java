@@ -2,12 +2,15 @@
 package main;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 
+import game.GameObject;
 import game.environment.AsteroidMap;
 import game.inventory.Item;
 import game.Coordinates;
@@ -38,10 +41,11 @@ public class Gameplay {
     private NPC npc;
     private List<ItemStack> stacksOnWorld = new ArrayList<>();
     private List<Enemy> enemies = new ArrayList<>();
-
     private List<Bullet> playerBullets = new ArrayList<>();
     private List<Warp> warps = new ArrayList<>();
     private List<Warp> mapWarps = new ArrayList<>();
+    private List<GameObject> objects = new ArrayList<>();
+
     private GameMap mapDestination;
     private Warp warpDestination;
     private PausePanel pausePanel;
@@ -159,6 +163,18 @@ public class Gameplay {
             Enemy enemy = enemyIter.next();
             if (enemy != null && enemy.enemyState == EnemyState.DEAD) {
                 enemyIter.remove();
+
+                if (enemies.isEmpty()) {
+
+                    try {
+                        BufferedImage floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_win.png"));
+                        objects.get(0).image = floorSymbol;
+                    } catch (Exception e) {
+                        System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
+
+                    }
+                }
+
             }
         }
 
@@ -230,13 +246,9 @@ public class Gameplay {
             }
         }
 
-        for (int i = 0; i < Inventory.NUMBER_OF_SLOTS; i++) {
-            if (inventory.slots[i] == null) {
-                System.out.println("null");
-            } else {
-                System.out.println(inventory.slots[i].item.name + inventory.slots[i].amount);
-            }
-        }
+        //Objects
+
+
 
         System.gc();
     }
@@ -259,6 +271,9 @@ public class Gameplay {
         for (ItemStack item : stacksOnWorld) {
             panel.draw(item.item);
         }
+        for (GameObject object : objects) {
+            panel.draw(object);
+        }
         panel.draw(npc);
         panel.draw(player);
         panel.draw(pauseButton);
@@ -272,7 +287,6 @@ public class Gameplay {
     }
 
     private void handleUserInput() {
-
 
         final Set<Keys> pressedKeys = keyHandler.getKeys();
         boolean horStill = true;
@@ -354,10 +368,13 @@ public class Gameplay {
         stacksOnWorld.removeAll(stacksOnWorld);
         warps.removeAll(warps);
         mapWarps.removeAll(mapWarps);
+        objects.removeAll(objects);
+
         enemies.addAll(map.enemies);
         stacksOnWorld.addAll(map.stacksOnWorld);
         warps.addAll(map.warps);
         mapWarps.addAll(map.mapWarps);
+        objects.addAll(map.objects);
     }
 
 }

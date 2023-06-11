@@ -15,12 +15,10 @@ import java.util.Objects;
 public class NPC extends GameObject {
 
     public BufferedImage sprite;
-    public Coordinates coordinates;
     Quest quest;
 
     public NPC(Coordinates coordinates) {
-        super();
-        this.coordinates = coordinates;
+        super(coordinates);
         try {
             sprite = ImageIO.read(Objects.requireNonNull(getClass().getResource("/sprites/npcs/npc1_64.png")));
         } catch (IOException e) {
