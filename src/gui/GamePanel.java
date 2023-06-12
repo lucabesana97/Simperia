@@ -12,9 +12,7 @@ public class GamePanel extends Panel {
 	public GamePanel() {
 		super();
 		setBackground(Color.green);
-		//setLayout(new BorderLayout());
-
-		//setLayout(null);
+		setFocusable(true);
 	}
 	public void draw(GameObject object) {
 		object.draw(graphics);

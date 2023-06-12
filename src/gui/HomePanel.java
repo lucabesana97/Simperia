@@ -12,6 +12,11 @@ import java.awt.event.ActionListener;
  */
 public class HomePanel extends Panel {
 
+    JButton newGameButton;
+    JButton loadGameButton;
+    JButton settingsButton;
+    JButton muteButton;
+
     public HomePanel() {
         setLayout(new GridBagLayout());
         setBackground(Color.WHITE);
@@ -28,10 +33,10 @@ public class HomePanel extends Panel {
         buttonPanel.setBackground(Color.WHITE);
 
         // Create the buttons
-        JButton newGameButton = new JButton("New Game");
-        JButton loadGameButton = new JButton("Load Game");
-        JButton settingsButton = new JButton("Settings");
-        JButton muteButton = new JButton("Mute");
+        newGameButton = new JButton("New Game");
+        loadGameButton = new JButton("Load Game");
+        settingsButton = new JButton("Settings");
+        muteButton = new JButton("Mute");
 
         // Set preferred size for the buttons
         Dimension buttonSize = new Dimension(200, 50);
@@ -59,8 +64,8 @@ public class HomePanel extends Panel {
         add(muteButton, gbc);
     }
 
-    public void newGameClicked() {
-        // Handle new game button click
+    public JButton getNewGameButton() {
+        return newGameButton;
     }
 
     public void loadGameClicked() {

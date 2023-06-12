@@ -1,8 +1,6 @@
 
 package main;
-import gui.GameFrame;
-import gui.GamePanel;
-import gui.PausePanel;
+import gui.*;
 import input.KeyHandler;
 
 import javax.swing.*;
@@ -12,8 +10,7 @@ public class Game {
 	final private KeyHandler keyHandler;
 
 	private Gameplay gameplay;
-	private GamePanel panel;
-	PausePanel pausePanel;
+	private Panel panel;
 
 	public Game() {
 		frame = new GameFrame("Simperia");
@@ -22,16 +19,19 @@ public class Game {
 	}
 
 	public void init() {
+		//panel = new HomePanel();
+//		frame.setPanel(panel);
+
+		//JButton newGameButton = ((HomePanel) panel).getNewGameButton();
+		//newGameButton.addActionListener(e -> { start();	});
 	}
 
 	public void start() {
 		panel = new GamePanel();
-		gameplay = new Gameplay(panel, keyHandler, frame);
-
-//		pausePanel = new PausePanel();
-//		panel.add(pausePanel, JLayeredPane.PALETTE_LAYER);
-
+		panel.requestFocusInWindow();
 		frame.setPanel(panel);
+
+		gameplay = new Gameplay(panel, keyHandler, frame);
 
 		gameplay.init();
 		gameplay.run();

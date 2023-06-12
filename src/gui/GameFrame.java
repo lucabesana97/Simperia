@@ -10,12 +10,13 @@ public class GameFrame extends JFrame{
 	public static final int TILE_SIZE = 64;
 
 
-	private GamePanel gamePanel;
+	private Panel panel;
 	private PausePanel pausePanel;
 	private InventoryPanel inventoryPanel;
 	private JLayeredPane layeredPane;
 	
 	public GameFrame(String title) {
+
 		// Set window properties
 		setTitle(title);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,11 +28,9 @@ public class GameFrame extends JFrame{
 
 		pausePanel = new PausePanel();
 		pausePanel.setVisible(false);
-//		layeredPane.add(pausePanel, 1);
 
 		inventoryPanel = new InventoryPanel();
 		inventoryPanel.setVisible(false);
-//		layeredPane.add(inventoryPanel, 2);
 
 		// Add the layered pane to the main frame's content pane
 		getContentPane().add(layeredPane);
@@ -41,26 +40,22 @@ public class GameFrame extends JFrame{
 
 	}
 	
-    public void setPanel(GamePanel gamePanel) {
-        if (this.gamePanel != null) {
-            remove(this.gamePanel);
+    public void setPanel(Panel panel) {
+        if (this.panel != null) {
+            remove(this.panel);
         }
-        this.gamePanel = gamePanel;
-
-		//this.add(panel);
+        this.panel = panel;
 
 		// Add the game panel to the bottom layer
-		layeredPane.add(gamePanel, JLayeredPane.DEFAULT_LAYER);
+		layeredPane.add(panel, JLayeredPane.DEFAULT_LAYER);
 		layeredPane.add(pausePanel, JLayeredPane.PALETTE_LAYER);
 		layeredPane.add(inventoryPanel, JLayeredPane.PALETTE_LAYER);
-//		pausePanel.setVisible(false);
 
-
-//		layeredPane.setComponentZOrder(pausePanel, JLayeredPane.PALETTE_LAYER);
-//		layeredPane.setComponentZOrder(inventoryPanel, JLayeredPane.PALETTE_LAYER);
+		// layeredPane.setComponentZOrder(pausePanel, JLayeredPane.PALETTE_LAYER);
+		// layeredPane.setComponentZOrder(inventoryPanel, JLayeredPane.PALETTE_LAYER);
 
 		layeredPane.revalidate();
-//		layeredPane.repaint();
+		// layeredPane.repaint();
     }
 
 	public PausePanel getPausePanel() { return pausePanel; }
