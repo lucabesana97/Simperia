@@ -63,7 +63,7 @@ public class Gameplay {
         this.inventoryPanel = frame.getInventoryPanel();
 
         this.keyHandler = keyHandler;
-		gameState = GameState.HOME;
+		gameState = GameState.PLAYING;
     }
 
 

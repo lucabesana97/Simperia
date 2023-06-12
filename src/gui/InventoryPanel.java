@@ -10,9 +10,14 @@ public class InventoryPanel extends Panel {
     private JLabel selectedSlotLabel;
     private boolean[] slotSelected;
 
+    JButton useItemButton;
+    JButton throwItemButton;
+    JButton closeButton;
+
     public InventoryPanel() {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
+        setOpaque(true); // Makes sure the background color is visible
         setVisible(false);
 
         // Calculate the position to center the inventory panel
@@ -61,7 +66,7 @@ public class InventoryPanel extends Panel {
         buttonsPanel.setBackground(Color.WHITE);
         add(buttonsPanel, BorderLayout.SOUTH);
 
-        JButton useItemButton = new JButton("Use Item");
+        useItemButton = new JButton("Use Item");
         useItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,7 +82,7 @@ public class InventoryPanel extends Panel {
         });
         buttonsPanel.add(useItemButton);
 
-        JButton throwItemButton = new JButton("Throw Item Away");
+        throwItemButton = new JButton("Throw Item Away");
         throwItemButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -92,6 +97,9 @@ public class InventoryPanel extends Panel {
             }
         });
         buttonsPanel.add(throwItemButton);
+
+        closeButton = new JButton("Close");
+        buttonsPanel.add(closeButton);
     }
 
     private int getSelectedSlot() {
@@ -101,6 +109,35 @@ public class InventoryPanel extends Panel {
             }
         }
         return -1; // No slot selected
+    }
+
+    // Getters
+    public JLabel getSelectedSlotLabel() {
+        return selectedSlotLabel;
+    }
+
+    public boolean[] getSlotSelected() {
+        return slotSelected;
+    }
+
+    public JButton getUseItemButton() {
+        return useItemButton;
+    }
+
+    public JButton getThrowItemButton() {
+        return throwItemButton;
+    }
+
+    public JButton getCloseButton() {
+        return closeButton;
+    }
+
+    public JButton throwItemButton() {
+        return throwItemButton;
+    }
+
+    public JButton useItemButton() {
+        return useItemButton;
     }
 }
 
