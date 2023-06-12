@@ -17,7 +17,8 @@ public class PausePanel extends Panel {
 
         // Use GridBagLayout for precise positioning
         setLayout(new GridBagLayout());
-        setBackground(Color.pink);
+        setBackground(Color.WHITE);
+        setOpaque(true); // Makes sure the background color is visible
         setVisible(false);
 
         // Calculate the position to center the pause panel

@@ -29,7 +29,7 @@ import objState.MovingState;
 import output.Sound;
 
 public class Gameplay {
-    final GamePanel panel;
+    private GamePanel panel;
     final KeyHandler keyHandler;
 
     public static Player player;
@@ -48,6 +48,7 @@ public class Gameplay {
     private Warp warpDestination;
     private PausePanel pausePanel;
     private InventoryPanel inventoryPanel;
+    private HomePanel homePanel;
     private GameState gameState;
     private boolean paused;
 
@@ -56,20 +57,19 @@ public class Gameplay {
     Sound effects = new Sound();
 
 
-    public Gameplay(GamePanel panel, KeyHandler keyHandler, GameFrame frame) {
-        //this.panel = (GamePanel) panel;
-        this.panel = panel;
+    public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {
+        this.panel = (GamePanel) panel;
         this.pausePanel = frame.getPausePanel();
         this.inventoryPanel = frame.getInventoryPanel();
 
         this.keyHandler = keyHandler;
-		gameState = GameState.PLAYING;
+		gameState = GameState.HOME;
     }
 
 
     public void init() {
 
-        //Don't change the order
+        // Don't change the order
         map = new AsteroidMap();
         player = new Player();
         map.init(player);
@@ -84,7 +84,15 @@ public class Gameplay {
         soundtrack.playMusic(2);
         soundtrack.changeVolume(-20);
 
-        // Button actions
+
+//        JButton newGameButton = homePanel.getNewGameButton();
+//        newGameButton.addActionListener(e -> {
+//            this.panel = (GamePanel) panel;
+//            gameState = GameState.PLAYING;
+//            run();
+//        });
+
+        // Button actions of pause and inventory panels
         JButton resumeButton = pausePanel.getResumeButton();
         resumeButton.addActionListener(e -> resume());
 
@@ -94,6 +102,14 @@ public class Gameplay {
         JButton quitGameButton = pausePanel.getQuitButton();
         quitGameButton.addActionListener(e -> quitGame());
 
+        JButton closeInventoryButton = inventoryPanel.getCloseButton();
+        closeInventoryButton.addActionListener(e -> closeInventory());
+
+        JButton throwItemButton = inventoryPanel.getThrowItemButton();
+        throwItemButton.addActionListener(e -> throwItem());
+
+        JButton useItemButton = inventoryPanel.getUseItemButton();
+        useItemButton.addActionListener(e -> useItem());
     }
 
 	public void run() {
@@ -104,7 +120,6 @@ public class Gameplay {
             long currentTick = System.currentTimeMillis();
             double diffSeconds = (currentTick - lastTick) / 100.0;
             lastTick = currentTick;
-
 
             this.panel.requestFocusInWindow();
             if (gameState == GameState.PAUSED){
@@ -119,34 +134,23 @@ public class Gameplay {
 
                 update(diffSeconds);
 
-
                 panel.clear();
                 drawElements();
                 panel.redraw();
-                try {
 
+                try {
                     handleUserInput();
                 } catch (Exception e) {
                     System.out.println("Error: " + e.getCause());
                 }
             }
-
-
-//            pausePanel.repaint();
-//            inventoryPanel.repaint();
-
             System.out.flush();
-
         }
     }
 
 	private void update(double diffSeconds) {
-		// Workaround to resume the game
-//		if (!pausePanel.isVisible() && !inventoryPanel.isVisible()) {
-//			resume();
-//		}
-//
-//        // Pauses the game
+
+        // Pauses the game
 		if (gameState == GameState.PAUSED || gameState == GameState.INVENTORY) {
 			return;
 		}
@@ -178,13 +182,15 @@ public class Gameplay {
         for (Enemy enemy : enemies) {
             enemy.move(diffSeconds, player);
         }
-        if (player.isColliding(beginnerNPC)){
-            // Player is talking to the NPC
-            String text = beginnerNPC.interact();
-            System.out.println("Text: " + text);
-        }else{
-            // Player is not talking to the NPC
-            beginnerNPC.stopInteracting();
+        if (beginnerNPC != null) {
+            if (player.isColliding(beginnerNPC)) {
+                // Player is talking to the NPC
+                String text = beginnerNPC.interact();
+                System.out.println("Text: " + text);
+            } else {
+                // Player is not talking to the NPC
+                beginnerNPC.stopInteracting();
+            }
         }
         for (Warp warp : warps) {
             if (player.isColliding(warp)) {
@@ -261,7 +267,9 @@ public class Gameplay {
     private void drawElements() {
 
         panel.draw(map);
-        panel.draw(beginnerNPC);
+        if (beginnerNPC != null){
+            panel.draw(beginnerNPC);
+        }
         int killedEnemies = 0;
         for (Enemy enemy : enemies) {
             panel.draw(enemy);
@@ -269,8 +277,10 @@ public class Gameplay {
                 killedEnemies++;
             }
         }
-        if (killedEnemies == 1) {
-            beginnerNPC.quest.completed = true;
+        if (beginnerNPC != null) {
+            if (killedEnemies == 1) {
+                beginnerNPC.quest.completed = true;
+            }
         }
         for (Bullet bullet : playerBullets) {
             panel.draw(bullet);
@@ -288,20 +298,16 @@ public class Gameplay {
             panel.draw(object);
         }
         panel.draw(player);
-
-//        pausePanel.repaint();
-        //inventoryPanel.repaint();
-
     }
 
     private void handleUserInput() {
-        System.out.println("Handling user input");
+
         final Set<Keys> pressedKeys = keyHandler.getKeys();
         boolean horStill = true;
         boolean verStill = true;
         boolean sprintStill = true;
         for (Keys keyCode : pressedKeys) {
-            System.out.println("Key pressed: " + keyCode);
+            //System.out.println("Key pressed: " + keyCode);
             switch (keyCode) {
                 case ATTACK:
                     if (player.currentWeapon == player.GUN) {
@@ -338,8 +344,7 @@ public class Gameplay {
                     player.switchWeapon();
                     break;
                 case PAUSE:
-                    System.out.println("Pause");
-                    if (!pausePanel.isVisible() && this.gameState != GameState.PAUSED) {
+                    if (!pausePanel.isVisible()) {
                         pause();
                     } else {
                         resume();
@@ -375,25 +380,21 @@ public class Gameplay {
     private void openInventory() {
         inventoryPanel.setVisible(true);
         gameState = GameState.INVENTORY;
-        inventoryPanel.redraw();
     }
 
     private void closeInventory() {
         inventoryPanel.setVisible(false);
         gameState = GameState.PLAYING;
-        inventoryPanel.redraw();
     }
 
     public void pause() {
         pausePanel.setVisible(true);
         gameState = GameState.PAUSED;
-//        pausePanel.repaint();
     }
 
 	public void resume() {
         pausePanel.setVisible(false);
         gameState = GameState.PLAYING;
-//        pausePanel.repaint();
     }
 
 	public boolean isPaused() {	return gameState == GameState.PAUSED; }
@@ -404,12 +405,21 @@ public class Gameplay {
             muteButton.setText("Unmute");
         } else {
             soundtrack.playMusic(2);
+            soundtrack.changeVolume(-20);
             muteButton.setText("Mute");
         }
     }
 
     public void quitGame() {
         // TODO: go back to home screen
+    }
+
+    public void throwItem() {
+        // TODO
+    }
+
+    public void useItem() {
+        // TODO
     }
 
     public void loadObjects() {
