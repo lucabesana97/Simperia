@@ -53,9 +53,5 @@ public class Bullet extends Enemy{
 
         coordinates.moveX(dx * this.speed * diffSeconds);
         coordinates.moveY(dy * this.speed * diffSeconds);
-
-        if (this.coordinates.intersects(player.coordinates) && (player.invincibilityTimer > player.invincibilityCooldown)){
-            this.attack(player);
-        }
     }
 }

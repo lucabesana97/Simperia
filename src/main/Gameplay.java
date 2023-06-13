@@ -40,6 +40,7 @@ public class Gameplay {
     private List<ItemStack> stacksOnWorld = new ArrayList<>();
     private List<Enemy> enemies = new ArrayList<>();
     private List<Bullet> playerBullets = new ArrayList<>();
+    public static List<Bullet> enemyBullets = new ArrayList<>();
     private List<Warp> warps = new ArrayList<>();
     private List<Warp> mapWarps = new ArrayList<>();
     private List<GameObject> objects = new ArrayList<>();
@@ -205,11 +206,28 @@ public class Gameplay {
                 bulletIterator.remove();
             }
             for (Enemy enemy : enemies) {
-                if (enemy.isColliding(bullet)) {
-                    System.out.println("Enemy health: " + enemy.health);
+                if (enemy.isColliding(bullet)){
+//                    System.out.println("Enemy health: " + enemy.health);
                     bullet.attack(enemy);
+                    if (enemy.enemyState != EnemyState.DEAD) {
+                        enemy.enemyState = EnemyState.DAMAGED;
+                    }
                 }
             }
+        }
+
+        Iterator<Bullet> bulletIteratorEnemy = enemyBullets.iterator();
+        while (bulletIteratorEnemy.hasNext()) {
+            Bullet bullet = bulletIteratorEnemy.next();
+            bullet.move(diffSeconds, player);
+            if (bullet.enemyState == EnemyState.DEAD) {
+                bulletIteratorEnemy.remove();
+            }
+            if (player.isColliding(bullet)){
+//                System.out.println("Player health: " + player.health);
+                bullet.attack(player);
+            }
+
         }
 		/*
 		for(Item item : items){
@@ -283,6 +301,9 @@ public class Gameplay {
             }
         }
         for (Bullet bullet : playerBullets) {
+            panel.draw(bullet);
+        }
+        for (Bullet bullet : enemyBullets) {
             panel.draw(bullet);
         }
         for (Warp warp : warps) {

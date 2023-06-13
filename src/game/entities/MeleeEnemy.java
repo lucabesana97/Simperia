@@ -22,10 +22,10 @@ public class MeleeEnemy extends Enemy{
     public double timeSinceLastAttack = 30;
     public MeleeEnemy(int x, int y) {
         super();
-        invincibilityCooldown = 0;
         this.speed = 5;
         this.name = "MeleeEnemy";
         this.attack = 20;
+        this.health = 70;
         this.coordinates = new Coordinates(x, y, 48, 31);
         this.whereToMove = getNewCoordinates(); // Random coordinates to move to when roaming around
 
@@ -87,17 +87,15 @@ public class MeleeEnemy extends Enemy{
 
     @Override
     public void move(double diffSeconds, Player player) {
+        super.move(diffSeconds, player);
         // Calculate the distance between the player and the enemy
         // Recalculate which sprite to show
         this.sprites.calculateSprite(this.enemyState, this.movingState, diffSeconds);
         this.timeSinceLastAttack += diffSeconds;
-        this.invincibilityTimer += diffSeconds;
 
 
         if(this.isColliding(player)){
-            if(player.invincibilityTimer > player.invincibilityCooldown){
-                this.attack(player);
-            }
+            this.attack(player);
             return;
         }
 
@@ -106,7 +104,7 @@ public class MeleeEnemy extends Enemy{
         // If the player is within x pixels, the enemy is hostile
         // If the player is within y pixels, the enemy is shooting
         // Otherwise the enemy is friendly
-        if (distance < 700) {
+        if (distance < 300) {
             this.speed = 9;
             if (distance < 2 && this.timeSinceLastAttack > this.attackingCooldown){
                 this.enemyState = EnemyState.ATTACKING;
@@ -114,6 +112,7 @@ public class MeleeEnemy extends Enemy{
                 this.enemyState = EnemyState.HOSTILE;
             }
         } else {
+            this.speed = 2;
             this.enemyState = EnemyState.FRIENDLY;
         }
 

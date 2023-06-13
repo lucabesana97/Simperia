@@ -30,7 +30,7 @@ public abstract class Entity extends GameObject {
     }
 
     public void attack(Entity entity) {
-        System.out.println(this.name + " attacked " + entity.name + " for " + this.attack + " damage.");
+//        System.out.println(this.name + " attacked " + entity.name + " for " + this.attack + " damage.");
         entity.takeDamage(this.attack);
     }
 
@@ -49,6 +49,7 @@ public abstract class Entity extends GameObject {
         if (this.invincibilityTimer < this.invincibilityCooldown) {
             return;
         }
+        System.out.println(this.name + " took " + amount + " damage.");
         this.invincibilityTimer = 0;
         this.health -= amount;
         if (this.health <= 0) {
@@ -61,6 +62,7 @@ public abstract class Entity extends GameObject {
     }
 
     public void move(double diffSeconds) {
+
         //TODO add implementation of movement
     }
 

@@ -27,7 +27,7 @@ public class Enemy extends Entity implements Movable {
     }
     @Override
     public void draw(Graphics g) {
-        if(coordinates.inScreen()) {
+        if(coordinates.inScreen() && this.enemyState != EnemyState.DAMAGED) {
             BufferedImage image = sprites.current;
             g.drawImage(image, (int) coordinates.screenX - 24, (int)coordinates.screenY - 24, null);
         }
@@ -36,7 +36,7 @@ public class Enemy extends Entity implements Movable {
     // within 150 pixels of the enemy's current position.
     protected Coordinates getNewCoordinates(){
         Random rand = new Random();
-        int pixelsToMove = 150;
+        int pixelsToMove = 50;
         int x = rand.nextInt(2 * pixelsToMove) - pixelsToMove + (int) (this.coordinates.topLeftCorner_x + this.coordinates.bottomRightCorner_x)/2;
         int y = rand.nextInt(2 * pixelsToMove) - pixelsToMove + (int) (this.coordinates.topLeftCorner_y + this.coordinates.bottomRightCorner_y)/2;
         return new Coordinates(x, y, 0, 0);
@@ -48,6 +48,7 @@ public class Enemy extends Entity implements Movable {
     }
 
     public void move(double diffSeconds, Player player) {
+        this.invincibilityTimer += diffSeconds;
     }
 }
 
