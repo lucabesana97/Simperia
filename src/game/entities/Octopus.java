@@ -140,10 +140,10 @@ public class Octopus extends Enemy{
             runTowardsCoordinates(diffSeconds, player.coordinates);
             this.whereToMove = getNewCoordinates();
         } else if (this.enemyState == EnemyState.FRIENDLY){
-            runTowardsCoordinates(diffSeconds, this.whereToMove);
-            if (distanceBetweenCoordinates(this.coordinates, this.whereToMove) < 3){
-                this.whereToMove = getNewCoordinates();
-            }
+//            runTowardsCoordinates(diffSeconds, this.whereToMove);
+//            if (distanceBetweenCoordinates(this.coordinates, this.whereToMove) < 3){
+//                this.whereToMove = getNewCoordinates();
+//            }
         }else{
             if (this.timeSinceLastShot > this.shootingCooldown){
                 this.timeSinceLastShot = 0;
