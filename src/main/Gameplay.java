@@ -12,6 +12,7 @@ import javax.swing.*;
 
 import game.GameObject;
 import game.environment.AsteroidMap;
+import game.inventory.HealthElixir;
 import game.inventory.Item;
 import game.Coordinates;
 import game.GameState;
@@ -33,7 +34,7 @@ public class Gameplay {
     final KeyHandler keyHandler;
 
     public static Player player;
-    public Inventory inventory;
+    public static Inventory inventory;
     public static GameMap map;
     private boolean changeMap = false;
     private NPC beginnerNPC;
@@ -62,7 +63,6 @@ public class Gameplay {
         this.panel = (GamePanel) panel;
         this.pausePanel = frame.getPausePanel();
         this.inventoryPanel = frame.getInventoryPanel();
-        this.inventory = frame.getInventory();
         this.keyHandler = keyHandler;
 		this.gameState = GameState.PLAYING;
     }
@@ -76,6 +76,16 @@ public class Gameplay {
         map.init(player);
 
         loadObjects();
+        inventory = new Inventory();
+
+        //inventoryPanel.init(inventory);
+
+        // Test items in the inventory panel TODO: Delete in the future
+        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
+        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
+        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
+
+        inventoryPanel.init(inventory);
 
         panel.addKeyListener(keyHandler);
 
@@ -459,3 +469,4 @@ public class Gameplay {
     }
 
 }
+

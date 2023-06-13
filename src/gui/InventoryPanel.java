@@ -14,23 +14,19 @@ public class InventoryPanel extends Panel {
     private JLabel selectedSlotLabel;
     private JLabel selectedSlotDescriptionLabel;
     private boolean[] slotSelected;
-    private final Rectangle rv = new Rectangle();
 
+    private JButton useItemButton;
+    private JButton throwItemButton;
+    private JButton closeButton;
+    private JPanel slotsPanel;
 
-    JButton useItemButton;
-    JButton throwItemButton;
-    JButton closeButton;
-    JPanel slotsPanel;
-
-    Inventory inventory;
+    private Inventory inventory;
     final Color BACKGROUND_COLOR = new Color(141, 134, 186);  // RGB values for #8d86ba
     final Color TEXT_COLOR = Color.BLACK;
     final Color BORDER_COLOR = Color.BLACK;
     final String LABEL_FONT = "Helvetica";
 
-    public InventoryPanel(Inventory invent) {
-        this.inventory = invent;
-
+    public InventoryPanel() {
         setLayout(new BorderLayout());
         setBackground(BACKGROUND_COLOR);
         setOpaque(true); // Makes sure the background color is visible
@@ -46,6 +42,10 @@ public class InventoryPanel extends Panel {
         int panelY = (getHeight() - panelHeight) / 2;
 
         setBounds(panelX, panelY, panelWidth, panelHeight);
+    }
+
+    public void init(Inventory inv) {
+        this.inventory = inv;
 
         // Label to display the selected slot
         selectedSlotLabel = new JLabel();
@@ -90,16 +90,13 @@ public class InventoryPanel extends Panel {
 
             JButton slotButton = new JButton();
             final int slotIndex = i;
-            String itemName = "";
-            BufferedImage itemSprite = null;
 
             slotButton.setContentAreaFilled(false);
             slotButton.setBorderPainted(false);
 
             // If items exists
             if (inventory.slots[i] != null) {
-                itemName = inventory.slots[i].item.name;
-                itemSprite = inventory.slots[i].item.sprite;
+                BufferedImage itemSprite = inventory.slots[i].item.sprite;
 
                 // Scale the image to fit the button
                 ImageIcon scaledImageIcon = scaleImage(itemSprite, slotButton);
@@ -144,6 +141,7 @@ public class InventoryPanel extends Panel {
                     // Use the item in the selected slot
                     System.out.println("Using item " + inventory.slots[selectedSlot - 1].item.name);
                     inventory.useItem(selectedSlot - 1);
+                    updateInventoryUI();
 
                     // Update the slot button image and labels
                     if (inventory.slots[selectedSlot - 1] == null) {
@@ -247,4 +245,16 @@ public class InventoryPanel extends Panel {
         return new ImageIcon(scaledImage);
     }
 
+    // Update the item slots when the inventory is updated
+    public void updateInventoryUI() {
+        for (int i = 0; i < 12; i++) {
+            System.out.println("Slot " + i + ": " + inventory.slots[i]);
+            if (inventory.slots[i] != null) {
+                updateButton(i + 1);
+            } else {
+                ((JButton) slotsPanel.getComponent(i)).setIcon(null);
+            }
+        }
+    }
 }
+
