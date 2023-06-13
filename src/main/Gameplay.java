@@ -33,7 +33,7 @@ public class Gameplay {
     final KeyHandler keyHandler;
 
     public static Player player;
-    public static Inventory inventory;
+    public Inventory inventory;
     public static GameMap map;
     private boolean changeMap = false;
     private NPC beginnerNPC;
@@ -62,9 +62,9 @@ public class Gameplay {
         this.panel = (GamePanel) panel;
         this.pausePanel = frame.getPausePanel();
         this.inventoryPanel = frame.getInventoryPanel();
-
+        this.inventory = frame.getInventory();
         this.keyHandler = keyHandler;
-		gameState = GameState.PLAYING;
+		this.gameState = GameState.PLAYING;
     }
 
 
@@ -76,7 +76,6 @@ public class Gameplay {
         map.init(player);
 
         loadObjects();
-        inventory = new Inventory();
 
         panel.addKeyListener(keyHandler);
 

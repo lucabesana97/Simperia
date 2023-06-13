@@ -1,5 +1,10 @@
 package gui;
 
+import game.Coordinates;
+import game.inventory.HealthElixir;
+import game.inventory.Inventory;
+import game.inventory.ItemStack;
+
 import javax.swing.*;
 
 public class GameFrame extends JFrame{
@@ -14,6 +19,7 @@ public class GameFrame extends JFrame{
 	private PausePanel pausePanel;
 	private InventoryPanel inventoryPanel;
 	private JLayeredPane layeredPane;
+	private Inventory inventory;
 	
 	public GameFrame(String title) {
 
@@ -29,7 +35,12 @@ public class GameFrame extends JFrame{
 		pausePanel = new PausePanel();
 		pausePanel.setVisible(false);
 
-		inventoryPanel = new InventoryPanel();
+		inventory = new Inventory();
+
+		// Test ItemStack TODO: Remove in the future
+		inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
+
+		inventoryPanel = new InventoryPanel(inventory);
 		inventoryPanel.setVisible(false);
 
 		// Add the layered pane to the main frame's content pane
@@ -60,6 +71,6 @@ public class GameFrame extends JFrame{
 
 	public PausePanel getPausePanel() { return pausePanel; }
 	public InventoryPanel getInventoryPanel() { return inventoryPanel; }
-
+	public Inventory getInventory() { return inventory;	}
 
 }

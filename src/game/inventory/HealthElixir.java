@@ -26,7 +26,7 @@ public class HealthElixir extends Item {
     public void initSprite() {
 
         try {
-            this.sprite = ImageIO.read(Objects.requireNonNull(getClass().getResource("/sprites/inventory/elixir_16.png")));
+            this.sprite = ImageIO.read(Objects.requireNonNull(getClass().getResource("/sprites/inventory/elixir_48.png")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

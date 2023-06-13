@@ -1,24 +1,43 @@
 package gui;
 
+import game.inventory.Inventory;
+
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 public class InventoryPanel extends Panel {
 
     private JLabel selectedSlotLabel;
+    private JLabel selectedSlotDescriptionLabel;
     private boolean[] slotSelected;
+    private final Rectangle rv = new Rectangle();
+
 
     JButton useItemButton;
     JButton throwItemButton;
     JButton closeButton;
+    JPanel slotsPanel;
 
-    public InventoryPanel() {
+    Inventory inventory;
+    final Color BACKGROUND_COLOR = new Color(141, 134, 186);  // RGB values for #8d86ba
+    final Color TEXT_COLOR = Color.BLACK;
+    final Color BORDER_COLOR = Color.BLACK;
+    final String LABEL_FONT = "Helvetica";
+
+    public InventoryPanel(Inventory invent) {
+        this.inventory = invent;
+
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
+        setBackground(BACKGROUND_COLOR);
         setOpaque(true); // Makes sure the background color is visible
         setVisible(false);
+
+        Border border = BorderFactory.createLineBorder(BORDER_COLOR, 2);
+        setBorder(border);
 
         // Calculate the position to center the inventory panel
         int panelWidth = (int) (GameFrame.WIDTH * 0.6);
@@ -28,21 +47,65 @@ public class InventoryPanel extends Panel {
 
         setBounds(panelX, panelY, panelWidth, panelHeight);
 
-        selectedSlotLabel = new JLabel("No slot selected");
+        // Label to display the selected slot
+        selectedSlotLabel = new JLabel();
+        selectedSlotLabel.setFont(new Font(LABEL_FONT, Font.BOLD, 18));
+        selectedSlotLabel.setForeground(TEXT_COLOR);
         selectedSlotLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        add(selectedSlotLabel, BorderLayout.NORTH);
 
-        JPanel slotsPanel = new JPanel(new GridLayout(3, 4, 10, 10));
-        slotsPanel.setBackground(Color.WHITE);
+        selectedSlotDescriptionLabel = new JLabel();
+        selectedSlotDescriptionLabel.setFont(new Font(LABEL_FONT, Font.PLAIN, 15));
+        selectedSlotDescriptionLabel.setForeground(TEXT_COLOR);
+        selectedSlotDescriptionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        updateLabelsToEmptyItems();
+
+        // Panel to hold the labels
+        JPanel labelsPanel = new JPanel(new GridBagLayout());
+        labelsPanel.setBackground(BACKGROUND_COLOR);
+
+        // GridBagConstraints to set the alignment to center
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.anchor = GridBagConstraints.CENTER;
+        constraints.insets = new Insets(15, 10, 10, 10); // Add spacing around the labels
+
+        labelsPanel.add(selectedSlotLabel, constraints);
+
+        constraints.gridy = 1;
+        constraints.insets = new Insets(2, 10, 5, 10);
+        labelsPanel.add(selectedSlotDescriptionLabel, constraints);
+
+        add(labelsPanel, BorderLayout.NORTH);
+
+        // Panel to hold the inventory slots
+        slotsPanel = new JPanel(new GridLayout(3, 4, 10, 10));
+        slotsPanel.setBackground(BACKGROUND_COLOR);
         add(slotsPanel, BorderLayout.CENTER);
 
         slotSelected = new boolean[12];
+
         for (int i = 0; i < 12; i++) {
-            JButton slotButton = new JButton("Slot " + (i + 1));
 
-            //slotButton.setSize(40, 40);
-
+            JButton slotButton = new JButton();
             final int slotIndex = i;
+            String itemName = "";
+            BufferedImage itemSprite = null;
+
+            slotButton.setContentAreaFilled(false);
+            slotButton.setBorderPainted(false);
+
+            // If items exists
+            if (inventory.slots[i] != null) {
+                itemName = inventory.slots[i].item.name;
+                itemSprite = inventory.slots[i].item.sprite;
+
+                // Scale the image to fit the button
+                ImageIcon scaledImageIcon = scaleImage(itemSprite, slotButton);
+                slotButton.setIcon(scaledImageIcon);
+            }
+
             slotButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -54,16 +117,21 @@ public class InventoryPanel extends Panel {
                     // Set the selected slot
                     slotSelected[slotIndex] = true;
 
-                    // Update the label with the selected slot name
-                    selectedSlotLabel.setText("Selected Slot: " + (slotIndex + 1));
+                    if (inventory.slots[slotIndex] != null) {
+                        // Update the label with the selected item name
+                        selectedSlotLabel.setText(inventory.slots[slotIndex].item.name);
+                        selectedSlotDescriptionLabel.setText(inventory.slots[slotIndex].item.description);
+                    } else {
+                        updateLabelsToEmptyItems();
+                    }
+
                 }
             });
-
             slotsPanel.add(slotButton);
         }
 
         JPanel buttonsPanel = new JPanel(new FlowLayout());
-        buttonsPanel.setBackground(Color.WHITE);
+        buttonsPanel.setBackground(BACKGROUND_COLOR);
         add(buttonsPanel, BorderLayout.SOUTH);
 
         useItemButton = new JButton("Use Item");
@@ -72,9 +140,19 @@ public class InventoryPanel extends Panel {
             public void actionPerformed(ActionEvent e) {
                 // Handle "Use Item" button click
                 int selectedSlot = getSelectedSlot();
-                if (selectedSlot != -1) {
+                if (selectedSlot != -1 && inventory.slots[selectedSlot - 1] != null) { // -1 because the slot numbers start from 1
                     // Use the item in the selected slot
-                    System.out.println("Using item in slot " + selectedSlot);
+                    System.out.println("Using item " + inventory.slots[selectedSlot - 1].item.name);
+                    inventory.useItem(selectedSlot - 1);
+
+                    // Update the slot button image and labels
+                    if (inventory.slots[selectedSlot - 1] == null) {
+                        ((JButton) slotsPanel.getComponent(selectedSlot - 1)).setIcon(null);
+                        updateLabelsToEmptyItems();
+                    } else {
+                        updateButton(selectedSlot - 1);
+                        updateLabelsToExistingItems(selectedSlot - 1);
+                    }
                 } else {
                     System.out.println("No slot selected");
                 }
@@ -88,9 +166,19 @@ public class InventoryPanel extends Panel {
             public void actionPerformed(ActionEvent e) {
                 // Handle "Throw Item Away" button click
                 int selectedSlot = getSelectedSlot();
-                if (selectedSlot != -1) {
+                if (selectedSlot != -1 && inventory.slots[selectedSlot - 1] != null) {
                     // Throw away the item in the selected slot
-                    System.out.println("Throwing away item in slot " + selectedSlot);
+                    System.out.println("Throwing away item " + inventory.slots[selectedSlot - 1].item.name);
+                    inventory.removeItem(selectedSlot - 1);
+
+                    // Update the slot button image and labels
+                    if (inventory.slots[selectedSlot - 1] == null) {
+                        ((JButton) slotsPanel.getComponent(selectedSlot - 1)).setIcon(null);
+                        updateLabelsToEmptyItems();
+                    } else {
+                        updateButton(selectedSlot - 1);
+                        updateLabelsToExistingItems(selectedSlot - 1);
+                    }
                 } else {
                     System.out.println("No slot selected");
                 }
@@ -100,6 +188,21 @@ public class InventoryPanel extends Panel {
 
         closeButton = new JButton("Close");
         buttonsPanel.add(closeButton);
+    }
+
+    private void updateButton(int selectedSlot) {
+        ImageIcon scaledImageIcon = scaleImage(inventory.slots[selectedSlot - 1].item.sprite, (JButton) slotsPanel.getComponent(selectedSlot - 1));
+        ((JButton) slotsPanel.getComponent(selectedSlot - 1)).setIcon(scaledImageIcon);
+    }
+
+    private void updateLabelsToEmptyItems() {
+        selectedSlotLabel.setText("No item selected");
+        selectedSlotDescriptionLabel.setText(" ");
+    }
+
+    private void updateLabelsToExistingItems(int selectedSlot) {
+        selectedSlotLabel.setText(inventory.slots[selectedSlot - 1].item.name);
+        selectedSlotDescriptionLabel.setText(inventory.slots[selectedSlot - 1].item.description);
     }
 
     private int getSelectedSlot() {
@@ -112,14 +215,6 @@ public class InventoryPanel extends Panel {
     }
 
     // Getters
-    public JLabel getSelectedSlotLabel() {
-        return selectedSlotLabel;
-    }
-
-    public boolean[] getSlotSelected() {
-        return slotSelected;
-    }
-
     public JButton getUseItemButton() {
         return useItemButton;
     }
@@ -132,65 +227,24 @@ public class InventoryPanel extends Panel {
         return closeButton;
     }
 
-    public JButton throwItemButton() {
-        return throwItemButton;
+    private ImageIcon scaleImage (BufferedImage itemSprite, JButton slotButton) {
+        // Load the image
+        ImageIcon imageIcon = new ImageIcon(itemSprite);
+        Image image = imageIcon.getImage();
+
+        // Get the image dimensions
+        int imageWidth = imageIcon.getIconWidth();
+        int imageHeight = imageIcon.getIconHeight();
+
+        // Calculate the desired button size based on image dimensions
+        int buttonSize = Math.max(imageWidth, imageHeight);
+        slotButton.setSize(new Dimension(buttonSize, buttonSize));
+
+        // Resize the image to match the button's size
+        Image scaledImage = image.getScaledInstance(buttonSize, buttonSize, Image.SCALE_SMOOTH);
+
+        // Create an image icon with the scaled image
+        return new ImageIcon(scaledImage);
     }
 
-    public JButton useItemButton() {
-        return useItemButton;
-    }
 }
-
-
-/*
-public class InventoryPanel extends Panel {
-
-    public InventoryPanel() {
-        setBackground(Color.orange);
-        setVisible(false);
-        //setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Make the buttons appear vertically
-
-        // Calculate the position to center the panel
-        int panelWidth = (int) (this.getWidth() * 0.5);
-        int panelHeight = (int) (this.getHeight() * 0.5);
-        int panelX = (this.getWidth() - panelWidth) / 2;
-        int panelY = (this.getHeight() - panelHeight) / 2;
-
-        setBounds(panelX, panelY, panelWidth, panelHeight);
-
-        // Buttons
-        JButton useItemButton = new JButton("Use Item");
-        useItemButton.addActionListener(e -> { useItemClicked(); });
-        add(useItemButton);
-
-        JButton dropItemButton = new JButton("Drop Item");
-        dropItemButton.addActionListener(e -> { dropItemClicked(); });
-        add(dropItemButton);
-
-        JButton closeButton = new JButton("Close");
-        closeButton.addActionListener(e -> { closeInventory(); });
-        add(closeButton);
-
-        // Set the buttons to the middle of the panel
-        useItemButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        dropItemButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        closeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-    }
-
-    public void useItemClicked() {
-
-    }
-
-    public void dropItemClicked() {
-
-    }
-
-    public void closeInventory() {
-        setVisible(false);
-    }
-
-    public void draw() {
-
-    }
-}
-*/
