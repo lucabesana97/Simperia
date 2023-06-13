@@ -1,11 +1,15 @@
 package game.inventory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Inventory {
     public static int NUMBER_OF_SLOTS = 12;
     public ItemStack[] slots;
-
+    //public List<ItemStack> slots;
     public Inventory() {
         slots = new ItemStack[NUMBER_OF_SLOTS];
+        //slots = new ArrayList<>();
     }
 
     /**

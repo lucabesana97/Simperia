@@ -114,12 +114,6 @@ public class Gameplay {
 
         JButton closeInventoryButton = inventoryPanel.getCloseButton();
         closeInventoryButton.addActionListener(e -> closeInventory());
-
-        JButton throwItemButton = inventoryPanel.getThrowItemButton();
-        throwItemButton.addActionListener(e -> throwItem());
-
-        JButton useItemButton = inventoryPanel.getUseItemButton();
-        useItemButton.addActionListener(e -> useItem());
     }
 
 	public void run() {
@@ -432,24 +426,16 @@ public class Gameplay {
     public void muteGame (JButton muteButton) {
         if (soundtrack.isMusicPlaying()) {
             soundtrack.stopMusic();
-            muteButton.setText("Unmute");
+            muteButton.setIcon(new ImageIcon("resources/sprites/pause/music_muted.png"));
         } else {
             soundtrack.playMusic(2);
             soundtrack.changeVolume(-20);
-            muteButton.setText("Mute");
+            muteButton.setIcon(new ImageIcon("resources/sprites/pause/music_playing.png"));
         }
     }
 
     public void quitGame() {
         // TODO: go back to home screen
-    }
-
-    public void throwItem() {
-        // TODO
-    }
-
-    public void useItem() {
-        // TODO
     }
 
     public void loadObjects() {
