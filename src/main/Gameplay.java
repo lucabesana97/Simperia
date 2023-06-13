@@ -48,14 +48,14 @@ public class Gameplay {
 
     private GameMap mapDestination;
     private Warp warpDestination;
-    private PausePanel pausePanel;
-    private InventoryPanel inventoryPanel;
+    private final PausePanel pausePanel;
+    private final InventoryPanel inventoryPanel;
     private HomePanel homePanel;
     private GameState gameState;
     private boolean paused;
 
     private Item deletedItem;
-    private Sound soundtrack = new Sound();
+    private final Sound soundtrack = new Sound();
     Sound effects = new Sound();
 
 

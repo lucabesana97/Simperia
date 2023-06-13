@@ -9,20 +9,17 @@ import java.awt.*;
  */
 public class PausePanel extends Panel {
 
-    private final JButton resumeButton;
-    private final JButton quitButton;
-    private final JButton muteButton;
+    private JButton resumeButton;
+    private JButton quitButton;
+    private JButton muteButton;
 
     //final Color BACKGROUND_COLOR = new Color(141, 134, 186);
     final Color BACKGROUND_COLOR = new Color(51,51,51);
-
     final Color TEXT_COLOR = new Color(0, 254,254);
     final Color BORDER_COLOR = new Color(0, 254,254);
     final String LABEL_FONT = "Helvetica";
 
     public PausePanel() {
-
-        // Use GridBagLayout for precise positioning
         setLayout(new GridBagLayout());
         setBackground(BACKGROUND_COLOR);
         setOpaque(true); // Makes sure the background color is visible
@@ -39,6 +36,27 @@ public class PausePanel extends Panel {
 
         setBounds(panelX, panelY, pausePanelWidth, pausePanelHeight);
 
+        // Create and customize buttons
+        customizeButtons(border);
+
+        // Add buttons to the panel
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(10, 0, 10, 0); // Add spacing between buttons
+        gbc.anchor = GridBagConstraints.CENTER;
+        add(resumeButton, gbc);
+
+        gbc.gridy = 1;
+        add(quitButton, gbc);
+
+        gbc.gridy = 2;
+        gbc.anchor = GridBagConstraints.PAGE_END; // Align mute button to the bottom
+        gbc.insets = new Insets(50, 0, 0, 0); // Add spacing between buttons and bottom edge
+        add(muteButton, gbc);
+    }
+
+    private void customizeButtons(Border border) {
         // Buttons
         resumeButton = new JButton("RESUME");
         quitButton = new JButton("QUIT");
@@ -49,7 +67,7 @@ public class PausePanel extends Panel {
         muteButton.setIcon(muteIcon);
 
         // Set button sizes
-        Dimension buttonSize = new Dimension(150, 50); // Adjust the width and height as needed
+        Dimension buttonSize = new Dimension(150, 50);
         resumeButton.setPreferredSize(buttonSize);
         quitButton.setPreferredSize(buttonSize);
         muteButton.setPreferredSize(new Dimension(muteIcon.getIconWidth(), muteIcon.getIconHeight()));
@@ -73,26 +91,6 @@ public class PausePanel extends Panel {
         resumeButton.setBorder(border);
         quitButton.setBorder(border);
         muteButton.setBorder(border);
-
-        // Add buttons to the panel
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(10, 0, 10, 0); // Add spacing between buttons
-        gbc.anchor = GridBagConstraints.CENTER;
-        add(resumeButton, gbc);
-
-        gbc.gridy = 1;
-        add(quitButton, gbc);
-
-        gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.PAGE_END; // Align mute button to the bottom
-        gbc.insets = new Insets(50, 0, 0, 0); // Add spacing between buttons and bottom edge
-        add(muteButton, gbc);
-    }
-
-    public void draw() {
-
     }
 
     public JButton getResumeButton() {
