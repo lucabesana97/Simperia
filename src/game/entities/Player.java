@@ -42,6 +42,7 @@ public class Player extends Entity implements Movable {
     private BufferedImage[] spritesDown;
     private BufferedImage[] spritesUp;
     private BufferedImage[] spritesSide;
+    public MovingState previousStateX, previousStateY;
     //public List<Item> items = new ArrayList<>();
 
     public Player() {
@@ -57,10 +58,11 @@ public class Player extends Entity implements Movable {
         }
         speed = 30;
         xState = MovingState.STILL;
+        previousStateX = previousStateY = MovingState.STILL;
         yState = MovingState.STILL;
         shootState = FightState.READY;
         slashRange = 40;
-        sprites.current = resize(image);
+        sprites.current = image;
         this.name = "Player";
         this.coins = 0;
         this.xp = 0;
@@ -76,16 +78,19 @@ public class Player extends Entity implements Movable {
 
         if (xState == MovingState.LEFT) {
             currentSprite = createFlipped(spritesSide[(int) (System.currentTimeMillis() / 200 % 4)]);
+            sprites.current= currentSprite;
         } else if (xState == MovingState.RIGHT) {
             currentSprite = spritesSide[(int) (System.currentTimeMillis() / 200 % 4)];
+            sprites.current= currentSprite;
         } else if (yState == MovingState.DOWN) {
             currentSprite = spritesDown[(int) (System.currentTimeMillis() / 200 % 2)];
+            sprites.current= currentSprite;
         } else if (yState == MovingState.UP) {
             currentSprite = spritesUp[(int) (System.currentTimeMillis() / 200 % 2)];
+            sprites.current= currentSprite;
         } else {
             currentSprite = sprites.current;
         }
-        currentSprite = resize(currentSprite);
 
 
         if (closeToLeftWall()) {
@@ -121,6 +126,12 @@ public class Player extends Entity implements Movable {
             coordinates.moveX((xState == MovingState.RIGHT) ? moveBy : -moveBy);
         } else if (yState != MovingState.STILL){
             coordinates.moveY((yState == MovingState.DOWN) ? moveBy : -moveBy);
+        }
+
+        if(xState == MovingState.STILL && yState == MovingState.STILL) {}
+        else {
+            previousStateX = xState;
+            previousStateY = yState;
         }
 
         if (coordinates.topLeftCorner_x <= 0) {
