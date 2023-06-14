@@ -41,14 +41,14 @@ public class InventoryPanel extends Panel {
         setOpaque(true); // Makes sure the background color is visible
         setVisible(false);
 
-        EmptyBorder marginBorder = new EmptyBorder(10, 10, 10, 10);
+        EmptyBorder marginBorder = new EmptyBorder(10, 15, 10, 15);
         LineBorder lineBorder = new LineBorder(MAIN_COLOR, 2);
         CompoundBorder compoundBorder = new CompoundBorder(lineBorder, marginBorder);
         setBorder(compoundBorder);
 
         // Calculate the position to center the inventory panel
-        int panelWidth = (int) (GameFrame.WIDTH * 0.6);
-        int panelHeight = (int) (GameFrame.HEIGHT * 0.7);
+        int panelWidth = (int) (GameFrame.WIDTH * 0.5);
+        int panelHeight = (int) (GameFrame.HEIGHT * 0.6);
         int panelX = (getWidth() - panelWidth) / 2;
         int panelY = (getHeight() - panelHeight) / 2;
 
@@ -105,14 +105,13 @@ public class InventoryPanel extends Panel {
 
             slotButton.setContentAreaFilled(false);
             slotButton.setBorder(UNSELECTED_BORDER);
+            slotButton.setSize(10, 10);
             //slotButton.setBorderPainted(false);
 
             slotButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     clearSelectedSlot();
-
-                    // Set the selected slot
                     slotSelected[slotIndex] = true;
                     slotButton.setBorder(SELECTED_BORDER);
                     JLabel slotLabel = (JLabel) ((JPanel) slotsPanel.getComponent(slotIndex)).getComponent(1);
@@ -136,13 +135,13 @@ public class InventoryPanel extends Panel {
             itemCountLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
 
             // Panel to hold the button and the count label
-            JPanel buttonAndLabelPanel = new JPanel(new BorderLayout());
+            JPanel buttonAndLabelPanel = new JPanel();
+            buttonAndLabelPanel.setLayout(new BorderLayout());
             buttonAndLabelPanel.setBackground(BACKGROUND_COLOR);
             buttonAndLabelPanel.add(slotButton, BorderLayout.CENTER);
             buttonAndLabelPanel.add(itemCountLabels[i], BorderLayout.SOUTH);
 
             slotsPanel.add(buttonAndLabelPanel);
-            //slotsPanel.add(slotButton);
         }
 
         buttonsPanel = new JPanel(new FlowLayout());
@@ -243,7 +242,7 @@ public class InventoryPanel extends Panel {
         buttonsPanel.add(throwItemButton);
         buttonsPanel.add(Box.createHorizontalStrut(8));
         buttonsPanel.add(closeButton);
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 0, 0));
     }
 
     private void updateLabelsToEmptyItems() {
@@ -274,6 +273,7 @@ public class InventoryPanel extends Panel {
             button.setBorder(UNSELECTED_BORDER);
             label.setForeground(MAIN_COLOR);
             slotSelected[j] = false;
+            updateLabelsToEmptyItems();
         }
     }
 
