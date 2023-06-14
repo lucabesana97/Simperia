@@ -62,7 +62,7 @@ public class Player extends Entity implements Movable {
         yState = MovingState.STILL;
         shootState = FightState.READY;
         slashRange = 40;
-        sprites.current = resize(image);
+        sprites.current = image;
         this.name = "Player";
         this.coins = 0;
         this.xp = 0;
@@ -91,7 +91,6 @@ public class Player extends Entity implements Movable {
         } else {
             currentSprite = sprites.current;
         }
-        currentSprite = resize(currentSprite);
 
 
         if (closeToLeftWall()) {
