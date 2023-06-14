@@ -81,9 +81,9 @@ public class Gameplay {
         //inventoryPanel.init(inventory);
 
         // Test items in the inventory panel TODO: Delete in the future
-        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
-        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
-        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
+//        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
+//        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
+//        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
 
         inventoryPanel.init(inventory);
 
@@ -190,7 +190,7 @@ public class Gameplay {
             if (player.isColliding(beginnerNPC)) {
                 // Player is talking to the NPC
                 String text = beginnerNPC.interact();
-                System.out.println("Text: " + text);
+                //System.out.println("Text: " + text);
             } else {
                 // Player is not talking to the NPC
                 beginnerNPC.stopInteracting();
@@ -273,7 +273,7 @@ public class Gameplay {
                     } else { //There are items that didn't fit in the inventory.
                         stacksOnWorld.get(i).amount = remainder.amount;
                     }
-
+                    inventoryPanel.updateInventoryUI();
                 }
             }
         }
@@ -407,6 +407,7 @@ public class Gameplay {
     }
 
     private void closeInventory() {
+        inventoryPanel.clearSelectedSlot();
         inventoryPanel.setVisible(false);
         gameState = GameState.PLAYING;
     }

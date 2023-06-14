@@ -1,19 +1,26 @@
 package gui;
 
 import game.inventory.Inventory;
+import game.inventory.ItemStack;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class InventoryPanel extends Panel {
 
-    private JLabel selectedSlotLabel;
-    private JLabel selectedSlotDescriptionLabel;
-    private boolean[] slotSelected;
+    private JLabel selectedSlotLabel; // Displays the name of the selected item
+    private JLabel selectedSlotDescriptionLabel; // Displays the description of the selected item
+    private JLabel[] itemCountLabels;
+    private boolean[] slotSelected; // Keeps track of which slot is selected
 
     private JButton closeButton;
     private JPanel slotsPanel;
@@ -21,8 +28,10 @@ public class InventoryPanel extends Panel {
 
     private Inventory inventory;
     final Color BACKGROUND_COLOR = new Color(51,51,51);
-    final Color TEXT_COLOR = new Color(0, 254,254);
-    final Color BORDER_COLOR = new Color(0, 254,254);
+    final Color MAIN_COLOR = new Color(0, 254,254);
+    final Color COMPLEMENTARY_COLOR = new Color(249,206,55);
+    final Border SELECTED_BORDER = BorderFactory.createLineBorder(COMPLEMENTARY_COLOR, 2);
+    final Border UNSELECTED_BORDER = BorderFactory.createLineBorder(MAIN_COLOR, 2);
     final String LABEL_FONT = "Helvetica";
     final int FONT_SIZE = 17;
 
@@ -32,12 +41,14 @@ public class InventoryPanel extends Panel {
         setOpaque(true); // Makes sure the background color is visible
         setVisible(false);
 
-        Border border = BorderFactory.createLineBorder(BORDER_COLOR, 2);
-        setBorder(border);
+        EmptyBorder marginBorder = new EmptyBorder(10, 10, 10, 10);
+        LineBorder lineBorder = new LineBorder(MAIN_COLOR, 2);
+        CompoundBorder compoundBorder = new CompoundBorder(lineBorder, marginBorder);
+        setBorder(compoundBorder);
 
         // Calculate the position to center the inventory panel
         int panelWidth = (int) (GameFrame.WIDTH * 0.6);
-        int panelHeight = (int) (GameFrame.HEIGHT * 0.6);
+        int panelHeight = (int) (GameFrame.HEIGHT * 0.7);
         int panelX = (getWidth() - panelWidth) / 2;
         int panelY = (getHeight() - panelHeight) / 2;
 
@@ -46,16 +57,17 @@ public class InventoryPanel extends Panel {
 
     public void init(Inventory inv) {
         this.inventory = inv;
+        itemCountLabels = new JLabel[12];
 
         // Label to display the selected slot
         selectedSlotLabel = new JLabel();
         selectedSlotLabel.setFont(new Font(LABEL_FONT, Font.PLAIN, 18));
-        selectedSlotLabel.setForeground(TEXT_COLOR);
+        selectedSlotLabel.setForeground(MAIN_COLOR);
         selectedSlotLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         selectedSlotDescriptionLabel = new JLabel();
         selectedSlotDescriptionLabel.setFont(new Font(LABEL_FONT, Font.PLAIN, 15));
-        selectedSlotDescriptionLabel.setForeground(TEXT_COLOR);
+        selectedSlotDescriptionLabel.setForeground(MAIN_COLOR);
         selectedSlotDescriptionLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         updateLabelsToEmptyItems();
@@ -69,12 +81,12 @@ public class InventoryPanel extends Panel {
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.CENTER;
-        constraints.insets = new Insets(15, 10, 10, 10); // Add spacing around the labels
+        constraints.insets = new Insets(5, 10, 5, 10); // Add spacing around the labels
 
         labelsPanel.add(selectedSlotLabel, constraints);
 
         constraints.gridy = 1;
-        constraints.insets = new Insets(2, 10, 5, 10);
+        constraints.insets = new Insets(0, 10, 13, 10);
         labelsPanel.add(selectedSlotDescriptionLabel, constraints);
 
         add(labelsPanel, BorderLayout.NORTH);
@@ -92,27 +104,19 @@ public class InventoryPanel extends Panel {
             final int slotIndex = i;
 
             slotButton.setContentAreaFilled(false);
-            slotButton.setBorderPainted(false);
-
-            // If items exists
-            if (inventory.slots[i] != null) {
-                BufferedImage itemSprite = inventory.slots[i].item.sprite;
-
-                // Scale the image to fit the button
-                ImageIcon scaledImageIcon = scaleImage(itemSprite, slotButton);
-                slotButton.setIcon(scaledImageIcon);
-            }
+            slotButton.setBorder(UNSELECTED_BORDER);
+            //slotButton.setBorderPainted(false);
 
             slotButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Clear selection for all slots
-                    for (int j = 0; j < 12; j++) {
-                        slotSelected[j] = false;
-                    }
+                    clearSelectedSlot();
 
                     // Set the selected slot
                     slotSelected[slotIndex] = true;
+                    slotButton.setBorder(SELECTED_BORDER);
+                    JLabel slotLabel = (JLabel) ((JPanel) slotsPanel.getComponent(slotIndex)).getComponent(1);
+                    slotLabel.setForeground(COMPLEMENTARY_COLOR);
 
                     if (inventory.slots[slotIndex] != null) {
                         // Update the label with the selected item name
@@ -124,7 +128,21 @@ public class InventoryPanel extends Panel {
 
                 }
             });
-            slotsPanel.add(slotButton);
+
+            // Label for displaying the item count
+            itemCountLabels[i] = new JLabel();
+            itemCountLabels[i].setFont(new Font(LABEL_FONT, Font.PLAIN, 15));
+            itemCountLabels[i].setForeground(MAIN_COLOR);
+            itemCountLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
+
+            // Panel to hold the button and the count label
+            JPanel buttonAndLabelPanel = new JPanel(new BorderLayout());
+            buttonAndLabelPanel.setBackground(BACKGROUND_COLOR);
+            buttonAndLabelPanel.add(slotButton, BorderLayout.CENTER);
+            buttonAndLabelPanel.add(itemCountLabels[i], BorderLayout.SOUTH);
+
+            slotsPanel.add(buttonAndLabelPanel);
+            //slotsPanel.add(slotButton);
         }
 
         buttonsPanel = new JPanel(new FlowLayout());
@@ -135,68 +153,89 @@ public class InventoryPanel extends Panel {
     }
 
     private void customizeButtons() {
-        Border border = BorderFactory.createLineBorder(BORDER_COLOR, 2);
 
         JButton useItemButton = new JButton("USE ITEM");
         useItemButton.setFont(new Font(LABEL_FONT, Font.PLAIN, FONT_SIZE));
-        useItemButton.setForeground(TEXT_COLOR);
+        useItemButton.setForeground(MAIN_COLOR);
         useItemButton.setBackground(BACKGROUND_COLOR);
-        useItemButton.setBorder(border);
+        useItemButton.setBorder(UNSELECTED_BORDER);
         useItemButton.setPreferredSize(new Dimension(100, 25));
         useItemButton.addActionListener(e -> {
             // Handle "Use Item" button click
             int selectedSlot = getSelectedSlot();
-            if (selectedSlot != -1 && inventory.slots[selectedSlot - 1] != null) { // -1 because the slot numbers start from 1
+            if (selectedSlot != -1 && inventory.slots[selectedSlot] != null) {
                 // Use the item in the selected slot
-                System.out.println("Using item " + inventory.slots[selectedSlot - 1].item.name);
-                inventory.useItem(selectedSlot - 1);
-                updateInventoryUI();
-
-                // Update the slot button image and labels
-                if (inventory.slots[selectedSlot - 1] == null) {
-                    ((JButton) slotsPanel.getComponent(selectedSlot - 1)).setIcon(null);
-                    updateLabelsToEmptyItems();
-                } else {
-                    updateButton(selectedSlot - 1);
-                    updateLabelsToExistingItems(selectedSlot - 1);
-                }
+                System.out.println("Using item " + inventory.slots[selectedSlot].item.name);
+                inventory.useItem(selectedSlot);
+                updateSlot(selectedSlot);
             } else {
                 System.out.println("No slot selected");
+            }
+        });
+        // Change button border and text colors when pressed
+        useItemButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                useItemButton.setBorder(SELECTED_BORDER);
+                useItemButton.setForeground(COMPLEMENTARY_COLOR);
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                useItemButton.setBorder(UNSELECTED_BORDER);
+                useItemButton.setForeground(MAIN_COLOR);
             }
         });
 
         JButton throwItemButton = new JButton("REMOVE ITEM");
         throwItemButton.setFont(new Font(LABEL_FONT, Font.PLAIN, FONT_SIZE));
-        throwItemButton.setForeground(TEXT_COLOR);
+        throwItemButton.setForeground(MAIN_COLOR);
         throwItemButton.setBackground(BACKGROUND_COLOR);
-        throwItemButton.setBorder(border);
+        throwItemButton.setBorder(UNSELECTED_BORDER);
         throwItemButton.setPreferredSize(new Dimension(135, 25));
         throwItemButton.addActionListener(e -> {
             int selectedSlot = getSelectedSlot();
-            if (selectedSlot != -1 && inventory.slots[selectedSlot - 1] != null) {
+            if (selectedSlot != -1 && inventory.slots[selectedSlot] != null) {
                 // Throw away the item in the selected slot
-                System.out.println("Throwing away item " + inventory.slots[selectedSlot - 1].item.name);
-                inventory.removeItem(selectedSlot - 1);
-
-                // Update the slot button image and labels
-                if (inventory.slots[selectedSlot - 1] == null) {
-                    ((JButton) slotsPanel.getComponent(selectedSlot - 1)).setIcon(null);
-                    updateLabelsToEmptyItems();
-                } else {
-                    updateButton(selectedSlot - 1);
-                    updateLabelsToExistingItems(selectedSlot - 1);
-                }
+                System.out.println("Throwing away item " + inventory.slots[selectedSlot].item.name);
+                inventory.removeItem(selectedSlot);
+                updateSlot(selectedSlot);
             } else {
                 System.out.println("No slot selected");
+            }
+        });
+        // Change button border and text colors when pressed
+        throwItemButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                throwItemButton.setBorder(SELECTED_BORDER);
+                throwItemButton.setForeground(COMPLEMENTARY_COLOR);
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                throwItemButton.setBorder(UNSELECTED_BORDER);
+                throwItemButton.setForeground(MAIN_COLOR);
             }
         });
 
         closeButton = new JButton("CLOSE");
         closeButton.setFont(new Font(LABEL_FONT, Font.PLAIN, FONT_SIZE));
-        closeButton.setForeground(TEXT_COLOR);
+        closeButton.setForeground(MAIN_COLOR);
         closeButton.setBackground(BACKGROUND_COLOR);
-        closeButton.setBorder(border);
+        closeButton.setBorder(UNSELECTED_BORDER);
         closeButton.setPreferredSize(new Dimension(75, 25));
+        // Change button border and text colors when pressed
+        closeButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                closeButton.setBorder(SELECTED_BORDER);
+                closeButton.setForeground(COMPLEMENTARY_COLOR);
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                closeButton.setBorder(UNSELECTED_BORDER);
+                closeButton.setForeground(MAIN_COLOR);
+            }
+        });
 
         // Add the buttons to the panel with spacing
         buttonsPanel.add(useItemButton);
@@ -204,12 +243,7 @@ public class InventoryPanel extends Panel {
         buttonsPanel.add(throwItemButton);
         buttonsPanel.add(Box.createHorizontalStrut(8));
         buttonsPanel.add(closeButton);
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 8, 0));
-    }
-
-    private void updateButton(int selectedSlot) {
-        ImageIcon scaledImageIcon = scaleImage(inventory.slots[selectedSlot - 1].item.sprite, (JButton) slotsPanel.getComponent(selectedSlot - 1));
-        ((JButton) slotsPanel.getComponent(selectedSlot - 1)).setIcon(scaledImageIcon);
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(8, 0, 0, 0));
     }
 
     private void updateLabelsToEmptyItems() {
@@ -218,21 +252,58 @@ public class InventoryPanel extends Panel {
     }
 
     private void updateLabelsToExistingItems(int selectedSlot) {
-        selectedSlotLabel.setText(inventory.slots[selectedSlot - 1].item.name);
-        selectedSlotDescriptionLabel.setText(inventory.slots[selectedSlot - 1].item.description);
+        selectedSlotLabel.setText(inventory.slots[selectedSlot].item.name);
+        selectedSlotDescriptionLabel.setText(inventory.slots[selectedSlot].item.description);
     }
 
     private int getSelectedSlot() {
         for (int i = 0; i < 12; i++) {
             if (slotSelected[i]) {
-                return i + 1;
+                return i;
             }
         }
         return -1; // No slot selected
     }
 
+    public void clearSelectedSlot() {
+        // Clear selection for all slots and clear border and label colors
+        for (int j = 0; j < 12; j++) {
+            JPanel buttonAndLabelPanel = (JPanel) slotsPanel.getComponent(j);
+            JButton button = (JButton) buttonAndLabelPanel.getComponent(0);
+            JLabel label = (JLabel) buttonAndLabelPanel.getComponent(1);
+            button.setBorder(UNSELECTED_BORDER);
+            label.setForeground(MAIN_COLOR);
+            slotSelected[j] = false;
+        }
+    }
+
     public JButton getCloseButton() {
         return closeButton;
+    }
+
+    // Update the item slots when the inventory is updated
+    public void updateInventoryUI() {
+        for (int i = 0; i < 12; i++) {
+            //System.out.println("Slot " + i + ": " + inventory.slots[i].item.name + " x" + inventory.slots[i].amount);
+            updateSlot(i);
+        }
+    }
+
+    // Update image and item count label
+    private void updateSlot(int i) {
+        JPanel buttonAndLabelPanel = (JPanel) slotsPanel.getComponent(i);
+        JButton button = (JButton) buttonAndLabelPanel.getComponent(0);
+
+        if (inventory.slots[i] != null) { // Items exist in the stack
+            itemCountLabels[i].setText("x" + inventory.slots[i].amount); // Update the item count label
+            ImageIcon imageIcon = new ImageIcon(inventory.slots[i].item.sprite);
+            button.setIcon(imageIcon);
+            //updateLabelsToExistingItems(i);
+        } else { // Empty stack
+            button.setIcon(null);
+            itemCountLabels[i].setText(""); // Clear the item count label
+            updateLabelsToEmptyItems();
+        }
     }
 
     private ImageIcon scaleImage (BufferedImage itemSprite, JButton slotButton) {
@@ -255,16 +326,5 @@ public class InventoryPanel extends Panel {
         return new ImageIcon(scaledImage);
     }
 
-    // Update the item slots when the inventory is updated
-    public void updateInventoryUI() {
-        for (int i = 0; i < 12; i++) {
-            System.out.println("Slot " + i + ": " + inventory.slots[i]);
-            if (inventory.slots[i] != null) {
-                updateButton(i + 1);
-            } else {
-                ((JButton) slotsPanel.getComponent(i)).setIcon(null);
-            }
-        }
-    }
 }
 

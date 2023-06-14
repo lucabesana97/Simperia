@@ -19,16 +19,16 @@ public class Game {
 	}
 
 	public void init() {
-		//this.panel = new HomePanel();
+		this.panel = new HomePanel();
 		//frame.setPanel(panel);
 
-		//JButton newGameButton = ((HomePanel) panel).getNewGameButton();
-		//newGameButton.addActionListener(e -> { start(); });
+		JButton newGameButton = ((HomePanel) panel).getNewGameButton();
+		newGameButton.addActionListener(e -> { start(); });
 	}
 
 	public void start() {
 		this.panel = new GamePanel();
-		panel.requestFocusInWindow();
+		this.panel.requestFocusInWindow();
 		frame.setPanel(panel);
 
 		gameplay = new Gameplay(panel, keyHandler, frame);
