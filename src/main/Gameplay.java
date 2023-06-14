@@ -12,6 +12,7 @@ import javax.swing.*;
 
 import game.GameObject;
 import game.environment.AsteroidMap;
+import game.inventory.HealthElixir;
 import game.inventory.Item;
 import game.Coordinates;
 import game.GameState;
@@ -47,14 +48,14 @@ public class Gameplay {
 
     private GameMap mapDestination;
     private Warp warpDestination;
-    private PausePanel pausePanel;
-    private InventoryPanel inventoryPanel;
+    private final PausePanel pausePanel;
+    private final InventoryPanel inventoryPanel;
     private HomePanel homePanel;
     private GameState gameState;
     private boolean paused;
 
     private Item deletedItem;
-    private Sound soundtrack = new Sound();
+    private final Sound soundtrack = new Sound();
     Sound effects = new Sound();
 
 
@@ -62,9 +63,8 @@ public class Gameplay {
         this.panel = (GamePanel) panel;
         this.pausePanel = frame.getPausePanel();
         this.inventoryPanel = frame.getInventoryPanel();
-
         this.keyHandler = keyHandler;
-		gameState = GameState.PLAYING;
+		this.gameState = GameState.PLAYING;
     }
 
 
@@ -77,6 +77,15 @@ public class Gameplay {
 
         loadObjects();
         inventory = new Inventory();
+
+        //inventoryPanel.init(inventory);
+
+        // Test items in the inventory panel TODO: Delete in the future
+//        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
+//        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
+//        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
+
+        inventoryPanel.init(inventory);
 
         panel.addKeyListener(keyHandler);
 
@@ -105,12 +114,6 @@ public class Gameplay {
 
         JButton closeInventoryButton = inventoryPanel.getCloseButton();
         closeInventoryButton.addActionListener(e -> closeInventory());
-
-        JButton throwItemButton = inventoryPanel.getThrowItemButton();
-        throwItemButton.addActionListener(e -> throwItem());
-
-        JButton useItemButton = inventoryPanel.getUseItemButton();
-        useItemButton.addActionListener(e -> useItem());
     }
 
 	public void run() {
@@ -187,7 +190,7 @@ public class Gameplay {
             if (player.isColliding(beginnerNPC)) {
                 // Player is talking to the NPC
                 String text = beginnerNPC.interact();
-                System.out.println("Text: " + text);
+                //System.out.println("Text: " + text);
             } else {
                 // Player is not talking to the NPC
                 beginnerNPC.stopInteracting();
@@ -270,7 +273,7 @@ public class Gameplay {
                     } else { //There are items that didn't fit in the inventory.
                         stacksOnWorld.get(i).amount = remainder.amount;
                     }
-
+                    inventoryPanel.updateInventoryUI();
                 }
             }
         }
@@ -404,6 +407,7 @@ public class Gameplay {
     }
 
     private void closeInventory() {
+        inventoryPanel.clearSelectedSlot();
         inventoryPanel.setVisible(false);
         gameState = GameState.PLAYING;
     }
@@ -423,24 +427,16 @@ public class Gameplay {
     public void muteGame (JButton muteButton) {
         if (soundtrack.isMusicPlaying()) {
             soundtrack.stopMusic();
-            muteButton.setText("Unmute");
+            muteButton.setIcon(new ImageIcon("resources/sprites/pause/music_muted.png"));
         } else {
             soundtrack.playMusic(2);
             soundtrack.changeVolume(-20);
-            muteButton.setText("Mute");
+            muteButton.setIcon(new ImageIcon("resources/sprites/pause/music_playing.png"));
         }
     }
 
     public void quitGame() {
         // TODO: go back to home screen
-    }
-
-    public void throwItem() {
-        // TODO
-    }
-
-    public void useItem() {
-        // TODO
     }
 
     public void loadObjects() {
@@ -460,3 +456,4 @@ public class Gameplay {
     }
 
 }
+

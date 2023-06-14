@@ -1,5 +1,10 @@
 package gui;
 
+import game.Coordinates;
+import game.inventory.HealthElixir;
+import game.inventory.Inventory;
+import game.inventory.ItemStack;
+
 import javax.swing.*;
 
 public class GameFrame extends JFrame{
@@ -11,9 +16,9 @@ public class GameFrame extends JFrame{
 
 
 	private Panel panel;
-	private PausePanel pausePanel;
-	private InventoryPanel inventoryPanel;
-	private JLayeredPane layeredPane;
+	private final PausePanel pausePanel;
+	private final InventoryPanel inventoryPanel;
+	private final JLayeredPane layeredPane;
 	
 	public GameFrame(String title) {
 
@@ -23,7 +28,7 @@ public class GameFrame extends JFrame{
 		setSize(WIDTH, HEIGHT);
 		setResizable(false);
 
-		// Create a layered pane to hold different panels
+		// Layered pane to hold different panels
 		layeredPane = new JLayeredPane();
 
 		pausePanel = new PausePanel();
@@ -37,7 +42,6 @@ public class GameFrame extends JFrame{
 
 		setLocationRelativeTo(null); // Center the window
 		setVisible(true);
-
 	}
 	
     public void setPanel(Panel panel) {
@@ -46,20 +50,14 @@ public class GameFrame extends JFrame{
         }
         this.panel = panel;
 
-		// Add the game panel to the bottom layer
+		// Add the game panel to the bottom layer and the others to the top layer
 		layeredPane.add(panel, JLayeredPane.DEFAULT_LAYER);
 		layeredPane.add(pausePanel, JLayeredPane.PALETTE_LAYER);
 		layeredPane.add(inventoryPanel, JLayeredPane.PALETTE_LAYER);
 
-		// layeredPane.setComponentZOrder(pausePanel, JLayeredPane.PALETTE_LAYER);
-		// layeredPane.setComponentZOrder(inventoryPanel, JLayeredPane.PALETTE_LAYER);
-
 		layeredPane.revalidate();
-		// layeredPane.repaint();
     }
 
 	public PausePanel getPausePanel() { return pausePanel; }
 	public InventoryPanel getInventoryPanel() { return inventoryPanel; }
-
-
 }

@@ -13,22 +13,22 @@ public class Game {
 	private Panel panel;
 
 	public Game() {
-		frame = new GameFrame("Simperia");
-		keyHandler = new KeyHandler();
-		frame.addKeyListener(keyHandler);
+		this.frame = new GameFrame("Simperia");
+		this.keyHandler = new KeyHandler();
+		this.frame.addKeyListener(keyHandler);
 	}
 
 	public void init() {
-		//panel = new HomePanel();
-//		frame.setPanel(panel);
+		this.panel = new HomePanel();
+		//frame.setPanel(panel);
 
-		//JButton newGameButton = ((HomePanel) panel).getNewGameButton();
-		//newGameButton.addActionListener(e -> { start();	});
+		JButton newGameButton = ((HomePanel) panel).getNewGameButton();
+		newGameButton.addActionListener(e -> { start(); });
 	}
 
 	public void start() {
-		panel = new GamePanel();
-		panel.requestFocusInWindow();
+		this.panel = new GamePanel();
+		this.panel.requestFocusInWindow();
 		frame.setPanel(panel);
 
 		gameplay = new Gameplay(panel, keyHandler, frame);
