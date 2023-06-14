@@ -41,7 +41,7 @@ public class InventoryPanel extends Panel {
         setOpaque(true); // Makes sure the background color is visible
         setVisible(false);
 
-        EmptyBorder marginBorder = new EmptyBorder(10, 15, 10, 15);
+        EmptyBorder marginBorder = new EmptyBorder(15, 15, 15, 15);
         LineBorder lineBorder = new LineBorder(MAIN_COLOR, 2);
         CompoundBorder compoundBorder = new CompoundBorder(lineBorder, marginBorder);
         setBorder(compoundBorder);
@@ -81,7 +81,7 @@ public class InventoryPanel extends Panel {
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.CENTER;
-        constraints.insets = new Insets(5, 10, 5, 10); // Add spacing around the labels
+        constraints.insets = new Insets(0, 10, 5, 10); // Add spacing around the labels
 
         labelsPanel.add(selectedSlotLabel, constraints);
 
@@ -105,7 +105,6 @@ public class InventoryPanel extends Panel {
 
             slotButton.setContentAreaFilled(false);
             slotButton.setBorder(UNSELECTED_BORDER);
-            slotButton.setSize(10, 10);
             //slotButton.setBorderPainted(false);
 
             slotButton.addActionListener(new ActionListener() {
@@ -115,13 +114,13 @@ public class InventoryPanel extends Panel {
                     slotSelected[slotIndex] = true;
                     slotButton.setBorder(SELECTED_BORDER);
                     JLabel slotLabel = (JLabel) ((JPanel) slotsPanel.getComponent(slotIndex)).getComponent(1);
-                    slotLabel.setForeground(COMPLEMENTARY_COLOR);
-
                     if (inventory.slots[slotIndex] != null) {
                         // Update the label with the selected item name
                         selectedSlotLabel.setText(inventory.slots[slotIndex].item.name.toUpperCase());
                         selectedSlotDescriptionLabel.setText(inventory.slots[slotIndex].item.description);
+                        slotLabel.setForeground(COMPLEMENTARY_COLOR);
                     } else {
+                        slotLabel.setForeground(BACKGROUND_COLOR);
                         updateLabelsToEmptyItems();
                     }
 
@@ -129,10 +128,14 @@ public class InventoryPanel extends Panel {
             });
 
             // Label for displaying the item count
-            itemCountLabels[i] = new JLabel();
+            itemCountLabels[i] = new JLabel(".");
             itemCountLabels[i].setFont(new Font(LABEL_FONT, Font.PLAIN, 15));
-            itemCountLabels[i].setForeground(MAIN_COLOR);
             itemCountLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
+            if (inventory.slots[i] == null) {
+                itemCountLabels[i].setForeground(BACKGROUND_COLOR);
+            } else {
+                itemCountLabels[i].setForeground(MAIN_COLOR);
+            }
 
             // Panel to hold the button and the count label
             JPanel buttonAndLabelPanel = new JPanel();
@@ -242,7 +245,7 @@ public class InventoryPanel extends Panel {
         buttonsPanel.add(throwItemButton);
         buttonsPanel.add(Box.createHorizontalStrut(8));
         buttonsPanel.add(closeButton);
-        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(25, 0, 0, 0));
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
     }
 
     private void updateLabelsToEmptyItems() {
@@ -271,7 +274,11 @@ public class InventoryPanel extends Panel {
             JButton button = (JButton) buttonAndLabelPanel.getComponent(0);
             JLabel label = (JLabel) buttonAndLabelPanel.getComponent(1);
             button.setBorder(UNSELECTED_BORDER);
-            label.setForeground(MAIN_COLOR);
+            if (inventory.slots[j] == null) {
+                label.setForeground(BACKGROUND_COLOR);
+            } else {
+                label.setForeground(MAIN_COLOR);
+            }
             slotSelected[j] = false;
             updateLabelsToEmptyItems();
         }
@@ -296,12 +303,18 @@ public class InventoryPanel extends Panel {
 
         if (inventory.slots[i] != null) { // Items exist in the stack
             itemCountLabels[i].setText("x" + inventory.slots[i].amount); // Update the item count label
+            if (slotSelected[i]) {
+                itemCountLabels[i].setForeground(COMPLEMENTARY_COLOR);
+            } else {
+                itemCountLabels[i].setForeground(MAIN_COLOR);
+            }
             ImageIcon imageIcon = new ImageIcon(inventory.slots[i].item.sprite);
             button.setIcon(imageIcon);
             //updateLabelsToExistingItems(i);
         } else { // Empty stack
             button.setIcon(null);
-            itemCountLabels[i].setText(""); // Clear the item count label
+            itemCountLabels[i].setText("."); // Clear the item count label
+            itemCountLabels[i].setForeground(BACKGROUND_COLOR);
             updateLabelsToEmptyItems();
         }
     }
