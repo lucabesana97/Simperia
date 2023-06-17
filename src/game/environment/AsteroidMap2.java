@@ -9,7 +9,7 @@ import game.inventory.ItemStack;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
-public class AsteroidMap extends GameMap {
+public class AsteroidMap2 extends GameMap {
     private void load() {
         String str;
 
@@ -24,15 +24,12 @@ public class AsteroidMap extends GameMap {
 
     }
 
-    public AsteroidMap() {
+    public AsteroidMap2() {
         load();
-        enemies.add(new Octopus(1000, 1000));
-        enemies.add(new MeleeEnemy(700, 700));
         beginnerNPC = new NPC(new Coordinates(100, 100, 37, 64));
         //enemies.add(new Octopus(800,700));
 //        warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
         mapWarps.add(new Warp(CaveID, new Coordinates(600, 930, 32, 32), new Coordinates(200, 3150, 32, 32), player));
-
         stacksOnWorld.add(new ItemStack(new HealthElixir(new Coordinates(1000, 1000, 32, 32)), 200, false));
     }
 }

@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameMap {
+    protected static final int asteroidID = 0;
+    protected static final int CaveID = 1;
+    protected static final int asteroid2ID = 2;
     public BufferedImage mapImage;
     public static int[][] mapCollision;
     public Player player;
@@ -61,5 +64,17 @@ public class GameMap {
 
         //g.drawImage(map, 0, 0, null); // Draw the entire map
         g.drawImage(mapImage.getSubimage(startX, startY, endX - startX, endY - startY), 0, 0, null);
+    }
+
+    public static GameMap warpTo(int i) {
+        switch (i) {
+            case 0:
+                return new AsteroidMap();
+            case 1:
+                return new CaveMap();
+            case 2:
+                return new AsteroidMap2();
+        }
+        return null;
     }
 }

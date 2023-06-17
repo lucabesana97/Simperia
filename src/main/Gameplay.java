@@ -247,12 +247,12 @@ public class Gameplay {
         for (Warp warp : mapWarps) {
             if (player.isColliding(warp)) {
                 changeMap = true;
-                mapDestination = warp.map;
+                mapDestination = GameMap.warpTo(warp.mapID);
                 warpDestination = warp;
             }
         }
         if (changeMap) {
-            warpDestination.map.player = player;
+            mapDestination.player = player;
             map = mapDestination;
             loadObjects();
             player.teleport(warpDestination);

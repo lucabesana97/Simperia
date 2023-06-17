@@ -14,16 +14,16 @@ public class Warp extends GameObject {
     public double screenXIn, screenYIn, screenXOut, screenYOut;
     public int frameWidth = GameFrame.WIDTH/2;
     public int frameHeight = GameFrame.HEIGHT/2;
-    public GameMap map;
+    public int mapID;
     public Warp(Coordinates coordinates, Coordinates exit, Player player){
         super(coordinates);
         this.exit = exit;
         this.player = player;
     }
 
-    public Warp(GameMap map, Coordinates coordinates, Coordinates exit, Player player){
+    public Warp(int mapID, Coordinates coordinates, Coordinates exit, Player player){
         super(coordinates);
-        this.map = map;
+        this.mapID = mapID;
         this.exit = exit;
         this.player = player;
     }
