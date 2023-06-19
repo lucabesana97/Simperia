@@ -1,7 +1,7 @@
 
 package main;
 
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,15 +12,14 @@ import javax.swing.*;
 
 import game.GameObject;
 import game.environment.AsteroidMap;
-import game.inventory.HealthElixir;
 import game.inventory.Item;
-import game.Coordinates;
 import game.GameState;
 import game.entities.*;
 import game.environment.GameMap;
 import game.inventory.Inventory;
 import game.inventory.ItemStack;
 import gui.*;
+import gui.Panel;
 import helperFunctions.Utility;
 import input.KeyHandler;
 import input.Keys;
@@ -50,21 +49,36 @@ public class Gameplay {
     private Warp warpDestination;
     private final PausePanel pausePanel;
     private final InventoryPanel inventoryPanel;
-    private HomePanel homePanel;
+    private final HomePanel homePanel;
+    private DialogPanel dialogPanel;
     private GameState gameState;
-    private boolean paused;
-
     private Item deletedItem;
     private final Sound soundtrack = new Sound();
     Sound effects = new Sound();
-
+    private JButton newGameButton;
 
     public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {
         this.panel = (GamePanel) panel;
         this.pausePanel = frame.getPausePanel();
         this.inventoryPanel = frame.getInventoryPanel();
+        this.dialogPanel = frame.getDialogPanel();
+        this.homePanel = frame.getHomePanel();
         this.keyHandler = keyHandler;
 		this.gameState = GameState.PLAYING;
+
+        newGameButton = homePanel.getNewGameButton();
+        newGameButton.addActionListener(e -> {
+            homePanel.setVisible(false);
+            gameState = GameState.PLAYING;
+
+            init();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    run_game();
+                }
+            }).start();
+        });
     }
 
 
@@ -77,14 +91,6 @@ public class Gameplay {
 
         loadObjects();
         inventory = new Inventory();
-
-        //inventoryPanel.init(inventory);
-
-        // Test items in the inventory panel TODO: Delete in the future
-//        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
-//        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
-//        inventory.addStack(new ItemStack(new HealthElixir(new Coordinates(100, 100, 10, 10)) , 1, true));
-
         inventoryPanel.init(inventory);
 
         panel.addKeyListener(keyHandler);
@@ -93,14 +99,6 @@ public class Gameplay {
         soundtrack.stopMusic();
         soundtrack.playMusic(2);
         soundtrack.changeVolume(-20);
-
-
-//        JButton newGameButton = homePanel.getNewGameButton();
-//        newGameButton.addActionListener(e -> {
-//            this.panel = (GamePanel) panel;
-//            gameState = GameState.PLAYING;
-//            run();
-//        });
 
         // Button actions of pause and inventory panels
         JButton resumeButton = pausePanel.getResumeButton();
@@ -114,9 +112,12 @@ public class Gameplay {
 
         JButton closeInventoryButton = inventoryPanel.getCloseButton();
         closeInventoryButton.addActionListener(e -> closeInventory());
+
+        JButton closeDialogButton = dialogPanel.getCloseDialogButton();
+        closeDialogButton.addActionListener(e -> closeNPCDialog());
     }
 
-	public void run() {
+	public void run_game() {
 
         long lastTick = System.currentTimeMillis();
 
@@ -132,9 +133,13 @@ public class Gameplay {
             } else if (gameState == GameState.INVENTORY) {
                 inventoryPanel.setVisible(true);
                 inventoryPanel.repaint();
+            } else if (gameState == GameState.DIALOG) {
+                dialogPanel.setVisible(true);
+                dialogPanel.repaint();
             } else {
                 pausePanel.setVisible(false);
                 inventoryPanel.setVisible(false);
+                dialogPanel.setVisible(false);
 
                 update(diffSeconds);
 
@@ -147,18 +152,13 @@ public class Gameplay {
                 } catch (Exception e) {
                     System.out.println("Error: " + e.getCause());
                 }
+
             }
             System.out.flush();
         }
     }
 
 	private void update(double diffSeconds) {
-
-        // Pauses the game
-		if (gameState == GameState.PAUSED || gameState == GameState.INVENTORY) {
-			return;
-		}
-
         // Player
         player.move(diffSeconds);
 
@@ -187,13 +187,15 @@ public class Gameplay {
             enemy.move(diffSeconds, player);
         }
         if (beginnerNPC != null) {
-            if (player.isColliding(beginnerNPC)) {
+            if (player.isColliding(beginnerNPC) && !(beginnerNPC.interacting)) {
                 // Player is talking to the NPC
                 String text = beginnerNPC.interact();
+                displayNPCDialog(text);
                 //System.out.println("Text: " + text);
-            } else {
+            } else if(!player.isColliding(beginnerNPC)){
                 // Player is not talking to the NPC
                 beginnerNPC.stopInteracting();
+                closeNPCDialog();
             }
         }
         for (Warp warp : warps) {
@@ -325,11 +327,11 @@ public class Gameplay {
     }
 
     private void handleUserInput() {
-
         final Set<Keys> pressedKeys = keyHandler.getKeys();
         boolean horStill = true;
         boolean verStill = true;
         boolean sprintStill = true;
+        boolean npcTalk = false;
         for (Keys keyCode : pressedKeys) {
             //System.out.println("Key pressed: " + keyCode);
             switch (keyCode) {
@@ -368,22 +370,19 @@ public class Gameplay {
                     player.switchWeapon();
                     break;
                 case PAUSE:
-                    if (!pausePanel.isVisible()) {
-                        pause();
-                    } else {
-                        resume();
-                    }
+                    if (!pausePanel.isVisible()) { pause(); }
+                    else { resume(); }
                     break;
                 case INVENTORY:
-                    if (!inventoryPanel.isVisible()) {
-                        openInventory();
-                    } else {
-                        closeInventory();
-                    }
+                    if (!inventoryPanel.isVisible()) { openInventory(); }
+                    else { closeInventory(); }
                     break;
                 case SPRINT:
                     player.sprint();
                     sprintStill = false;
+                    break;
+                case NPC_TALK:
+                    // Leave it empty for now
                     break;
                 default:
                     break;
@@ -422,8 +421,6 @@ public class Gameplay {
         gameState = GameState.PLAYING;
     }
 
-	public boolean isPaused() {	return gameState == GameState.PAUSED; }
-
     public void muteGame (JButton muteButton) {
         if (soundtrack.isMusicPlaying()) {
             soundtrack.stopMusic();
@@ -437,6 +434,17 @@ public class Gameplay {
 
     public void quitGame() {
         // TODO: go back to home screen
+    }
+
+    public void displayNPCDialog(String text) {
+        dialogPanel.setDialogText(text);
+        dialogPanel.setVisible(true);
+        gameState = GameState.DIALOG;
+    }
+
+    public void closeNPCDialog() {
+        dialogPanel.setVisible(false);
+        gameState = GameState.PLAYING;
     }
 
     public void loadObjects() {

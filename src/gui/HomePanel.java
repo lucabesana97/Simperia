@@ -16,7 +16,9 @@ public class HomePanel extends Panel {
     final String LABEL_FONT = "Helvetica";
 
     public HomePanel() {
+        super();
         setLayout(new GridBagLayout());
+        setFocusable(true);
         setBackground(BACKGROUND_COLOR);
         setBounds(0, 0, GameFrame.WIDTH, GameFrame.HEIGHT);
 

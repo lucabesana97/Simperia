@@ -8,7 +8,7 @@ import javax.swing.*;
 public class Game {
 	final private GameFrame frame;
 	final private KeyHandler keyHandler;
-
+	private HomePanel homePanel;
 	private Gameplay gameplay;
 	private Panel panel;
 
@@ -19,21 +19,32 @@ public class Game {
 	}
 
 	public void init() {
-		this.panel = new HomePanel();
-		//frame.setPanel(panel);
-
-		JButton newGameButton = ((HomePanel) panel).getNewGameButton();
-		newGameButton.addActionListener(e -> { start(); });
+		//this.homePanel = frame.getHomePanel();
+//		this.panel = new HomePanel();
+		//frame.setPanel(homePanel);
+//
+//		JButton newGameButton = ((HomePanel) panel).getNewGameButton();
+//		newGameButton.addActionListener(e -> { this.start(); });
+//		this.start();
 	}
 
 	public void start() {
 		this.panel = new GamePanel();
-		this.panel.requestFocusInWindow();
+		this.panel.setFocusable(true);
+
 		frame.setPanel(panel);
 
-		gameplay = new Gameplay(panel, keyHandler, frame);
+//		JButton newGameButton = homePanel.getNewGameButton();
+//		newGameButton.addActionListener(e -> {
+//			homePanel.setVisible(false);
+//
+//
+//		});
 
-		gameplay.init();
-		gameplay.run();
+		gameplay = new Gameplay(panel, keyHandler, frame);
+		//gameplay.init();
+		this.panel.requestFocusInWindow();
+		//gameplay.run();
+
 	}
 }

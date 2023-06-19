@@ -104,7 +104,7 @@ public class MeleeEnemy extends Enemy{
         // If the player is within x pixels, the enemy is hostile
         // If the player is within y pixels, the enemy is shooting
         // Otherwise the enemy is friendly
-        if (distance < 300) {
+        if (distance < 700) {
             this.speed = 9;
             if (distance < 2 && this.timeSinceLastAttack > this.attackingCooldown){
                 this.enemyState = EnemyState.ATTACKING;

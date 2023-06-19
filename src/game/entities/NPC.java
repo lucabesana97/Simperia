@@ -20,6 +20,7 @@ public class NPC extends GameObject {
     public Quest quest;
     public boolean rewardGiven = false;
     private boolean npcDone = false;
+    public boolean interacting = false;
 
     public NPC(Coordinates coordinates) {
         super(coordinates);
@@ -41,6 +42,7 @@ public class NPC extends GameObject {
     }
 
     public String interact() {
+        this.interacting = true;
         String toBeReturned = "";
         if (quest.completed) {
             if (!rewardGiven) {
@@ -62,6 +64,7 @@ public class NPC extends GameObject {
     }
 
     public void stopInteracting(){
+        this.interacting = false;
         if (quest.completed && rewardGiven) {
             npcDone = true;
         }

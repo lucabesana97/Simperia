@@ -12,12 +12,16 @@ public class GameFrame extends JFrame{
 	//Dimensions of the window
 	public static final int WIDTH = 1024;
 	public static final int HEIGHT = 768;
+
+	//public static final int HEIGHT = 668; // TODO: change back to 768
 	public static final int TILE_SIZE = 64;
 
 
 	private Panel panel;
+	private final HomePanel homePanel;
 	private final PausePanel pausePanel;
 	private final InventoryPanel inventoryPanel;
+	private final DialogPanel dialogPanel;
 	private final JLayeredPane layeredPane;
 	
 	public GameFrame(String title) {
@@ -31,11 +35,17 @@ public class GameFrame extends JFrame{
 		// Layered pane to hold different panels
 		layeredPane = new JLayeredPane();
 
+		homePanel = new HomePanel();
+		homePanel.setVisible(true);
+
 		pausePanel = new PausePanel();
 		pausePanel.setVisible(false);
 
 		inventoryPanel = new InventoryPanel();
 		inventoryPanel.setVisible(false);
+
+		dialogPanel = new DialogPanel();
+		dialogPanel.setVisible(false);
 
 		// Add the layered pane to the main frame's content pane
 		getContentPane().add(layeredPane);
@@ -52,12 +62,17 @@ public class GameFrame extends JFrame{
 
 		// Add the game panel to the bottom layer and the others to the top layer
 		layeredPane.add(panel, JLayeredPane.DEFAULT_LAYER);
-		layeredPane.add(pausePanel, JLayeredPane.PALETTE_LAYER);
-		layeredPane.add(inventoryPanel, JLayeredPane.PALETTE_LAYER);
+		//layeredPane.add(playerInfoPanel, JLayeredPane.PALETTE_LAYER);
+		layeredPane.add(dialogPanel, JLayeredPane.MODAL_LAYER);
+		layeredPane.add(pausePanel, JLayeredPane.POPUP_LAYER);
+		layeredPane.add(inventoryPanel, JLayeredPane.POPUP_LAYER);
+		layeredPane.add(homePanel, JLayeredPane.POPUP_LAYER);
 
 		layeredPane.revalidate();
     }
 
 	public PausePanel getPausePanel() { return pausePanel; }
 	public InventoryPanel getInventoryPanel() { return inventoryPanel; }
+	public DialogPanel getDialogPanel() { return dialogPanel; }
+	public HomePanel getHomePanel() { return homePanel; }
 }
