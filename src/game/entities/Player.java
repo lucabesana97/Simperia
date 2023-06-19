@@ -108,7 +108,6 @@ public class Player extends Entity implements Movable {
             screenY = GameFrame.HEIGHT / 2 - 24;
         }
         graphics.drawImage(currentSprite, screenX, screenY, null);
-        System.out.println("x: " + coordinates.topLeftCorner_x + " y: " + coordinates.topLeftCorner_y);
     }
 
     @Override
