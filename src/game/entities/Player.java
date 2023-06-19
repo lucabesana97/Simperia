@@ -70,7 +70,7 @@ public class Player extends Entity implements Movable {
         this.xpToNextLevel = levelXp;
         mapHeight = Gameplay.map.mapImage.getHeight();
         mapWidth = Gameplay.map.mapImage.getWidth();
-        this.coordinates = new Coordinates((int)(mapWidth/2) - 24, (int)(mapHeight/2) - 24, 48, 48);
+        this.coordinates = new Coordinates(186,340 , 48, 48);
     }
 
     public void draw(Graphics graphics) {
@@ -108,7 +108,7 @@ public class Player extends Entity implements Movable {
             screenY = GameFrame.HEIGHT / 2 - 24;
         }
         graphics.drawImage(currentSprite, screenX, screenY, null);
-        //System.out.println("x: " + coordinates.topLeftCorner_x + " y: " + coordinates.topLeftCorner_y);
+        System.out.println("x: " + coordinates.topLeftCorner_x + " y: " + coordinates.topLeftCorner_y);
     }
 
     @Override
