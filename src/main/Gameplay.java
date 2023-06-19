@@ -64,14 +64,14 @@ public class Gameplay {
         this.dialogPanel = frame.getDialogPanel();
         this.homePanel = frame.getHomePanel();
         this.keyHandler = keyHandler;
-		this.gameState = GameState.PLAYING;
+		this.gameState = GameState.HOME;
 
         newGameButton = homePanel.getNewGameButton();
         newGameButton.addActionListener(e -> {
-            homePanel.setVisible(false);
             gameState = GameState.PLAYING;
-
+            homePanel.setVisible(false);
             init();
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -100,24 +100,11 @@ public class Gameplay {
         soundtrack.playMusic(2);
         soundtrack.changeVolume(-20);
 
-        // Button actions of pause and inventory panels
-        JButton resumeButton = pausePanel.getResumeButton();
-        resumeButton.addActionListener(e -> resume());
-
-        JButton muteButton = pausePanel.getMuteButton();
-        muteButton.addActionListener(e -> { muteGame(muteButton); });
-
-        JButton quitGameButton = pausePanel.getQuitButton();
-        quitGameButton.addActionListener(e -> quitGame());
-
-        JButton closeInventoryButton = inventoryPanel.getCloseButton();
-        closeInventoryButton.addActionListener(e -> closeInventory());
-
-        JButton closeDialogButton = dialogPanel.getCloseDialogButton();
-        closeDialogButton.addActionListener(e -> closeNPCDialog());
+        createButtons();
     }
 
-	public void run_game() {
+
+    public void run_game() {
 
         long lastTick = System.currentTimeMillis();
 
@@ -136,7 +123,7 @@ public class Gameplay {
             } else if (gameState == GameState.DIALOG) {
                 dialogPanel.setVisible(true);
                 dialogPanel.repaint();
-            } else {
+            } else if (gameState == GameState.PLAYING) {
                 pausePanel.setVisible(false);
                 inventoryPanel.setVisible(false);
                 dialogPanel.setVisible(false);
@@ -433,7 +420,9 @@ public class Gameplay {
     }
 
     public void quitGame() {
-        // TODO: go back to home screen
+//        gameState = GameState.HOME;
+//        pausePanel.setVisible(false);
+//        homePanel.setVisible(true);
     }
 
     public void displayNPCDialog(String text) {
@@ -461,6 +450,24 @@ public class Gameplay {
         mapWarps.addAll(map.mapWarps);
         objects.addAll(map.objects);
         beginnerNPC = map.beginnerNPC;
+    }
+
+    private void createButtons() {
+        // Button actions of pause/inventory/dialog panels
+        JButton resumeButton = pausePanel.getResumeButton();
+        resumeButton.addActionListener(e -> resume());
+
+        JButton muteButton = pausePanel.getMuteButton();
+        muteButton.addActionListener(e -> { muteGame(muteButton); });
+
+        JButton quitGameButton = pausePanel.getQuitButton();
+        quitGameButton.addActionListener(e -> quitGame());
+
+        JButton closeInventoryButton = inventoryPanel.getCloseButton();
+        closeInventoryButton.addActionListener(e -> closeInventory());
+
+        JButton closeDialogButton = dialogPanel.getCloseDialogButton();
+        closeDialogButton.addActionListener(e -> closeNPCDialog());
     }
 
 }

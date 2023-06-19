@@ -38,7 +38,6 @@ public class DialogPanel extends Panel {
         dialogArea.setFont(new Font(FONT_FAMILY, Font.PLAIN, FONT_SIZE));
         dialogArea.setForeground(Color.WHITE);
         dialogArea.setBackground(new Color(0, 0, 0, 0));
-        //dialogArea.setBorder(BorderFactory.createLineBorder(Color.WHITE));
         dialogArea.setMargin(new Insets(15, 18, 15, 22));
         add(dialogArea, BorderLayout.NORTH);
 

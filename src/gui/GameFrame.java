@@ -11,9 +11,9 @@ public class GameFrame extends JFrame{
 
 	//Dimensions of the window
 	public static final int WIDTH = 1024;
-	public static final int HEIGHT = 768;
+	//public static final int HEIGHT = 768;
 
-	//public static final int HEIGHT = 668; // TODO: change back to 768
+	public static final int HEIGHT = 668; // TODO: change back to 768
 	public static final int TILE_SIZE = 64;
 
 
@@ -62,7 +62,6 @@ public class GameFrame extends JFrame{
 
 		// Add the game panel to the bottom layer and the others to the top layer
 		layeredPane.add(panel, JLayeredPane.DEFAULT_LAYER);
-		//layeredPane.add(playerInfoPanel, JLayeredPane.PALETTE_LAYER);
 		layeredPane.add(dialogPanel, JLayeredPane.MODAL_LAYER);
 		layeredPane.add(pausePanel, JLayeredPane.POPUP_LAYER);
 		layeredPane.add(inventoryPanel, JLayeredPane.POPUP_LAYER);

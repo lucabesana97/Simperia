@@ -1,9 +1,7 @@
-
 package main;
+
 import gui.*;
 import input.KeyHandler;
-
-import javax.swing.*;
 
 public class Game {
 	final private GameFrame frame;
@@ -19,13 +17,6 @@ public class Game {
 	}
 
 	public void init() {
-		//this.homePanel = frame.getHomePanel();
-//		this.panel = new HomePanel();
-		//frame.setPanel(homePanel);
-//
-//		JButton newGameButton = ((HomePanel) panel).getNewGameButton();
-//		newGameButton.addActionListener(e -> { this.start(); });
-//		this.start();
 	}
 
 	public void start() {
@@ -33,18 +24,10 @@ public class Game {
 		this.panel.setFocusable(true);
 
 		frame.setPanel(panel);
-
-//		JButton newGameButton = homePanel.getNewGameButton();
-//		newGameButton.addActionListener(e -> {
-//			homePanel.setVisible(false);
-//
-//
-//		});
+		this.panel.requestFocusInWindow();
 
 		gameplay = new Gameplay(panel, keyHandler, frame);
 		//gameplay.init();
-		this.panel.requestFocusInWindow();
 		//gameplay.run();
-
 	}
 }
