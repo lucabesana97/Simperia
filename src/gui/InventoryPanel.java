@@ -35,6 +35,14 @@ public class InventoryPanel extends Panel {
     final String LABEL_FONT = "Helvetica";
     final int FONT_SIZE = 17;
 
+//    @Override
+//    protected void paintComponent(Graphics g) {
+//        super.paintComponent(g);
+//        // Paint the background of the inventory panel
+//        g.setColor(BACKGROUND_COLOR);
+//        g.fillRect(0, 0, getWidth(), getHeight());
+//    }
+
     public InventoryPanel() {
         setLayout(new BorderLayout());
         setBackground(BACKGROUND_COLOR);

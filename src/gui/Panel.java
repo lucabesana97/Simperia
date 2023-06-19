@@ -8,6 +8,7 @@ public abstract class Panel extends JLayeredPane {
 
     public static final int WIDTH = GameFrame.WIDTH;
     public static final int HEIGHT = GameFrame.HEIGHT;
+    final Color BACKGROUND_COLOR = new Color(51,51,51);
 
     //Output objects
     public Graphics graphics;
@@ -17,7 +18,7 @@ public abstract class Panel extends JLayeredPane {
 
         //Initiate panel variables
         this.setSize(WIDTH, HEIGHT);
-        this.setBackground(Color.BLUE);
+        this.setBackground(BACKGROUND_COLOR);
 
         //Initiate graphics system
         GraphicsConfiguration graphicsConf = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
