@@ -60,7 +60,7 @@ public class CaveMap extends GameMap {
         enemies.add(new Octopus(420, 840));
 
 //        items.add(new HealthElixir(new Coordinates(1000, 1000, 32, 32)));
-        mapWarps.add(new Warp(asteroid2ID, new Coordinates(600,930,32,32), new Coordinates(1400,600,32,32), player));
+        mapWarps.add(new Warp(asteroid2ID, new Coordinates(240,220,32,32), new Coordinates(202,342,32,32), player));
 
     }
 }
