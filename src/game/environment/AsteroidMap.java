@@ -39,6 +39,11 @@ public class AsteroidMap extends GameMap {
         enemies.add(new Octopus(341, 1277));
         enemies.add(new MeleeEnemy(234, 1171));
         enemies.add(new Octopus(253, 1047));
+        enemies.add(new Octopus(901, 93));
+        enemies.add(new MeleeEnemy(1213, 238));
+        enemies.add(new Octopus(1459, 406));
+        enemies.add(new MeleeEnemy(1575, 570));
+        enemies.add(new Octopus(1758, 570));
         beginnerNPC = new NPC(new Coordinates(472, 150, 37, 64));
         //enemies.add(new Octopus(800,700));
 //        warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
