@@ -30,14 +30,14 @@ public class MeleeEnemy extends Enemy{
         this.whereToMove = getNewCoordinates(); // Random coordinates to move to when roaming around
 
         // Loading the sprites
-        URL idle_down_1 = getClass().getResource("/sprites/enemies/Octopus-idle-down-1.png");
-        URL idle_down_2 = getClass().getResource("/sprites/enemies/Octopus-idle-down-2.png");
-        URL idle_up_1 = getClass().getResource("/sprites/enemies/Octopus-idle-up-1.png");
-        URL idle_up_2 = getClass().getResource("/sprites/enemies/Octopus-idle-up-2.png");
-        URL mad_down_1 = getClass().getResource("/sprites/enemies/Octopus-mad-down-1.png");
-        URL mad_down_2 = getClass().getResource("/sprites/enemies/Octopus-mad-down-2.png");
-        URL mad_up_1 = getClass().getResource("/sprites/enemies/Octopus-mad-up-1.png");
-        URL mad_up_2 = getClass().getResource("/sprites/enemies/Octopus-mad-up-2.png");
+        URL idle_down_1 = getClass().getResource("/sprites/enemies/monster/Monster-down-1.png");
+        URL idle_down_2 = getClass().getResource("/sprites/enemies/monster/Monster-down-2.png");
+        URL idle_up_1 = getClass().getResource("/sprites/enemies/monster/Monster-up-1.png");
+        URL idle_up_2 = getClass().getResource("/sprites/enemies/monster/Monster-up-2.png");
+        URL mad_down_1 = getClass().getResource("/sprites/enemies/monster/Monster-down-1.png");
+        URL mad_down_2 = getClass().getResource("/sprites/enemies/monster/Monster-down-2.png");
+        URL mad_up_1 = getClass().getResource("/sprites/enemies/monster/Monster-up-1.png");
+        URL mad_up_2 = getClass().getResource("/sprites/enemies/monster/Monster-up-2.png");
 
         BufferedImage image_idle_down_1;
         BufferedImage image_idle_down_2;
