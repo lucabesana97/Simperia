@@ -340,15 +340,19 @@ public class Gameplay {
                     if (player.currentWeapon == player.GUN) {
                         if (player.shootState == FightState.READY) {
                             int angle = Utility.getAimAngle(player);
-                            playerBullets.add(new Bullet(angle, player.coordinates, Bullet.PLAYER, 10, 15));
+                            playerBullets.add(new Bullet(angle, player.coordinates, Bullet.PLAYER, 10, 15, "/sprites/player/Player-bullet.png"));
                             player.shootState = FightState.RELOADING;
                         }
                     } else if (player.currentWeapon == player.SWORD) {
-                        for (Enemy enemy : enemies) {
-                            if (player.inSlashRange(enemy)) {
-                                player.attack(enemy);
+                        if(player.shootState == FightState.READY) {
+                            player.angle = Utility.getAimAngle(player);
+                            for (Enemy enemy : enemies) {
+                                if (player.inSlashRange(enemy)) {
+                                    player.attack(enemy);
+                                }
                             }
                         }
+                        player.shootState = FightState.RELOADING;
                     }
                     break;
                 case LEFT:

@@ -35,6 +35,27 @@ public class Bullet extends Enemy{
         this.coordinates = new Coordinates((coordinates.topLeftCorner_x + coordinates.bottomRightCorner_x)/2, (coordinates.topLeftCorner_y + coordinates.bottomRightCorner_y)/2, bulletImage.getWidth(), bulletImage.getHeight());
         this.sprites.current = rotateImageByDegrees(bulletImage, angle);
     }
+
+    public Bullet(int angle, Coordinates coordinates, int owner, int speed, int attack, String bulletPath) {
+        super();
+        this.attack = attack;
+        this.speed = speed;
+        this.angle = angle;
+        this.name = "Bullet";
+        this.enemyState = EnemyState.HOSTILE;
+        this.owner = owner;
+
+        URL bullet = getClass().getResource(bulletPath);
+        BufferedImage bulletImage;
+
+        try {
+            bulletImage = ImageIO.read(bullet);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        this.coordinates = new Coordinates((coordinates.topLeftCorner_x + coordinates.bottomRightCorner_x)/2, (coordinates.topLeftCorner_y + coordinates.bottomRightCorner_y)/2, bulletImage.getWidth(), bulletImage.getHeight());
+        this.sprites.current = rotateImageByDegrees(bulletImage, angle);
+    }
     @Override
     public void draw(Graphics graphics) {
         graphics.drawImage(sprites.current, (int) coordinates.screenX - 24, (int) coordinates.screenY - 24, null);

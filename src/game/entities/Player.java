@@ -42,6 +42,9 @@ public class Player extends Entity implements Movable {
     private BufferedImage[] spritesDown;
     private BufferedImage[] spritesUp;
     private BufferedImage[] spritesSide;
+    public int angle;
+
+    private BufferedImage[] spritesAttackSlash;
     public MovingState previousStateX, previousStateY;
     //public List<Item> items = new ArrayList<>();
 
@@ -49,6 +52,7 @@ public class Player extends Entity implements Movable {
         spritesDown = loadSprites("/sprites/player/Down-", 2);
         spritesUp = loadSprites("/sprites/player/Up-", 2);
         spritesSide = loadSprites("/sprites/player/Side-", 4);
+        spritesAttackSlash = loadSprites("/sprites/player/attack/Attack-glare-", 4);
         URL url = getClass().getResource("/sprites/player/Idle-1.png");
         BufferedImage image;
         try{
@@ -107,7 +111,18 @@ public class Player extends Entity implements Movable {
         } else {
             screenY = GameFrame.HEIGHT / 2 - 24;
         }
+
         graphics.drawImage(currentSprite, screenX, screenY, null);
+
+        if(shootState == FightState.RELOADING && currentWeapon == SWORD) {
+
+            graphics.drawImage(rotateImageByDegrees(spritesAttackSlash[(int) (switchCounter*4/RELOAD_TIMER+1)], angle),
+                    (int)(coordinates.centerX+Math.cos(Math.toRadians(angle))),
+                    (int)(coordinates.topLeftCorner_y+Math.sin(Math.toRadians(angle))), null);
+
+        }
+
+
     }
 
     @Override
@@ -224,6 +239,7 @@ public class Player extends Entity implements Movable {
         if(switchState == FightState.READY){
             if (currentWeapon == Player.GUN) {
                 currentWeapon = Player.SWORD;
+                loadSword();
             } else if (currentWeapon == Player.SWORD) {
                 currentWeapon = Player.GUN;
             }
