@@ -1,7 +1,6 @@
 
 package main;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,8 +9,10 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import game.Coordinates;
 import game.GameObject;
 import game.environment.AsteroidMap;
+import game.environment.CaveMap;
 import game.inventory.Item;
 import game.GameState;
 import game.entities.*;
@@ -29,7 +30,7 @@ import objState.MovingState;
 import output.Sound;
 
 public class Gameplay {
-    private GamePanel panel;
+    private final GamePanel panel;
     final KeyHandler keyHandler;
 
     public static Player player;
@@ -44,6 +45,7 @@ public class Gameplay {
     private List<Warp> warps = new ArrayList<>();
     private List<Warp> mapWarps = new ArrayList<>();
     private List<GameObject> objects = new ArrayList<>();
+    private List<GameObject> rocks = new ArrayList<>();
 
     private GameMap mapDestination;
     private Warp warpDestination;
@@ -64,7 +66,7 @@ public class Gameplay {
         this.dialogPanel = frame.getDialogPanel();
         this.homePanel = frame.getHomePanel();
         this.keyHandler = keyHandler;
-		this.gameState = GameState.HOME;
+        this.gameState = GameState.HOME;
 
         newGameButton = homePanel.getNewGameButton();
         newGameButton.addActionListener(e -> {
@@ -114,7 +116,7 @@ public class Gameplay {
             lastTick = currentTick;
 
             this.panel.requestFocusInWindow();
-            if (gameState == GameState.PAUSED){
+            if (gameState == GameState.PAUSED) {
                 pausePanel.setVisible(true);
                 pausePanel.repaint();
             } else if (gameState == GameState.INVENTORY) {
@@ -145,7 +147,7 @@ public class Gameplay {
         }
     }
 
-	private void update(double diffSeconds) {
+    private void update(double diffSeconds) {
         // Player
         player.move(diffSeconds);
 
@@ -156,15 +158,19 @@ public class Gameplay {
             if (enemy != null && enemy.enemyState == EnemyState.DEAD) {
                 enemyIter.remove();
 
-                if (enemies.isEmpty()) {
+                //boss killed
+                if (map instanceof CaveMap && enemies.isEmpty()) {
 
                     try {
                         BufferedImage floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_win.png"));
                         objects.get(0).image = floorSymbol;
+                        beginnerNPC.quest.completed = true;
                     } catch (Exception e) {
                         System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
-
                     }
+
+                    //TODO display victory text
+
                 }
 
             }
@@ -179,11 +185,12 @@ public class Gameplay {
                 String text = beginnerNPC.interact();
                 displayNPCDialog(text);
                 //System.out.println("Text: " + text);
-            } else if(!player.isColliding(beginnerNPC)){
+            } else if (!player.isColliding(beginnerNPC)) {
                 // Player is not talking to the NPC
                 beginnerNPC.stopInteracting();
                 closeNPCDialog();
             }
+
         }
         for (Warp warp : warps) {
             if (player.isColliding(warp)) {
@@ -198,7 +205,7 @@ public class Gameplay {
                 bulletIterator.remove();
             }
             for (Enemy enemy : enemies) {
-                if (enemy.isColliding(bullet)){
+                if (enemy.isColliding(bullet)) {
 //                    System.out.println("Enemy health: " + enemy.health);
                     bullet.attack(enemy);
                     if (enemy.enemyState != EnemyState.DEAD) {
@@ -215,7 +222,7 @@ public class Gameplay {
             if (bullet.enemyState == EnemyState.DEAD) {
                 bulletIteratorEnemy.remove();
             }
-            if (player.isColliding(bullet)){
+            if (player.isColliding(bullet)) {
 //                System.out.println("Player health: " + player.health);
                 bullet.attack(player);
             }
@@ -267,8 +274,10 @@ public class Gameplay {
             }
         }
 
-        //Objects
-
+        //Map
+        if (map instanceof CaveMap) {
+            updateCaveMap();
+        }
 
 
         System.gc();
@@ -277,20 +286,17 @@ public class Gameplay {
     private void drawElements() {
 
         panel.draw(map);
-        if (beginnerNPC != null){
-            panel.draw(beginnerNPC);
+        for (GameObject object : objects) {
+            panel.draw(object);
         }
-        int killedEnemies = 0;
-        for (Enemy enemy : enemies) {
-            panel.draw(enemy);
-            if (enemy.enemyState == EnemyState.DEAD) {
-                killedEnemies++;
-            }
+        for (GameObject rock : rocks) {
+            panel.draw(rock);
         }
         if (beginnerNPC != null) {
-            if (killedEnemies == 1) {
-                beginnerNPC.quest.completed = true;
-            }
+            panel.draw(beginnerNPC);
+        }
+        for (Enemy enemy : enemies) {
+            panel.draw(enemy);
         }
         for (Bullet bullet : playerBullets) {
             panel.draw(bullet);
@@ -307,9 +313,7 @@ public class Gameplay {
         for (ItemStack item : stacksOnWorld) {
             panel.draw(item.item);
         }
-        for (GameObject object : objects) {
-            panel.draw(object);
-        }
+
         panel.draw(player);
     }
 
@@ -357,12 +361,18 @@ public class Gameplay {
                     player.switchWeapon();
                     break;
                 case PAUSE:
-                    if (!pausePanel.isVisible()) { pause(); }
-                    else { resume(); }
+                    if (!pausePanel.isVisible()) {
+                        pause();
+                    } else {
+                        resume();
+                    }
                     break;
                 case INVENTORY:
-                    if (!inventoryPanel.isVisible()) { openInventory(); }
-                    else { closeInventory(); }
+                    if (!inventoryPanel.isVisible()) {
+                        openInventory();
+                    } else {
+                        closeInventory();
+                    }
                     break;
                 case SPRINT:
                     player.sprint();
@@ -403,12 +413,12 @@ public class Gameplay {
         gameState = GameState.PAUSED;
     }
 
-	public void resume() {
+    public void resume() {
         pausePanel.setVisible(false);
         gameState = GameState.PLAYING;
     }
 
-    public void muteGame (JButton muteButton) {
+    public void muteGame(JButton muteButton) {
         if (soundtrack.isMusicPlaying()) {
             soundtrack.stopMusic();
             muteButton.setIcon(new ImageIcon("resources/sprites/pause/music_muted.png"));
@@ -442,6 +452,7 @@ public class Gameplay {
         warps.removeAll(warps);
         mapWarps.removeAll(mapWarps);
         objects.removeAll(objects);
+        rocks.removeAll(rocks);
         beginnerNPC = null;
 
         enemies.addAll(map.enemies);
@@ -449,6 +460,7 @@ public class Gameplay {
         warps.addAll(map.warps);
         mapWarps.addAll(map.mapWarps);
         objects.addAll(map.objects);
+        rocks.addAll(map.rocks);
         beginnerNPC = map.beginnerNPC;
     }
 
@@ -458,7 +470,9 @@ public class Gameplay {
         resumeButton.addActionListener(e -> resume());
 
         JButton muteButton = pausePanel.getMuteButton();
-        muteButton.addActionListener(e -> { muteGame(muteButton); });
+        muteButton.addActionListener(e -> {
+            muteGame(muteButton);
+        });
 
         JButton quitGameButton = pausePanel.getQuitButton();
         quitGameButton.addActionListener(e -> quitGame());
@@ -468,6 +482,85 @@ public class Gameplay {
 
         JButton closeDialogButton = dialogPanel.getCloseDialogButton();
         closeDialogButton.addActionListener(e -> closeNPCDialog());
+    }
+
+    private void updateCaveMap() {
+
+        // DROP ROCKS
+        GameObject rock;
+        BufferedImage rockImage = null;
+
+        try {
+            rockImage = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_rock.png"));
+        } catch (Exception e) {
+            System.out.println("Couldn't load rock image: " + "\tReason: " + e.getCause());
+        }
+
+        //down left section
+        if (rocks.size() == 0 && player.coordinates.topLeftCorner_y < 2510 && player.coordinates.topLeftCorner_x < 650) {
+            rocks = new ArrayList<>();
+            rock = new GameObject(new Coordinates(310, 2530, 104, 106), rockImage);
+            rocks.add(rock);
+            rock = new GameObject(new Coordinates(400, 2530, 104, 106), rockImage);
+            rocks.add(rock);
+        }
+        //down right section
+        else if (rocks.size() == 0 && player.coordinates.topLeftCorner_y < 2510 && player.coordinates.topLeftCorner_x > 650) {
+            rocks = new ArrayList<>();
+            rock = new GameObject(new Coordinates(710, 2530, 104, 106), rockImage);
+            rocks.add(rock);
+            rock = new GameObject(new Coordinates(810, 2530, 104, 106), rockImage);
+            rocks.add(rock);
+        }
+        //center section
+        else if (rocks.size() <= 6 && player.coordinates.topLeftCorner_y < 1820) {
+            rock = new GameObject(new Coordinates(200, 1839, 104, 106), rockImage);
+            rocks.add(rock);
+            rock = new GameObject(new Coordinates(320, 1839, 104, 106), rockImage);
+            rocks.add(rock);
+            rock = new GameObject(new Coordinates(570, 1839, 104, 106), rockImage);
+            rocks.add(rock);
+            rock = new GameObject(new Coordinates(711, 1839, 104, 106), rockImage);
+            rocks.add(rock);
+        }
+        //top left section
+        else if (rocks.size() <= 10 && player.coordinates.topLeftCorner_y < 1600 && player.coordinates.topLeftCorner_x < 650) {
+            rock = new GameObject(new Coordinates(320, 1620, 104, 106), rockImage);
+            rocks.add(rock);
+            rock = new GameObject(new Coordinates(400, 1620, 104, 106), rockImage);
+            rocks.add(rock);
+        }
+        //top right section
+        else if (rocks.size() <= 10 && player.coordinates.topLeftCorner_y < 1600 && player.coordinates.topLeftCorner_x > 650) {
+            rock = new GameObject(new Coordinates(670, 1620, 104, 106), rockImage);
+            rocks.add(rock);
+        }
+        //boss section
+        else if (rocks.size() <= 15 && player.coordinates.topLeftCorner_y < 700) {
+            rock = new GameObject(new Coordinates(335, 730, 104, 106), rockImage);
+            rocks.add(rock);
+            rock = new GameObject(new Coordinates(440, 730, 104, 106), rockImage);
+            rocks.add(rock);
+            rock = new GameObject(new Coordinates(680, 730, 104, 106), rockImage);
+            rocks.add(rock);
+            rock = new GameObject(new Coordinates(760, 730, 104, 106), rockImage);
+            rocks.add(rock);
+        }
+
+        // ACTIVATE FINAL BOSS
+        if (player.coordinates.topLeftCorner_y < 820 && player.coordinates.topLeftCorner_y > 750) {
+            try {
+                BufferedImage floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_fight.png"));
+                objects.get(0).image = floorSymbol;
+
+                enemies.removeAll(enemies);
+                this.enemies.add(new BossOctopus(500, 500));
+
+            } catch (Exception e) {
+                System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
+
+            }
+        }
     }
 
 }

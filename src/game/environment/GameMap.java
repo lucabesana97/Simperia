@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class GameMap {
@@ -25,6 +26,7 @@ public class GameMap {
     public NPC beginnerNPC;
     public List<ItemStack> stacksOnWorld = new ArrayList<>();
     public List<GameObject> objects = new ArrayList<>();
+    public List<GameObject> rocks = new ArrayList<>();
 
     public GameMap() {
         load();

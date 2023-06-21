@@ -30,8 +30,8 @@ public class NPC extends GameObject {
             throw new RuntimeException(e);
         }
         quest = new Quest(
-                "Kill the octopussies",
-                "Well done. Here is your reward.",
+                "んのﾚﾑ √ﾉﾑﾌ乇尺の.\n ｷﾉ刀ﾑﾚﾚﾘ 丂のﾶ乇の刀乇 ᄃのﾶ乇丂. ｲん乇ﾘ ｲののズ ﾶﾘ ᄃﾑ刀乇, ﾉ ᄃﾑ刀'ｲ ｷﾉムんｲ ｲん乇ﾶ. ᄃﾑ刀 ﾘのひ ん乇ﾚｱ ﾶ乇 尺乇ｲ尺ﾉ乇√乇 ﾉｲ? ﾉ'ﾚﾚ ムﾉ√乇 ﾘのひ 丂のﾶ乇ｲんﾉ刀ム ﾉ刀 乇ﾒᄃんﾑ刀ム乇.",
+                "ｲんﾑ刀ズ ﾘのひ ｷの尺 ﾘのひ尺 ん乇ﾚｱ. ん乇尺乇 ﾉ丂 ﾘのひ尺 尺乇Wﾑ尺り.",
                 500,
                 new HealthElixir(
                         new Coordinates(0, 0, 0, 0)
