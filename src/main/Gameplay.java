@@ -211,7 +211,11 @@ public class Gameplay {
                     if (enemy.enemyState != EnemyState.DEAD) {
                         enemy.enemyState = EnemyState.DAMAGED;
                     }
+                    bulletIterator.remove();
                 }
+            }
+            if(bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 1000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 1000){
+                bulletIterator.remove();
             }
         }
 
@@ -225,8 +229,14 @@ public class Gameplay {
             if (player.isColliding(bullet)) {
 //                System.out.println("Player health: " + player.health);
                 bullet.attack(player);
+                bulletIteratorEnemy.remove();
+            }else if(bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 1000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 1000) {
+                try {
+                    bulletIteratorEnemy.remove();
+                }catch (Exception e){
+                    System.out.println("Error: " + e.getCause());
+                }
             }
-
         }
 		/*
 		for(Item item : items){
