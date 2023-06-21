@@ -188,6 +188,11 @@ public class Player extends Entity implements Movable {
         spritesSide = loadSprites("/sprites/player/Side-sword-", 4);
     }
 
+    public void unloadSword() {
+        spritesDown = loadSprites("/sprites/player/Down-", 2);
+        spritesSide = loadSprites("/sprites/player/Side-", 4);
+    }
+
     public void gainXp(int xp){
         this.xp += xp;
         if(this.xp >= xpToNextLevel){
@@ -242,6 +247,7 @@ public class Player extends Entity implements Movable {
                 loadSword();
             } else if (currentWeapon == Player.SWORD) {
                 currentWeapon = Player.GUN;
+                unloadSword();
             }
         }
     }
