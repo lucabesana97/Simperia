@@ -145,7 +145,7 @@ public class Gameplay {
         }
     }
 
-	private void update(double diffSeconds) {
+    private void update(double diffSeconds) {
         // Player
         player.move(diffSeconds);
 
@@ -156,15 +156,19 @@ public class Gameplay {
             if (enemy != null && enemy.enemyState == EnemyState.DEAD) {
                 enemyIter.remove();
 
-                if (enemies.isEmpty()) {
+                //boss killed
+                if (map instanceof CaveMap && enemies.isEmpty()) {
 
                     try {
                         BufferedImage floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_win.png"));
                         objects.get(0).image = floorSymbol;
+                        beginnerNPC.quest.completed = true;
                     } catch (Exception e) {
                         System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
-
                     }
+
+                    //TODO display victory text
+
                 }
 
             }
