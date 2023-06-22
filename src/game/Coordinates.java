@@ -12,7 +12,7 @@ public class Coordinates {
     public double worldX;
     public double worldY;
 
-    public final double size_X;
+    public double size_X;
     public final double size_Y;
     public double screenX, screenY;
     public Coordinates(double x, double y, double objectSize_x, double objectSize_y) {

@@ -54,11 +54,11 @@ public class Gameplay {
     private final InventoryPanel inventoryPanel;
     private final HomePanel homePanel;
     private final DialogPanel dialogPanel;
+    private final InfoPanel infoPanel;
     private GameState gameState;
     private Item deletedItem;
     private final Sound soundtrack = new Sound();
     Sound effects = new Sound();
-    private JButton newGameButton;
     private HUD hud;
     private HUD healthBar;
     private HUD xpBar;
@@ -69,10 +69,11 @@ public class Gameplay {
         this.inventoryPanel = frame.getInventoryPanel();
         this.dialogPanel = frame.getDialogPanel();
         this.homePanel = frame.getHomePanel();
+        this.infoPanel = frame.getInfoPanel();
         this.keyHandler = keyHandler;
         this.gameState = GameState.HOME;
 
-        newGameButton = homePanel.getNewGameButton();
+        JButton newGameButton = homePanel.getNewGameButton();
         newGameButton.addActionListener(e -> {
             gameState = GameState.PLAYING;
             homePanel.setVisible(false);
@@ -402,6 +403,7 @@ public class Gameplay {
                     break;
                 case NPC_TALK:
                     // Leave it empty for now
+                    //infoPanel.setVisible(true);
                     break;
                 default:
                     break;

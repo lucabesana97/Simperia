@@ -27,4 +27,24 @@ public class HUD extends GameObject {
         //graphics.drawImage(image, (int) coordinates.screenX, (int) coordinates.screenY, null);
         graphics.drawImage(image, (int) coordinates.topLeftCorner_x, (int) coordinates.topLeftCorner_y, (int) coordinates.size_X, (int) coordinates.size_Y, null);
     }
+
+    // Cut the image horizontally according to a percentage
+    public void cutImageHorizontally(double percentage) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        int newWidth = (int) (width * percentage);
+
+        if (newWidth <= 0) {
+            newWidth = 1;
+        }
+
+        BufferedImage newImage = new BufferedImage(newWidth, height, BufferedImage.TYPE_INT_ARGB);
+        coordinates.size_X = newWidth;
+
+        Graphics2D g = newImage.createGraphics();
+        g.drawImage(image, 0, 0, newWidth, height, 0, 0, newWidth, height, null);
+        g.dispose();
+
+        image = newImage;
+    }
 }
