@@ -49,11 +49,11 @@ public class Player extends Entity implements Movable {
     //public List<Item> items = new ArrayList<>();
 
     public Player() {
-        spritesDown = loadSprites("/sprites/player/Down-", 2);
-        spritesUp = loadSprites("/sprites/player/Up-", 2);
-        spritesSide = loadSprites("/sprites/player/Side-", 4);
+        spritesDown = loadSprites("/sprites/player/Down-gun-", 2);
+        spritesUp = loadSprites("/sprites/player/Up-gun-", 2);
+        spritesSide = loadSprites("/sprites/player/Side-gun-", 4);
         spritesAttackSlash = loadSprites("/sprites/player/attack/Attack-glare-", 4);
-        URL url = getClass().getResource("/sprites/player/Idle-1.png");
+        URL url = getClass().getResource("/sprites/player/Down-gun-1.png");
         BufferedImage image;
         try{
             image = ImageIO.read(url);
@@ -186,11 +186,13 @@ public class Player extends Entity implements Movable {
     public void loadSword() {
         spritesDown = loadSprites("/sprites/player/Down-sword-", 2);
         spritesSide = loadSprites("/sprites/player/Side-sword-", 4);
+        spritesUp = loadSprites("/sprites/player/Up-sword-", 2);
     }
 
-    public void unloadSword() {
-        spritesDown = loadSprites("/sprites/player/Down-", 2);
-        spritesSide = loadSprites("/sprites/player/Side-", 4);
+    public void loadGun() {
+        spritesDown = loadSprites("/sprites/player/Down-gun-", 2);
+        spritesSide = loadSprites("/sprites/player/Side-gun-", 4);
+        spritesUp = loadSprites("/sprites/player/Up-gun-", 2);
     }
 
     public void gainXp(int xp){
@@ -247,7 +249,7 @@ public class Player extends Entity implements Movable {
                 loadSword();
             } else if (currentWeapon == Player.SWORD) {
                 currentWeapon = Player.GUN;
-                unloadSword();
+                loadGun();
             }
         }
     }

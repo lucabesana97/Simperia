@@ -21,7 +21,7 @@ public class GamePanel extends Panel {
 		setFocusable(true);
 
 		backgroundHUDImage = Toolkit.getDefaultToolkit().getImage("resources/sprites/player_info_hud.png");
-		playerImage = Toolkit.getDefaultToolkit().getImage("resources/sprites/player/Idle-1.png");
+		playerImage = Toolkit.getDefaultToolkit().getImage("resources/sprites/player/Down-gun-1");
 //		levelLabel = new HUDElement(20, 20 , "Level 1");
 //		healthLabel = new HUDElement(50, 20, "Health: 100");
 //		profilePicture = new HUDElement(5, 20, playerImage);
