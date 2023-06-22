@@ -9,21 +9,16 @@ import java.lang.Math;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
-import static helperFunctions.Utility.createFlipped;
-import static helperFunctions.Utility.distanceBetweenCoordinates;
 import static helperFunctions.Utility.distanceBetweenCoordinates;
 
-public class MeleeEnemy extends Enemy{
+public class Maurice extends Enemy{
     public double attackingCooldown = 30;
     public double timeSinceLastAttack = 30;
-    public MeleeEnemy(int x, int y) {
+    public Maurice(int x, int y) {
         super();
         this.speed = 5;
-        this.name = "MeleeEnemy";
+        this.name = "Maurice";
         this.attack = 20;
         this.health = 70;
         this.coordinates = new Coordinates(x, y, 48, 31);
