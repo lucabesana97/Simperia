@@ -110,7 +110,7 @@ public class HomePanel extends Panel {
         g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
         g2d.setColor(Color.cyan);
         g2d.setStroke(new BasicStroke(4));
-        g2d.drawRect(3, 2, 1005, 727);
+        g2d.drawRect(2, 1, 1005, 726);
         g2d.dispose();
     }
 }
