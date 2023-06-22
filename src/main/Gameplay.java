@@ -21,6 +21,7 @@ import game.inventory.Inventory;
 import game.inventory.ItemStack;
 import gui.*;
 import gui.Panel;
+import gui.elements.HUD;
 import helperFunctions.Utility;
 import input.KeyHandler;
 import input.Keys;
@@ -52,12 +53,15 @@ public class Gameplay {
     private final PausePanel pausePanel;
     private final InventoryPanel inventoryPanel;
     private final HomePanel homePanel;
-    private DialogPanel dialogPanel;
+    private final DialogPanel dialogPanel;
     private GameState gameState;
     private Item deletedItem;
     private final Sound soundtrack = new Sound();
     Sound effects = new Sound();
     private JButton newGameButton;
+    private HUD hud;
+    private HUD healthBar;
+    private HUD xpBar;
 
     public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {
         this.panel = (GamePanel) panel;
@@ -94,6 +98,9 @@ public class Gameplay {
         loadObjects();
         inventory = new Inventory();
         inventoryPanel.init(inventory);
+        hud = new HUD(new Coordinates(10, 10, 361, 110), "/sprites/hud/hud.png");
+        healthBar = new HUD(new Coordinates(121, 72, 230, 23), "/sprites/hud/healthbar.png");
+        xpBar = new HUD(new Coordinates(112, 96, 95, 15), "/sprites/hud/xpbar.png");
 
         panel.addKeyListener(keyHandler);
 
@@ -325,6 +332,9 @@ public class Gameplay {
         }
 
         panel.draw(player);
+        panel.draw(hud);
+        panel.draw(healthBar);
+        panel.draw(xpBar);
     }
 
     private void handleUserInput() {
