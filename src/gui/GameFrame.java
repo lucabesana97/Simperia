@@ -14,6 +14,7 @@ public class GameFrame extends JFrame{
 	private final HomePanel homePanel;
 	private final PausePanel pausePanel;
 	private final InventoryPanel inventoryPanel;
+	private final InfoPanel infoPanel;
 	private final DialogPanel dialogPanel;
 	private final JLayeredPane layeredPane;
 	
@@ -37,6 +38,9 @@ public class GameFrame extends JFrame{
 		inventoryPanel = new InventoryPanel();
 		inventoryPanel.setVisible(false);
 
+		infoPanel = new InfoPanel();
+		infoPanel.setVisible(false);
+
 		dialogPanel = new DialogPanel();
 		dialogPanel.setVisible(false);
 
@@ -59,6 +63,7 @@ public class GameFrame extends JFrame{
 		layeredPane.add(pausePanel, JLayeredPane.POPUP_LAYER);
 		layeredPane.add(inventoryPanel, JLayeredPane.POPUP_LAYER);
 		layeredPane.add(homePanel, JLayeredPane.POPUP_LAYER);
+		layeredPane.add(infoPanel, JLayeredPane.POPUP_LAYER);
 
 		layeredPane.revalidate();
     }
@@ -67,4 +72,5 @@ public class GameFrame extends JFrame{
 	public InventoryPanel getInventoryPanel() { return inventoryPanel; }
 	public DialogPanel getDialogPanel() { return dialogPanel; }
 	public HomePanel getHomePanel() { return homePanel; }
+	public InfoPanel getInfoPanel() { return infoPanel; }
 }

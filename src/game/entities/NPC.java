@@ -31,8 +31,9 @@ public class NPC extends GameObject {
             throw new RuntimeException(e);
         }
         quest = new Quest(
-                "んのﾚﾑ √ﾉﾑﾌ乇尺の.\n ｷﾉ刀ﾑﾚﾚﾘ 丂のﾶ乇の刀乇 ᄃのﾶ乇丂. ｲん乇ﾘ ｲののズ ﾶﾘ ᄃﾑ刀乇, ﾉ ᄃﾑ刀'ｲ ｷﾉムんｲ ｲん乇ﾶ. ᄃﾑ刀 ﾘのひ ん乇ﾚｱ ﾶ乇 尺乇ｲ尺ﾉ乇√乇 ﾉｲ? ﾉ'ﾚﾚ ムﾉ√乇 ﾘのひ 丂のﾶ乇ｲんﾉ刀ム ﾉ刀 乇ﾒᄃんﾑ刀ム乇.",
-                "ｲんﾑ刀ズ ﾘのひ ｷの尺 ﾘのひ尺 ん乇ﾚｱ. ん乇尺乇 ﾉ丂 ﾘのひ尺 尺乇Wﾑ尺り.",
+                "Hi plis help mi. I need 2 find mi dog. He is lost. I will give u 100 coins if u find him. He is in the forest. I'll give" +
+                        " u a health elixir if u find him. And also 500 xp. My dog is scared, plis hurry.",
+                "Thank u for finding mi dog. Here is ur reward.",
                 500,
                 new HealthElixir(
                         new Coordinates(0, 0, 0, 0)
