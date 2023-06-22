@@ -74,7 +74,7 @@ public class Player extends Entity implements Movable {
         this.xpToNextLevel = levelXp;
         mapHeight = Gameplay.map.mapImage.getHeight();
         mapWidth = Gameplay.map.mapImage.getWidth();
-        this.coordinates = new Coordinates(186,340 , 48, 48);
+        this.coordinates = new Coordinates(186,340 , 29, 48);
     }
 
     public void draw(Graphics graphics) {
