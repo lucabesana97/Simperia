@@ -121,9 +121,9 @@ public class Octopus extends Enemy{
         // If the player is within x pixels, the enemy is hostile
         // If the player is within y pixels, the enemy is shooting
         // Otherwise the enemy is friendly
-        if (distance < 200) {
+        if (distance < 300) {
             this.speed = 7;
-            if (distance < 150 && this.timeSinceLastShot > this.shootingCooldown){
+            if (distance < 250 && this.timeSinceLastShot > this.shootingCooldown){
                 this.enemyState = EnemyState.ATTACKING;
             }else{
                 this.enemyState = EnemyState.HOSTILE;
@@ -154,7 +154,7 @@ public class Octopus extends Enemy{
     }
 
 
-    private void runTowardsCoordinates(double diffSeconds, Coordinates goalCoordinates){
+    protected void runTowardsCoordinates(double diffSeconds, Coordinates goalCoordinates){
         int aCenterX = (int) (this.coordinates.topLeftCorner_x + this.coordinates.bottomRightCorner_x) / 2;
         int aCenterY = (int) (this.coordinates.topLeftCorner_y + this.coordinates.bottomRightCorner_y) / 2;
 

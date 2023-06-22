@@ -24,6 +24,7 @@ public class Enemy extends Entity implements Movable {
         super();
         this.enemyState = EnemyState.FRIENDLY;
         this.movingState = MovingState.STILL;
+        this.invincibilityCooldown = 1;
     }
     @Override
     public void draw(Graphics g) {
