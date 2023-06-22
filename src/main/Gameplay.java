@@ -216,7 +216,7 @@ public class Gameplay {
                     break;
                 }
             }
-            if(bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 1000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 1000){
+            if(bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 3000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000){
                 bulletIterator.remove();
             }
         }
@@ -232,7 +232,7 @@ public class Gameplay {
 //                System.out.println("Player health: " + player.health);
                 bullet.attack(player);
                 bulletIteratorEnemy.remove();
-            }else if(bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 1000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 1000) {
+            }else if(bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 3000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000) {
                 try {
                     bulletIteratorEnemy.remove();
                 }catch (Exception e){
@@ -465,6 +465,8 @@ public class Gameplay {
         mapWarps.removeAll(mapWarps);
         objects.removeAll(objects);
         rocks.removeAll(rocks);
+        enemyBullets.removeAll(enemyBullets);
+        playerBullets.removeAll(playerBullets);
         beginnerNPC = null;
 
         enemies.addAll(map.enemies);

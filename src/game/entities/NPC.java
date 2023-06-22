@@ -24,6 +24,7 @@ public class NPC extends GameObject {
 
     public NPC(Coordinates coordinates) {
         super(coordinates);
+//        this.coordinates = new Coordinates(coordinates.topLeftCorner_x - 24, coordinates.topLeftCorner_y - 24, 37, 64); // (x, y, width, height
         try {
             sprite = ImageIO.read(Objects.requireNonNull(getClass().getResource("/sprites/npcs/npc1_64.png")));
         } catch (IOException e) {
@@ -72,7 +73,7 @@ public class NPC extends GameObject {
 
     public void draw(Graphics graphics) {
         if(coordinates.inScreen()) {
-            graphics.drawImage(sprite, (int) coordinates.screenX, (int) coordinates.screenY, null);
+            graphics.drawImage(sprite, (int) coordinates.screenX - 24, (int) coordinates.screenY - 24, null);
         }
         // draw circle around player
 //        graphics.setColor(Color.RED);
