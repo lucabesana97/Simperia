@@ -203,6 +203,7 @@ public class Gameplay {
             bullet.move(diffSeconds, player);
             if (bullet.enemyState == EnemyState.DEAD) {
                 bulletIterator.remove();
+                continue;
             }
             for (Enemy enemy : enemies) {
                 if (enemy.isColliding(bullet)) {
@@ -212,6 +213,7 @@ public class Gameplay {
                         enemy.enemyState = EnemyState.DAMAGED;
                     }
                     bulletIterator.remove();
+                    break;
                 }
             }
             if(bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 1000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 1000){

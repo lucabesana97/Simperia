@@ -1,9 +1,14 @@
 package game.entities;
 
+import game.Coordinates;
+import objState.EnemyState;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.net.URL;
 import java.awt.image.BufferedImage;
+
+import static helperFunctions.Utility.distanceBetweenCoordinates;
 
 
 public class BossOctopus extends Octopus{
@@ -12,6 +17,7 @@ public class BossOctopus extends Octopus{
         super(x, y);
         health = 1;
         speed = 3;
+        this.coordinates = new Coordinates(x, y, 293, 191);
 
         // Loading the sprites
         URL idle_down_1 = getClass().getResource("/sprites/enemies/480/Octopus-idle-down-1.png");
@@ -64,5 +70,70 @@ public class BossOctopus extends Octopus{
         sprites.current = image_idle_down_1;
 
     }
+
+    @Override
+    public void move(double diffSeconds, Player player) {
+//        super.move(diffSeconds, player);
+        // Calculate the distance between the player and the enemy
+//        Iterator<Bullet> iterator = Gameplay.enemyBullets.iterator();
+//        while (iterator.hasNext()) {
+//            Bullet bullet = iterator.next();
+//            bullet.move(diffSeconds, player);
+//            if (bullet.enemyState == EnemyState.DEAD) {
+//                iterator.remove();
+//            }
+//        }
+        // Recalculate which sprite to show
+        this.sprites.calculateSprite(this.enemyState, this.movingState, diffSeconds);
+        this.timeSinceLastShot += diffSeconds;
+
+
+        if(this.isColliding(player)){
+            if (this.timeSinceLastShot > this.shootingCooldown){
+                this.timeSinceLastShot = 0;
+                this.shoot();
+            }
+            this.attack(player);
+            return;
+        }
+
+        int distance = distanceBetweenCoordinates(this.coordinates, player.coordinates);
+
+
+        // If the player is within x pixels, the enemy is hostile
+        // If the player is within y pixels, the enemy is shooting
+        // Otherwise the enemy is friendly
+        if (distance < 900) {
+            this.speed = 7;
+            if (distance < 400 && this.timeSinceLastShot > this.shootingCooldown){
+                this.enemyState = EnemyState.ATTACKING;
+            }else{
+                this.enemyState = EnemyState.HOSTILE;
+            }
+        } else {
+            this.speed = 2;
+            this.enemyState = EnemyState.FRIENDLY;
+        }
+
+        // If the enemy is hostile, run towards the player
+        // If the enemy is friendly, run towards a random point
+
+        if (this.enemyState == EnemyState.HOSTILE){
+            this.runTowardsCoordinates(diffSeconds, player.coordinates);
+            this.whereToMove = getNewCoordinates();
+        } else if (this.enemyState == EnemyState.FRIENDLY){
+//            runTowardsCoordinates(diffSeconds, this.whereToMove);
+//            if (distanceBetweenCoordinates(this.coordinates, this.whereToMove) < 3){
+//                this.whereToMove = getNewCoordinates();
+//            }
+        }else{
+            if (this.timeSinceLastShot > this.shootingCooldown){
+                this.timeSinceLastShot = 0;
+                this.shoot();
+            }
+        }
+
+    }
+
 
 }
