@@ -100,5 +100,18 @@ public class HomePanel extends Panel {
     public JButton getNewGameButton() {
         return newGameButton;
     }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+
+        // Draw a border around the panel
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+        g2d.setColor(Color.cyan);
+        g2d.setStroke(new BasicStroke(4));
+        g2d.drawRect(3, 2, 1005, 727);
+        g2d.dispose();
+    }
 }
 
