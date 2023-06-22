@@ -1,10 +1,5 @@
 package gui;
 
-import game.Coordinates;
-import game.inventory.HealthElixir;
-import game.inventory.Inventory;
-import game.inventory.ItemStack;
-
 import javax.swing.*;
 
 public class GameFrame extends JFrame{
