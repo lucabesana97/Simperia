@@ -3,7 +3,6 @@ package game.environment;
 import game.Coordinates;
 import game.GameObject;
 import game.entities.*;
-import game.inventory.HealthElixir;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -60,7 +59,7 @@ public class CaveMap extends GameMap {
 //        enemies.add(new Octopus(860, 1120));
 //        enemies.add(new Octopus(790, 870));
 //        enemies.add(new Octopus(820, 840));
-        enemies.add(new MeleeEnemy(420, 840));
+        enemies.add(new Maurice(420, 840));
 
 //        items.add(new HealthElixir(new Coordinates(1000, 1000, 32, 32)));
 //        mapWarps.add(new Warp(asteroid2ID, new Coordinates(240,220,32,32), new Coordinates(202,342,32,32), player));

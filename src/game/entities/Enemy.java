@@ -24,12 +24,13 @@ public class Enemy extends Entity implements Movable {
         super();
         this.enemyState = EnemyState.FRIENDLY;
         this.movingState = MovingState.STILL;
+        this.invincibilityCooldown = 1;
     }
     @Override
     public void draw(Graphics g) {
         if(coordinates.inScreen() && this.enemyState != EnemyState.DAMAGED) {
             BufferedImage image = sprites.current;
-            g.drawImage(image, (int) coordinates.screenX - 24, (int)coordinates.screenY - 24, null);
+            g.drawImage(image, (int) coordinates.screenX - 24, (int)coordinates.screenY - 48, null);
         }
     }
     // Get a random coordinate to move to. This is used when the enemy is roaming around. It is calculated as a random position
