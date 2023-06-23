@@ -3,6 +3,8 @@ package game.entities;
 import game.GameObject;
 import game.Coordinates;
 import game.Sprites;
+import main.Gameplay;
+import objState.EnemyState;
 
 import java.awt.Graphics;
 
@@ -17,6 +19,7 @@ public abstract class Entity extends GameObject {
     public int level;
     public double invincibilityCooldown = 5;
     public double invincibilityTimer = 0;
+    public int experienceOnKill = 0;
 
     public Entity() {
         super(new Coordinates(0, 0, 100, 100));
@@ -32,6 +35,11 @@ public abstract class Entity extends GameObject {
     public void attack(Entity entity) {
 //        System.out.println(this.name + " attacked " + entity.name + " for " + this.attack + " damage.");
         entity.takeDamage(this.attack);
+        // this is player, add experience
+        if (this instanceof Bullet && ((Bullet) this).owner == Bullet.PLAYER && ((Enemy) entity).enemyState == EnemyState.DEAD){
+            Gameplay.player.gainXp(((Enemy)entity).experienceOnKill);
+            System.out.println("Player is on level " + Gameplay.player.level + " and has " + Gameplay.player.xp + " experience.");
+        }
     }
 
     /**
@@ -43,6 +51,9 @@ public abstract class Entity extends GameObject {
         if (this.health > this.maxHealth) {
             this.health = this.maxHealth;
         }
+    }
+
+    public void gainXp(int amount) {
     }
 
     public void takeDamage(int amount) {

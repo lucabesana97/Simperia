@@ -72,10 +72,11 @@ public class Player extends Entity implements Movable {
         shootState = FightState.READY;
         slashRange = 65;
         sprites.current = image;
+        this.level = 1;
         this.name = "Player";
         this.coins = 0;
         this.xp = 0;
-        levelXp = (level * level)/2 * 100;
+        levelXp = (int)((double)(level * level)/2 * 100);
         this.xpToNextLevel = levelXp;
         mapHeight = Gameplay.map.mapImage.getHeight();
         mapWidth = Gameplay.map.mapImage.getWidth();
@@ -214,6 +215,7 @@ public class Player extends Entity implements Movable {
         spritesUp = loadSprites("/sprites/player/Up-gun-", 2);
     }
 
+    @Override
     public void gainXp(int xp){
         this.xp += xp;
         if(this.xp >= xpToNextLevel){
@@ -287,8 +289,6 @@ public class Player extends Entity implements Movable {
             } else {
                 alpha = -Math.atan2(enemy.coordinates.centerY - coordinates.centerY, enemy.coordinates.centerX - coordinates.centerX);
             }
-//            System.out.println("Alpha: " + alpha);
-            System.out.println(xState + "\t" + yState);
             switch (previousStateX) {
                 case RIGHT:
                     switch (previousStateY) {
