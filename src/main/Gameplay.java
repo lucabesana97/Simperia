@@ -81,9 +81,7 @@ public class Gameplay {
 
             new Thread(new Runnable() {
                 @Override
-                public void run() {
-                    run_game();
-                }
+                public void run() { run_game(); }
             }).start();
         });
     }
@@ -113,7 +111,7 @@ public class Gameplay {
         createButtons();
     }
 
-
+    boolean firstLoop = true;
     public void run_game() {
 
         long lastTick = System.currentTimeMillis();
@@ -124,7 +122,10 @@ public class Gameplay {
             lastTick = currentTick;
 
             this.panel.requestFocusInWindow();
-            if (gameState == GameState.PAUSED) {
+            if (gameState == GameState.INFO) {
+                infoPanel.setVisible(true);
+                infoPanel.repaint();
+            } else if (gameState == GameState.PAUSED) {
                 pausePanel.setVisible(true);
                 pausePanel.repaint();
             } else if (gameState == GameState.INVENTORY) {
@@ -137,6 +138,7 @@ public class Gameplay {
                 pausePanel.setVisible(false);
                 inventoryPanel.setVisible(false);
                 dialogPanel.setVisible(false);
+                infoPanel.setVisible(false);
 
                 update(diffSeconds);
 
@@ -150,6 +152,14 @@ public class Gameplay {
                     System.out.println("Error: " + e.getCause());
                 }
 
+                if (firstLoop) {
+                    displayInfo("Initial info about the game....... Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut " +
+                            "labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi " +
+                            "ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum " +
+                            "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia " +
+                            "deserunt mollit anim id est laborum.");
+                    firstLoop = false;
+                }
             }
             System.out.flush();
         }
@@ -405,10 +415,6 @@ public class Gameplay {
                     player.sprint();
                     sprintStill = false;
                     break;
-                case NPC_TALK:
-                    // Leave it empty for now
-                    //infoPanel.setVisible(true);
-                    break;
                 default:
                     break;
             }
@@ -474,6 +480,17 @@ public class Gameplay {
         gameState = GameState.PLAYING;
     }
 
+    public void displayInfo(String text) {
+        infoPanel.setInfoText(text);
+        infoPanel.setVisible(true);
+        gameState = GameState.INFO;
+    }
+
+    public void closeInfo() {
+        infoPanel.setVisible(false);
+        gameState = GameState.PLAYING;
+    }
+
     public void loadObjects() {
         enemies.removeAll(enemies);
         stacksOnWorld.removeAll(stacksOnWorld);
@@ -495,7 +512,7 @@ public class Gameplay {
     }
 
     private void createButtons() {
-        // Button actions of pause/inventory/dialog panels
+        // Button actions of pause/inventory/dialog/info panels
         JButton resumeButton = pausePanel.getResumeButton();
         resumeButton.addActionListener(e -> resume());
 
@@ -512,6 +529,9 @@ public class Gameplay {
 
         JButton closeDialogButton = dialogPanel.getCloseDialogButton();
         closeDialogButton.addActionListener(e -> closeNPCDialog());
+
+        JButton closeInfoButton = infoPanel.getCloseInfoButton();
+        closeInfoButton.addActionListener(e -> closeInfo());
     }
 
     private void updateCaveMap() {
