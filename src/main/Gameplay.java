@@ -58,7 +58,7 @@ public class Gameplay {
     private GameState gameState;
     private Item deletedItem;
     private final Sound soundtrack = new Sound();
-    Sound effects = new Sound();
+    Sound effects, gunshot = new Sound();
     private HUD hud;
     public static HUD healthBar;
     private HUD xpBar;
@@ -367,6 +367,7 @@ public class Gameplay {
                         if (player.shootState == FightState.READY) {
                             int angle = Utility.getAimAngle(player);
                             playerBullets.add(new Bullet(angle, player.coordinates, Bullet.PLAYER, 10, 15, "/sprites/player/Player-bullet.png"));
+                            gunshot.playSoundEffect(7);
                             player.shootState = FightState.RELOADING;
                         }
                     } else if (player.currentWeapon == player.SWORD) {
