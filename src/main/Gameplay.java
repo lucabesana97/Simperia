@@ -60,7 +60,7 @@ public class Gameplay {
     private final Sound soundtrack = new Sound();
     Sound effects = new Sound();
     private HUD hud;
-    private HUD healthBar;
+    public static HUD healthBar;
     private HUD xpBar;
 
     public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {
@@ -199,13 +199,10 @@ public class Gameplay {
         }
         if (beginnerNPC != null) {
             if (player.isColliding(beginnerNPC) && !(beginnerNPC.interacting)) {
-                // Player is talking to the NPC
-                String text = beginnerNPC.interact();
+                String text = beginnerNPC.interact(); // Player is talking to the NPC
                 displayNPCDialog(text);
-                //System.out.println("Text: " + text);
             } else if (!player.isColliding(beginnerNPC)) {
-                // Player is not talking to the NPC
-                beginnerNPC.stopInteracting();
+                beginnerNPC.stopInteracting(); // Player is not talking to the NPC
                 closeNPCDialog();
             }
 
@@ -309,6 +306,8 @@ public class Gameplay {
             updateCaveMap();
         }
 
+        healthBar.updateHealthBar();
+        xpBar.updateXpBar();
 
         System.gc();
     }
