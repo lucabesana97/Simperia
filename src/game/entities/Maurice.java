@@ -21,7 +21,7 @@ public class Maurice extends Enemy{
         this.name = "Maurice";
         this.attack = 20;
         this.health = 70;
-        this.coordinates = new Coordinates(x, y, 37, 64);
+        this.coordinates = new Coordinates(x, y, 32, 59);
         this.whereToMove = getNewCoordinates(); // Random coordinates to move to when roaming around
 
         // Loading the sprites
