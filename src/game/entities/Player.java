@@ -22,7 +22,7 @@ public class Player extends Entity implements Movable {
     public static final int SWORD = 0;
     public static final int GUN = 1;
     public static final double RELOAD_TIMER = 2;
-    public static final double SWITCH_WEAPON_TIMER = 1;
+    public static final double SWITCH_WEAPON_TIMER = 2;
     public int coins;
     public int xp;
     public int xpToNextLevel;
@@ -30,6 +30,7 @@ public class Player extends Entity implements Movable {
     public int currentWeapon = GUN;
     public double switchCounter = 0;
     public FightState switchState = FightState.READY;
+    public FightState reloadState = FightState.READY;
     int slashRange;
     public MovingState xState;
     public MovingState yState;
@@ -40,6 +41,9 @@ public class Player extends Entity implements Movable {
     public boolean sword;
     public FightState shootState;
     private double shootCounter = 0;
+    private double switchWeaponCounter = 0;
+
+
     private BufferedImage[] spritesDown;
     private BufferedImage[] spritesUp;
     private BufferedImage[] spritesSide;
@@ -63,16 +67,18 @@ public class Player extends Entity implements Movable {
             throw new RuntimeException(e);
         }
         speed = 30;
+        attack = 25;
         xState = MovingState.STILL;
         previousStateX = previousStateY = MovingState.STILL;
         yState = MovingState.STILL;
         shootState = FightState.READY;
-        slashRange = 40;
+        slashRange = 65;
         sprites.current = image;
+        this.level = 1;
         this.name = "Player";
         this.coins = 0;
         this.xp = 0;
-        levelXp = (level * level)/2 * 100;
+        levelXp = (int)((double)(level * level)/2 * 100);
         this.xpToNextLevel = levelXp;
         mapHeight = Gameplay.map.mapImage.getHeight();
         mapWidth = Gameplay.map.mapImage.getWidth();
@@ -219,6 +225,7 @@ public class Player extends Entity implements Movable {
         spritesUp = loadSprites("/sprites/player/Up-gun-", 2);
     }
 
+    @Override
     public void gainXp(int xp){
         this.xp += xp;
         if(this.xp >= xpToNextLevel){
@@ -265,9 +272,16 @@ public class Player extends Entity implements Movable {
             shootCounter = 0;
             switchState = FightState.READY;
         }
+        switchWeaponCounter += diffSeconds;
+        if (switchWeaponCounter >= SWITCH_WEAPON_TIMER) {
+            reloadState = FightState.READY;
+        }else{
+            reloadState = FightState.RELOADING;
+        }
     }
     public void switchWeapon(){
-        if(switchState == FightState.READY){
+        if(reloadState == FightState.READY){
+            switchWeaponCounter = 0;
             if (currentWeapon == Player.GUN) {
                 currentWeapon = Player.SWORD;
                 loadSword();
@@ -285,7 +299,6 @@ public class Player extends Entity implements Movable {
             } else {
                 alpha = -Math.atan2(enemy.coordinates.centerY - coordinates.centerY, enemy.coordinates.centerX - coordinates.centerX);
             }
-            System.out.println("Alpha: " + alpha);
             switch (previousStateX) {
                 case RIGHT:
                     switch (previousStateY) {

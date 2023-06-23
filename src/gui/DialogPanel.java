@@ -14,7 +14,7 @@ public class DialogPanel extends Panel {
     final Color BACKGROUND_COLOR = new Color(51,51,51);
     final Color MAIN_COLOR = new Color(0, 254,254);
     Image background;
-    final int FONT_SIZE = 26;
+    final int FONT_SIZE = 20;
 
     public DialogPanel() {
         super();
@@ -32,11 +32,11 @@ public class DialogPanel extends Panel {
         // Load new font
         try {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/gui/fonts/Computerfont.ttf")));
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/gui/fonts/TT Octosquares Trial Black.ttf")));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Font customFont = new Font("Computerfont", Font.PLAIN, FONT_SIZE);
+        Font customFont = new Font("TT Octosquares Trl Blc", Font.PLAIN, FONT_SIZE);
 
         dialogArea = new JTextArea();
         dialogArea.setOpaque(false);

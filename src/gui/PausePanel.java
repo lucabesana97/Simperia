@@ -17,6 +17,7 @@ public class PausePanel extends Panel {
     final Color BACKGROUND_COLOR = new Color(51,51,51);
     final Color TEXT_COLOR = new Color(0, 254,254);
     final Color BORDER_COLOR = new Color(0, 254,254);
+    final int FONT_SIZE = 22;
     final Font customFont;
 
     public PausePanel() {
@@ -31,11 +32,11 @@ public class PausePanel extends Panel {
         // Load new font
         try {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/gui/fonts/Computerfont.ttf")));
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/gui/fonts/TT Octosquares Trial Black.ttf")));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        customFont = new Font("Computerfont", Font.PLAIN, 26);
+        customFont = new Font("TT Octosquares Trl Blc", Font.PLAIN, FONT_SIZE);
 
         // Calculate the position to center the pause panel
         int pausePanelWidth = (int) (getWidth() * 0.6);

@@ -60,8 +60,9 @@ public class Gameplay {
     private final Sound soundtrack = new Sound();
     Sound effects = new Sound();
     private HUD hud;
-    private HUD healthBar;
+    public static HUD healthBar;
     private HUD xpBar;
+    private HUD levelLabel;
 
     public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {
         this.panel = (GamePanel) panel;
@@ -81,9 +82,7 @@ public class Gameplay {
 
             new Thread(new Runnable() {
                 @Override
-                public void run() {
-                    run_game();
-                }
+                public void run() { run_game(); }
             }).start();
         });
     }
@@ -102,6 +101,7 @@ public class Gameplay {
         hud = new HUD(new Coordinates(10, 10, 361, 110), "/sprites/hud/hud.png");
         healthBar = new HUD(new Coordinates(121, 72, 230, 23), "/sprites/hud/healthbar.png");
         xpBar = new HUD(new Coordinates(112, 96, 95, 15), "/sprites/hud/xpbar.png");
+        levelLabel = new HUD(new Coordinates(125, 63, 80, 30));
 
         panel.addKeyListener(keyHandler);
 
@@ -113,7 +113,7 @@ public class Gameplay {
         createButtons();
     }
 
-
+    boolean firstLoop = true;
     public void run_game() {
 
         long lastTick = System.currentTimeMillis();
@@ -124,7 +124,10 @@ public class Gameplay {
             lastTick = currentTick;
 
             this.panel.requestFocusInWindow();
-            if (gameState == GameState.PAUSED) {
+            if (gameState == GameState.INFO) {
+                infoPanel.setVisible(true);
+                infoPanel.repaint();
+            } else if (gameState == GameState.PAUSED) {
                 pausePanel.setVisible(true);
                 pausePanel.repaint();
             } else if (gameState == GameState.INVENTORY) {
@@ -137,6 +140,7 @@ public class Gameplay {
                 pausePanel.setVisible(false);
                 inventoryPanel.setVisible(false);
                 dialogPanel.setVisible(false);
+                infoPanel.setVisible(false);
 
                 update(diffSeconds);
 
@@ -150,6 +154,14 @@ public class Gameplay {
                     System.out.println("Error: " + e.getCause());
                 }
 
+                if (firstLoop) {
+                    displayInfo("Initial info about the game....... Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut " +
+                            "labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi " +
+                            "ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum " +
+                            "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia " +
+                            "deserunt mollit anim id est laborum.");
+                    firstLoop = false;
+                }
             }
             System.out.flush();
         }
@@ -189,13 +201,10 @@ public class Gameplay {
         }
         if (beginnerNPC != null) {
             if (player.isColliding(beginnerNPC) && !(beginnerNPC.interacting)) {
-                // Player is talking to the NPC
-                String text = beginnerNPC.interact();
+                String text = beginnerNPC.interact(); // Player is talking to the NPC
                 displayNPCDialog(text);
-                //System.out.println("Text: " + text);
             } else if (!player.isColliding(beginnerNPC)) {
-                // Player is not talking to the NPC
-                beginnerNPC.stopInteracting();
+                beginnerNPC.stopInteracting(); // Player is not talking to the NPC
                 closeNPCDialog();
             }
 
@@ -299,6 +308,9 @@ public class Gameplay {
             updateCaveMap();
         }
 
+        healthBar.updateHealthBar();
+        xpBar.updateXpBar();
+        levelLabel.updateLevelLabel();
 
         System.gc();
     }
@@ -338,6 +350,7 @@ public class Gameplay {
         panel.draw(hud);
         panel.draw(healthBar);
         panel.draw(xpBar);
+        panel.draw(levelLabel);
     }
 
     private void handleUserInput() {
@@ -405,10 +418,6 @@ public class Gameplay {
                     player.sprint();
                     sprintStill = false;
                     break;
-                case NPC_TALK:
-                    // Leave it empty for now
-                    //infoPanel.setVisible(true);
-                    break;
                 default:
                     break;
             }
@@ -474,6 +483,17 @@ public class Gameplay {
         gameState = GameState.PLAYING;
     }
 
+    public void displayInfo(String text) {
+        infoPanel.setInfoText(text);
+        infoPanel.setVisible(true);
+        gameState = GameState.INFO;
+    }
+
+    public void closeInfo() {
+        infoPanel.setVisible(false);
+        gameState = GameState.PLAYING;
+    }
+
     public void loadObjects() {
         enemies.removeAll(enemies);
         stacksOnWorld.removeAll(stacksOnWorld);
@@ -495,7 +515,7 @@ public class Gameplay {
     }
 
     private void createButtons() {
-        // Button actions of pause/inventory/dialog panels
+        // Button actions of pause/inventory/dialog/info panels
         JButton resumeButton = pausePanel.getResumeButton();
         resumeButton.addActionListener(e -> resume());
 
@@ -512,6 +532,9 @@ public class Gameplay {
 
         JButton closeDialogButton = dialogPanel.getCloseDialogButton();
         closeDialogButton.addActionListener(e -> closeNPCDialog());
+
+        JButton closeInfoButton = infoPanel.getCloseInfoButton();
+        closeInfoButton.addActionListener(e -> closeInfo());
     }
 
     private void updateCaveMap() {
