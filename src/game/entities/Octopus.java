@@ -27,7 +27,7 @@ public class Octopus extends Enemy{
         this.name = "Octopus";
         this.attack = 20;
         this.health = 45;
-        this.coordinates = new Coordinates(x, y, 48, 31);
+        this.coordinates = new Coordinates(x, y, 42, 26);
         this.whereToMove = getNewCoordinates(); // Random coordinates to move to when roaming around
 
         // Loading the sprites
