@@ -60,7 +60,7 @@ public class Gameplay {
     private final Sound soundtrack = new Sound();
     Sound effects = new Sound();
     private HUD hud;
-    private HUD healthBar;
+    public static HUD healthBar;
     private HUD xpBar;
 
     public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {

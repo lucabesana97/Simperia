@@ -1,6 +1,7 @@
 package gui;
 
 import game.inventory.Inventory;
+import main.Gameplay;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -182,6 +183,9 @@ public class InventoryPanel extends Panel {
                 System.out.println("Using item " + inventory.slots[selectedSlot].item.name);
                 inventory.useItem(selectedSlot);
                 updateSlot(selectedSlot);
+                //Gameplay.healthBar.updateHealthBar();
+                //Gameplay.healthBar.update(Gameplay.player.health);
+                //System.out.println("Player health: " + Gameplay.player.health);
             } else {
                 System.out.println("No slot selected");
             }

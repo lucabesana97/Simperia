@@ -13,7 +13,7 @@ public class HUD extends GameObject {
     public BufferedImage currentImage;
     private final BufferedImage originalImage; // Store the original image to be able to reset the HUD
     private URL hudImage;
-    private final int MAX_HEALTH = 100;
+    private final int MAX_HEALTH = Gameplay.player.maxHealth;
     private final int MAX_XP = 100;
 
 
@@ -56,6 +56,17 @@ public class HUD extends GameObject {
 
     public void updateHealthBar() {
         int health = Gameplay.player.health;
+        //System.out.println("Health: " + health);
+        if (health <= 0) {
+            cutImageHorizontally(0.0);
+        } else if (health >= MAX_HEALTH) {
+            cutImageHorizontally(1.0);
+        } else {
+            cutImageHorizontally((double) health / MAX_HEALTH);
+        }
+    }
+
+    public void update(int health) {
         //System.out.println("Health: " + health);
         if (health <= 0) {
             cutImageHorizontally(0.0);
