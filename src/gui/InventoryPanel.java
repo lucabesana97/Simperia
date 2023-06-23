@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class InventoryPanel extends Panel {
 
@@ -32,22 +33,23 @@ public class InventoryPanel extends Panel {
     final Color COMPLEMENTARY_COLOR = new Color(249,206,55);
     final Border SELECTED_BORDER = BorderFactory.createLineBorder(COMPLEMENTARY_COLOR, 2);
     final Border UNSELECTED_BORDER = BorderFactory.createLineBorder(MAIN_COLOR, 2);
-    final String LABEL_FONT = "Helvetica";
-    final int FONT_SIZE = 17;
-
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        // Paint the background of the inventory panel
-//        g.setColor(BACKGROUND_COLOR);
-//        g.fillRect(0, 0, getWidth(), getHeight());
-//    }
+    private final String LABEL_FONT;
+    final int FONT_SIZE = 20;
 
     public InventoryPanel() {
         setLayout(new BorderLayout());
         setBackground(BACKGROUND_COLOR);
         setOpaque(true); // Makes sure the background color is visible
         setVisible(false);
+
+        // Load new font
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/gui/fonts/Computerfont.ttf")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        LABEL_FONT = "Computerfont";
 
         EmptyBorder marginBorder = new EmptyBorder(15, 15, 15, 15);
         LineBorder lineBorder = new LineBorder(MAIN_COLOR, 2);
@@ -69,12 +71,12 @@ public class InventoryPanel extends Panel {
 
         // Label to display the selected slot
         selectedSlotLabel = new JLabel();
-        selectedSlotLabel.setFont(new Font(LABEL_FONT, Font.PLAIN, 18));
+        selectedSlotLabel.setFont(new Font(LABEL_FONT, Font.PLAIN, 24));
         selectedSlotLabel.setForeground(MAIN_COLOR);
         selectedSlotLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         selectedSlotDescriptionLabel = new JLabel();
-        selectedSlotDescriptionLabel.setFont(new Font(LABEL_FONT, Font.PLAIN, 15));
+        selectedSlotDescriptionLabel.setFont(new Font(LABEL_FONT, Font.PLAIN, 21));
         selectedSlotDescriptionLabel.setForeground(MAIN_COLOR);
         selectedSlotDescriptionLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -137,7 +139,7 @@ public class InventoryPanel extends Panel {
 
             // Label for displaying the item count
             itemCountLabels[i] = new JLabel(".");
-            itemCountLabels[i].setFont(new Font(LABEL_FONT, Font.PLAIN, 15));
+            itemCountLabels[i].setFont(new Font(LABEL_FONT, Font.PLAIN, 19));
             itemCountLabels[i].setHorizontalAlignment(SwingConstants.CENTER);
             if (inventory.slots[i] == null) {
                 itemCountLabels[i].setForeground(BACKGROUND_COLOR);
@@ -310,7 +312,7 @@ public class InventoryPanel extends Panel {
         JButton button = (JButton) buttonAndLabelPanel.getComponent(0);
 
         if (inventory.slots[i] != null) { // Items exist in the stack
-            itemCountLabels[i].setText("x" + inventory.slots[i].amount); // Update the item count label
+            itemCountLabels[i].setText("x " + inventory.slots[i].amount); // Update the item count label
             if (slotSelected[i]) {
                 itemCountLabels[i].setForeground(COMPLEMENTARY_COLOR);
             } else {

@@ -11,11 +11,10 @@ public class DialogPanel extends Panel {
     private static final int DIALOG_PANEL_HEIGHT = 200;
     private final JTextArea dialogArea;
     private final JButton closeDialogButton;
-    final String FONT_FAMILY = "Helvetica";
     final Color BACKGROUND_COLOR = new Color(51,51,51);
     final Color MAIN_COLOR = new Color(0, 254,254);
     Image background;
-    final int FONT_SIZE = 17;
+    final int FONT_SIZE = 26;
 
     public DialogPanel() {
         super();
@@ -30,12 +29,21 @@ public class DialogPanel extends Panel {
             e.printStackTrace();
         }
 
+        // Load new font
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/gui/fonts/Computerfont.ttf")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Font customFont = new Font("Computerfont", Font.PLAIN, FONT_SIZE);
+
         dialogArea = new JTextArea();
         dialogArea.setOpaque(false);
         dialogArea.setEditable(false);
         dialogArea.setLineWrap(true);
         dialogArea.setWrapStyleWord(true);
-        dialogArea.setFont(new Font(FONT_FAMILY, Font.PLAIN, FONT_SIZE));
+        dialogArea.setFont(customFont);
         dialogArea.setForeground(Color.WHITE);
         dialogArea.setBackground(new Color(0, 0, 0, 0));
         dialogArea.setMargin(new Insets(15, 18, 15, 22));
@@ -50,7 +58,7 @@ public class DialogPanel extends Panel {
         buttonContainer.setBackground(new Color(0, 0, 0, 0));
 
         closeDialogButton = new JButton("CLOSE");
-        closeDialogButton.setFont(new Font(FONT_FAMILY, Font.PLAIN, FONT_SIZE));
+        closeDialogButton.setFont(customFont);
         closeDialogButton.setForeground(MAIN_COLOR);
         closeDialogButton.setBackground(BACKGROUND_COLOR);
         closeDialogButton.setBorderPainted(false);

@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.io.File;
 
 /**
  * The pause panel that appears when the game is paused.
@@ -13,11 +14,10 @@ public class PausePanel extends Panel {
     private JButton quitButton;
     private JButton muteButton;
 
-    //final Color BACKGROUND_COLOR = new Color(141, 134, 186);
     final Color BACKGROUND_COLOR = new Color(51,51,51);
     final Color TEXT_COLOR = new Color(0, 254,254);
     final Color BORDER_COLOR = new Color(0, 254,254);
-    final String LABEL_FONT = "Helvetica";
+    final Font customFont;
 
     public PausePanel() {
         setLayout(new GridBagLayout());
@@ -27,6 +27,15 @@ public class PausePanel extends Panel {
 
         Border border = BorderFactory.createLineBorder(BORDER_COLOR, 2);
         setBorder(border);
+
+        // Load new font
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("src/gui/fonts/Computerfont.ttf")));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        customFont = new Font("Computerfont", Font.PLAIN, 26);
 
         // Calculate the position to center the pause panel
         int pausePanelWidth = (int) (getWidth() * 0.6);
@@ -83,9 +92,8 @@ public class PausePanel extends Panel {
         muteButton.setForeground(TEXT_COLOR);
 
         // Set button fonts
-        resumeButton.setFont(new Font(LABEL_FONT, Font.PLAIN, 18));
-        quitButton.setFont(new Font(LABEL_FONT, Font.PLAIN, 18));
-        muteButton.setFont(new Font(LABEL_FONT, Font.PLAIN, 18));
+        resumeButton.setFont(customFont);
+        quitButton.setFont(customFont);
 
         // Set button borders
         resumeButton.setBorder(border);
