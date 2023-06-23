@@ -108,7 +108,7 @@ public class Gameplay {
         // Soundtrack
         soundtrack.stopMusic();
         soundtrack.playMusic(2);
-        soundtrack.changeVolume(-20);
+        soundtrack.changeVolume(-40);
 
         createButtons();
     }
@@ -367,6 +367,7 @@ public class Gameplay {
                         if (player.shootState == FightState.READY) {
                             int angle = Utility.getAimAngle(player);
                             playerBullets.add(new Bullet(angle, player.coordinates, Bullet.PLAYER, 10, 15, "/sprites/player/Player-bullet.png"));
+                            effects.playSoundEffect(7);
                             player.shootState = FightState.RELOADING;
                         }
                     } else if (player.currentWeapon == player.SWORD) {
@@ -377,6 +378,7 @@ public class Gameplay {
                                     player.attack(enemy);
                                 }
                             }
+                            effects.playSoundEffect(8);
                         }
                         player.shootState = FightState.RELOADING;
                     }

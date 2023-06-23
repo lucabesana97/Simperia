@@ -18,6 +18,9 @@ public class Sound {
 		soundURL[3] = getClass().getResource("/audio/Coin.wav");
 		soundURL[4] = getClass().getResource("/audio/Bang.wav");
 		soundURL[5] = getClass().getResource("/audio/Monster_Death.wav");
+		soundURL[6] = getClass().getResource("/audio/footstep.wav");
+		soundURL[7] = getClass().getResource("/audio/gunshot.wav");
+		soundURL[8] = getClass().getResource("/audio/sword-swipe.wav");
 	}
 	
 	public void setFile(int i) {
@@ -67,6 +70,7 @@ public class Sound {
 
 	public void playSoundEffect(int i) {
 		setFile(i);
+		changeVolume(-30);
 		play();
 	}
 
