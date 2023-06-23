@@ -6,6 +6,7 @@ public enum GameState {
     PAUSED, // Pause panel
     INVENTORY, // Inventory panel
     GAMEOVER, // Dead
-    DIALOG, // Talking to NPC
+    DIALOG, // Talking to the NPC
+    INFO, // Info panel
     WIN // Won the game
 }

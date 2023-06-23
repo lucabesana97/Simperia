@@ -68,8 +68,8 @@ public class HomePanel extends Panel {
     final Color BACKGROUND_COLOR = new Color(51, 51, 51);
     final Color TEXT_COLOR = new Color(0, 254, 254);
     final Color BORDER_COLOR = new Color(0, 254, 254);
-    final String BUTTON_FONT = "Helvetica";
-
+    final int FONT_SIZE_TITLE = 80;
+    final int FONT_SIZE_BUTTON = 22;
     public HomePanel() {
         setLayout(new BorderLayout());
         setFocusable(true);
@@ -92,7 +92,7 @@ public class HomePanel extends Panel {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Font titleFont = new Font("Game Of Squids", Font.PLAIN, 80);
+        Font titleFont = new Font("Game Of Squids", Font.PLAIN, FONT_SIZE_TITLE);
 
         JLabel title = new JLabel("SIMPERIA");
         title.setFont(titleFont);
@@ -109,7 +109,7 @@ public class HomePanel extends Panel {
 
         // Set the button
         newGameButton = new JButton("NEW GAME");
-        newGameButton.setFont(new Font("Game Of Squids", Font.PLAIN, 18));
+        newGameButton.setFont(new Font("Game Of Squids", Font.PLAIN, FONT_SIZE_BUTTON));
         newGameButton.setForeground(TEXT_COLOR);
         newGameButton.setBackground(BACKGROUND_COLOR);
         newGameButton.setBorder(BorderFactory.createLineBorder(BORDER_COLOR, 2));
