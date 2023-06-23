@@ -8,6 +8,7 @@ import helperFunctions.Utility;
 import main.Gameplay;
 import objState.MovingState;
 import objState.FightState;
+import output.Sound;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -43,7 +44,8 @@ public class Player extends Entity implements Movable {
     private BufferedImage[] spritesUp;
     private BufferedImage[] spritesSide;
     public int angle;
-
+    private Sound footstep = new Sound();
+    private double footstepCounter = 3.5;
     private BufferedImage[] spritesAttackSlash;
     public MovingState previousStateX, previousStateY;
     //public List<Item> items = new ArrayList<>();
@@ -157,10 +159,18 @@ public class Player extends Entity implements Movable {
             coordinates.moveY((yState == MovingState.DOWN) ? moveBy : -moveBy);
         }
 
-        if(xState == MovingState.STILL && yState == MovingState.STILL) {}
+        if(xState == MovingState.STILL && yState == MovingState.STILL) {footstepCounter = 3.5;}
         else {
             previousStateX = xState;
             previousStateY = yState;
+
+            if (footstepCounter <= 0) {
+                footstep.playSoundEffect(6);
+                footstepCounter = 3.5;
+            }else {
+                footstepCounter -= diffSeconds;
+                System.out.print(footstepCounter + "\t");
+            }
         }
 
         if (coordinates.topLeftCorner_x <= 0) {

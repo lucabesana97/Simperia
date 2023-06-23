@@ -107,8 +107,8 @@ public class Gameplay {
 
         // Soundtrack
         soundtrack.stopMusic();
-        soundtrack.playMusic(2);
-        soundtrack.changeVolume(-20);
+//        soundtrack.playMusic(2);
+//        soundtrack.changeVolume(-20);
 
         createButtons();
     }
