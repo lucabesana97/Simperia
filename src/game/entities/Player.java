@@ -116,9 +116,23 @@ public class Player extends Entity implements Movable {
 
         if(shootState == FightState.RELOADING && currentWeapon == SWORD) {
 
+            int offsetX = 0;
+            int offsetY = 0;
+
+            if (previousStateX == MovingState.LEFT) {
+                offsetX = -15;
+            } else if (previousStateX == MovingState.RIGHT) {
+                offsetX = 20;
+            }
+
+            if (previousStateY == MovingState.UP) {
+                offsetY = -15;
+            } else if (previousStateY == MovingState.DOWN) {
+                offsetY = 30;
+            }
+
             graphics.drawImage(rotateImageByDegrees(spritesAttackSlash[(int) (switchCounter*4/RELOAD_TIMER+1)], angle),
-                    (int)(coordinates.centerX+Math.cos(Math.toRadians(angle))),
-                    (int)(coordinates.topLeftCorner_y+Math.sin(Math.toRadians(angle))), null);
+                    screenX + offsetX, screenY + offsetY, null);
 
         }
 
