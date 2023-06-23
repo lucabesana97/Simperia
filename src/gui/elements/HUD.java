@@ -14,12 +14,13 @@ public class HUD extends GameObject {
     private final BufferedImage originalImage; // Store the original image to be able to reset the HUD
     private URL hudImage;
     private final int MAX_HEALTH = Gameplay.player.maxHealth;
-    private final int MAX_XP = 100;
+    private int MAX_XP = 100;
 
 
     public HUD(Coordinates coordinates, String path) {
         super(coordinates);
         hudImage = getClass().getResource(path);
+        this.MAX_XP = Gameplay.player.xpToNextLevel;
         try {
             assert hudImage != null;
             this.originalImage = ImageIO.read(hudImage);
@@ -79,6 +80,7 @@ public class HUD extends GameObject {
 
     public void updateXpBar() {
         int xp = Gameplay.player.xp;
+        int MAX_XP = Gameplay.player.xpToNextLevel;
         //System.out.println("XP: " + xp);
         if (xp <= 0) {
             cutImageHorizontally(0.0);

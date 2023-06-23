@@ -17,6 +17,7 @@ public class BossOctopus extends Octopus{
         super(x, y);
         health = 1;
         speed = 3;
+        this.experienceOnKill = 150;
         this.coordinates = new Coordinates(x, y, 293, 191);
 
         // Loading the sprites
