@@ -62,6 +62,7 @@ public class Gameplay {
     private HUD hud;
     public static HUD healthBar;
     private HUD xpBar;
+    private HUD levelLabel;
 
     public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {
         this.panel = (GamePanel) panel;
@@ -100,6 +101,7 @@ public class Gameplay {
         hud = new HUD(new Coordinates(10, 10, 361, 110), "/sprites/hud/hud.png");
         healthBar = new HUD(new Coordinates(121, 72, 230, 23), "/sprites/hud/healthbar.png");
         xpBar = new HUD(new Coordinates(112, 96, 95, 15), "/sprites/hud/xpbar.png");
+        levelLabel = new HUD(new Coordinates(125, 63, 80, 30));
 
         panel.addKeyListener(keyHandler);
 
@@ -308,6 +310,7 @@ public class Gameplay {
 
         healthBar.updateHealthBar();
         xpBar.updateXpBar();
+        levelLabel.updateLevelLabel();
 
         System.gc();
     }
@@ -347,6 +350,7 @@ public class Gameplay {
         panel.draw(hud);
         panel.draw(healthBar);
         panel.draw(xpBar);
+        panel.draw(levelLabel);
     }
 
     private void handleUserInput() {
