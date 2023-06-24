@@ -1,6 +1,8 @@
 
 package main;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -111,7 +113,7 @@ public class Gameplay {
 
         panel.addKeyListener(keyHandler);
 
-        inventory.addStack(new ItemStack(new CarKey(new Coordinates(100,100,32,32),ship), 1, true));
+        inventory.addStack(new ItemStack(new CarKey(new Coordinates(100, 100, 32, 32), ship), 1, true));
         inventoryPanel.updateInventoryUI();
 
         // Soundtrack
@@ -348,7 +350,7 @@ public class Gameplay {
             panel.draw(item.item);
         }
 
-        if((map instanceof AsteroidMap) || (map instanceof AsteroidMap2)){
+        if ((map instanceof AsteroidMap) || (map instanceof AsteroidMap2)) {
             panel.draw(ship);
         }
 
@@ -561,7 +563,7 @@ public class Gameplay {
         if (rocks.size() == 0 && player.coordinates.topLeftCorner_y < 2510 && player.coordinates.topLeftCorner_x < 650) {
             rocks = new ArrayList<>();
             rock = new GameObject(new Coordinates(310, 2530, 104, 106), rockImage);
-            rocks.add(rock);
+            dropRock(rock);
             rock = new GameObject(new Coordinates(400, 2530, 104, 106), rockImage);
             rocks.add(rock);
         }
@@ -623,6 +625,39 @@ public class Gameplay {
         }
     }
 
+    private void dropRock(GameObject rock) {
+
+        final GameObject[] rockToDrop = new GameObject[1];
+        final double x = rock.coordinates.topLeftCorner_x;
+        final double finalY = rock.coordinates.topLeftCorner_y;
+        final double startY = 0;
+        Timer timer = new Timer(10, new ActionListener() {
+            double dy = startY;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (dy < finalY) {
+                    rockToDrop[0] = new GameObject(new Coordinates(x, dy, 104, 106), rock.image);
+                    dy += 1;
+                    rock.coordinates.topLeftCorner_y = dy;
+                    panel.draw(rockToDrop[0]);
+                } else {
+                    rock.coordinates.topLeftCorner_y = finalY;
+                    ((Timer) e.getSource()).stop();
+                    return;
+                }
+            }
+        });
+
+        timer.start();
+
+        if (!timer.isRunning())
+            rocks.add(rock);
+
+
+    }
+
+
     private void bossKilled() {
 
         System.out.println("Boss killed");
@@ -637,7 +672,7 @@ public class Gameplay {
                     new CarKey(
                             new Coordinates(450, 450, 48, 29),
                             ship
-                    ),1, false));
+                    ), 1, false));
 
         } catch (Exception e) {
             System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
