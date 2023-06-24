@@ -2,6 +2,7 @@ package gui;
 
 import game.inventory.Inventory;
 import main.Gameplay;
+import output.Sound;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -26,6 +27,7 @@ public class InventoryPanel extends Panel {
     private JButton closeButton;
     private JPanel slotsPanel;
     private JPanel buttonsPanel;
+    private Sound soundEffect = new Sound();
 
     private Inventory inventory;
     final Color BACKGROUND_COLOR = new Color(51,51,51);
@@ -118,11 +120,11 @@ public class InventoryPanel extends Panel {
 
             slotButton.setContentAreaFilled(false);
             slotButton.setBorder(UNSELECTED_BORDER);
-            //slotButton.setBorderPainted(false);
 
             slotButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    soundEffect.playSoundEffect(9);
                     clearSelectedSlot();
                     slotSelected[slotIndex] = true;
                     slotButton.setBorder(SELECTED_BORDER);
@@ -174,9 +176,9 @@ public class InventoryPanel extends Panel {
         useItemButton.setForeground(MAIN_COLOR);
         useItemButton.setBackground(BACKGROUND_COLOR);
         useItemButton.setBorder(UNSELECTED_BORDER);
-        //useItemButton.setPreferredSize(new Dimension(100, 25));
         useItemButton.addActionListener(e -> {
             // Handle "Use Item" button click
+            soundEffect.playSoundEffect(9);
             int selectedSlot = getSelectedSlot();
             if (selectedSlot != -1 && inventory.slots[selectedSlot] != null) {
                 // Use the item in the selected slot
@@ -190,8 +192,7 @@ public class InventoryPanel extends Panel {
                 System.out.println("No slot selected");
             }
         });
-        // Change button border and text colors when pressed
-        useItemButton.addMouseListener(new MouseAdapter() {
+        useItemButton.addMouseListener(new MouseAdapter() { // Change button border and text colors when pressed
             @Override
             public void mousePressed(MouseEvent e) {
                 useItemButton.setBorder(SELECTED_BORDER);
@@ -209,8 +210,8 @@ public class InventoryPanel extends Panel {
         throwItemButton.setForeground(MAIN_COLOR);
         throwItemButton.setBackground(BACKGROUND_COLOR);
         throwItemButton.setBorder(UNSELECTED_BORDER);
-        //throwItemButton.setPreferredSize(new Dimension(135, 25));
         throwItemButton.addActionListener(e -> {
+            soundEffect.playSoundEffect(9);
             int selectedSlot = getSelectedSlot();
             if (selectedSlot != -1 && inventory.slots[selectedSlot] != null) {
                 // Throw away the item in the selected slot
@@ -221,8 +222,7 @@ public class InventoryPanel extends Panel {
                 System.out.println("No slot selected");
             }
         });
-        // Change button border and text colors when pressed
-        throwItemButton.addMouseListener(new MouseAdapter() {
+        throwItemButton.addMouseListener(new MouseAdapter() { // Change button border and text colors when pressed
             @Override
             public void mousePressed(MouseEvent e) {
                 throwItemButton.setBorder(SELECTED_BORDER);
@@ -240,9 +240,7 @@ public class InventoryPanel extends Panel {
         closeButton.setForeground(MAIN_COLOR);
         closeButton.setBackground(BACKGROUND_COLOR);
         closeButton.setBorder(UNSELECTED_BORDER);
-        //closeButton.setPreferredSize(new Dimension(75, 25));
-        // Change button border and text colors when pressed
-        closeButton.addMouseListener(new MouseAdapter() {
+        closeButton.addMouseListener(new MouseAdapter() { // Change button border and text colors when pressed
             @Override
             public void mousePressed(MouseEvent e) {
                 closeButton.setBorder(SELECTED_BORDER);

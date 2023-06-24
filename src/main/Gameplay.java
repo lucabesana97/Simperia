@@ -1,6 +1,8 @@
 
 package main;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -62,7 +64,7 @@ public class Gameplay {
     private Item deletedItem;
     private final Sound soundtrack = new Sound();
     Sound effects = new Sound();
-    private HUD hud;
+    private HUD hudBackground;
     public static HUD healthBar;
     private HUD xpBar;
     private HUD levelLabel;
@@ -79,6 +81,7 @@ public class Gameplay {
 
         JButton newGameButton = homePanel.getNewGameButton();
         newGameButton.addActionListener(e -> {
+            effects.playSoundEffect(9);
             gameState = GameState.PLAYING;
             homePanel.setVisible(false);
             init();
@@ -103,7 +106,7 @@ public class Gameplay {
         loadObjects();
         inventory = new Inventory();
         inventoryPanel.init(inventory);
-        hud = new HUD(new Coordinates(10, 10, 361, 110), "/sprites/hud/hud.png");
+        hudBackground = new HUD(new Coordinates(10, 10, 361, 110), "/sprites/hud/hud.png");
         healthBar = new HUD(new Coordinates(121, 72, 230, 23), "/sprites/hud/healthbar.png");
         xpBar = new HUD(new Coordinates(112, 96, 95, 15), "/sprites/hud/xpbar.png");
         levelLabel = new HUD(new Coordinates(125, 63, 80, 30));
@@ -353,7 +356,7 @@ public class Gameplay {
         }
 
         panel.draw(player);
-        panel.draw(hud);
+        panel.draw(hudBackground);
         panel.draw(healthBar);
         panel.draw(xpBar);
         panel.draw(levelLabel);
@@ -466,10 +469,12 @@ public class Gameplay {
     public void muteGame(JButton muteButton) {
         if (soundtrack.isMusicPlaying()) {
             soundtrack.stopMusic();
+            //effects.stop();
             muteButton.setIcon(new ImageIcon("resources/sprites/pause/music_muted.png"));
         } else {
             soundtrack.playMusic(2);
-            soundtrack.changeVolume(-20);
+            //effects.play();
+            soundtrack.changeVolume(-40);
             muteButton.setIcon(new ImageIcon("resources/sprites/pause/music_playing.png"));
         }
     }
@@ -525,24 +530,60 @@ public class Gameplay {
     private void createButtons() {
         // Button actions of pause/inventory/dialog/info panels
         JButton resumeButton = pausePanel.getResumeButton();
-        resumeButton.addActionListener(e -> resume());
+        resumeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                effects.playSoundEffect(9);
+                resume();
+            }
+        });
+
 
         JButton muteButton = pausePanel.getMuteButton();
-        muteButton.addActionListener(e -> {
-            muteGame(muteButton);
+        muteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                effects.playSoundEffect(9);
+                muteGame(muteButton);
+            }
         });
 
         JButton quitGameButton = pausePanel.getQuitButton();
-        quitGameButton.addActionListener(e -> quitGame());
+        quitGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                effects.playSoundEffect(9);
+                quitGame();
+            }
+        });
+
 
         JButton closeInventoryButton = inventoryPanel.getCloseButton();
-        closeInventoryButton.addActionListener(e -> closeInventory());
+        closeInventoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                effects.playSoundEffect(9);
+                closeInventory();
+            }
+        });
 
         JButton closeDialogButton = dialogPanel.getCloseDialogButton();
-        closeDialogButton.addActionListener(e -> closeNPCDialog());
+        closeDialogButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                effects.playSoundEffect(9);
+                closeNPCDialog();
+            }
+        });
 
         JButton closeInfoButton = infoPanel.getCloseInfoButton();
-        closeInfoButton.addActionListener(e -> closeInfo());
+        closeInfoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                effects.playSoundEffect(9);
+                closeInfo();
+            }
+        });
     }
 
     private void updateCaveMap() {
