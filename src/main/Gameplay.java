@@ -60,7 +60,8 @@ public class Gameplay {
     private final HomePanel homePanel;
     private final DialogPanel dialogPanel;
     private final InfoPanel infoPanel;
-    private GameState gameState;
+    private static VictoryFailPanel victoryFailPanel;
+    private static GameState gameState;
     private Item deletedItem;
     private final Sound soundtrack = new Sound();
     Sound effects = new Sound();
@@ -76,8 +77,9 @@ public class Gameplay {
         this.dialogPanel = frame.getDialogPanel();
         this.homePanel = frame.getHomePanel();
         this.infoPanel = frame.getInfoPanel();
+        victoryFailPanel = frame.getVictoryFailPanel();
         this.keyHandler = keyHandler;
-        this.gameState = GameState.HOME;
+        gameState = GameState.HOME;
 
         JButton newGameButton = homePanel.getNewGameButton();
         newGameButton.addActionListener(e -> {
@@ -149,6 +151,9 @@ public class Gameplay {
             } else if (gameState == GameState.DIALOG) {
                 dialogPanel.setVisible(true);
                 dialogPanel.repaint();
+            } else if (gameState == GameState.WIN || gameState == GameState.GAMEOVER) {
+                victoryFailPanel.setVisible(true);
+                victoryFailPanel.repaint();
             } else if (gameState == GameState.PLAYING) {
                 pausePanel.setVisible(false);
                 inventoryPanel.setVisible(false);
@@ -412,11 +417,12 @@ public class Gameplay {
                     player.switchWeapon();
                     break;
                 case PAUSE:
-                    if (!pausePanel.isVisible()) {
-                        pause();
-                    } else {
-                        resume();
-                    }
+                    victory();
+//                    if (!pausePanel.isVisible()) {
+//                        pause();
+//                    } else {
+//                        resume();
+//                    }
                     break;
                 case INVENTORY:
                     if (!inventoryPanel.isVisible()) {
@@ -584,6 +590,15 @@ public class Gameplay {
                 closeInfo();
             }
         });
+
+        JButton playAgainButton = victoryFailPanel.getPlayButton();
+        playAgainButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                effects.playSoundEffect(9);
+                //quitGame();
+            }
+        });
     }
 
     private void updateCaveMap() {
@@ -687,7 +702,14 @@ public class Gameplay {
     }
 
     public static void victory() {
-        //TODO display dialog
+        gameState = GameState.WIN;
+
+        String victoryTextUp = "Congratulations!";
+        String victoryTextDown = "You have made it!";
+
+        victoryFailPanel.setTopText(victoryTextUp);
+        victoryFailPanel.setBottomText(victoryTextDown);
+        victoryFailPanel.setVisible(true);
     }
 
 }

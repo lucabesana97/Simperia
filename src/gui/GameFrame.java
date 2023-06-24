@@ -16,6 +16,7 @@ public class GameFrame extends JFrame{
 	private final InventoryPanel inventoryPanel;
 	private final InfoPanel infoPanel;
 	private final DialogPanel dialogPanel;
+	private final VictoryFailPanel victoryFailPanel;
 	private final JLayeredPane layeredPane;
 	
 	public GameFrame(String title) {
@@ -44,6 +45,9 @@ public class GameFrame extends JFrame{
 		dialogPanel = new DialogPanel();
 		dialogPanel.setVisible(false);
 
+		victoryFailPanel = new VictoryFailPanel();
+		victoryFailPanel.setVisible(false);
+
 		// Add the layered pane to the main frame's content pane
 		getContentPane().add(layeredPane);
 
@@ -64,6 +68,7 @@ public class GameFrame extends JFrame{
 		layeredPane.add(inventoryPanel, JLayeredPane.POPUP_LAYER);
 		layeredPane.add(homePanel, JLayeredPane.POPUP_LAYER);
 		layeredPane.add(infoPanel, JLayeredPane.POPUP_LAYER);
+		layeredPane.add(victoryFailPanel, JLayeredPane.POPUP_LAYER);
 
 		layeredPane.revalidate();
     }
@@ -73,4 +78,5 @@ public class GameFrame extends JFrame{
 	public DialogPanel getDialogPanel() { return dialogPanel; }
 	public HomePanel getHomePanel() { return homePanel; }
 	public InfoPanel getInfoPanel() { return infoPanel; }
+	public VictoryFailPanel getVictoryFailPanel() { return victoryFailPanel; }
 }

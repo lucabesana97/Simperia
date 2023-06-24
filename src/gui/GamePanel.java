@@ -35,17 +35,5 @@ public class GamePanel extends Panel {
 	public void draw(Item object) {
 		object.draw(graphics);
 	}
-
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-		// Draw level label
-		g.setColor(Color.white);
-		g.setFont(new Font(LABEL_FONT, Font.BOLD, LABEL_FONT_SIZE));
-		g.drawString("Level 1", 70, 200);
-	}
-
-
 }
 
