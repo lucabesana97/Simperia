@@ -60,7 +60,6 @@ public abstract class Entity extends GameObject {
         if (this.invincibilityTimer < this.invincibilityCooldown) {
             return;
         }
-        System.out.println(this.name + " took " + amount + " damage.");
         this.invincibilityTimer = 0;
         this.health -= amount;
         if (this.health <= 0) {
@@ -70,6 +69,7 @@ public abstract class Entity extends GameObject {
 
     public void die() {
         System.out.println(this.name + " died.");
+        //TODO
     }
 
     public void move(double diffSeconds) {

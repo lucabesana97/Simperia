@@ -34,8 +34,9 @@ public class HealthElixir extends Item {
     }
 
     @Override
-    public void use() {
+    public boolean use() {
         Gameplay.player.heal(healthRestored);
+        return true;
     }
 
     @Override
