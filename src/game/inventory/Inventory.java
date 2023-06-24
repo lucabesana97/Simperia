@@ -15,11 +15,13 @@ public class Inventory {
      */
     public void useItem(int position) {
         if (slots[position] != null && slots[position].amount > 0) {
-            slots[position].amount--;
-            slots[position].item.use();
+            boolean used = slots[position].item.use();
+            if (used){
+                slots[position].amount--;
 
-            if (slots[position].amount <= 0) {
-                removeItem(position);
+                if (slots[position].amount <= 0) {
+                    removeItem(position);
+                }
             }
         }
     }

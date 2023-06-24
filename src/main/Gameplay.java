@@ -12,7 +12,9 @@ import javax.swing.*;
 import game.Coordinates;
 import game.GameObject;
 import game.environment.AsteroidMap;
+import game.environment.AsteroidMap2;
 import game.environment.CaveMap;
+import game.inventory.CarKey;
 import game.inventory.Item;
 import game.GameState;
 import game.entities.*;
@@ -45,8 +47,9 @@ public class Gameplay {
     public static List<Bullet> enemyBullets = new ArrayList<>();
     private List<Warp> warps = new ArrayList<>();
     private List<Warp> mapWarps = new ArrayList<>();
-    private List<GameObject> objects = new ArrayList<>();
+    public List<GameObject> objects = new ArrayList<>();
     private List<GameObject> rocks = new ArrayList<>();
+    private GameObject ship;
 
     private GameMap mapDestination;
     private Warp warpDestination;
@@ -82,7 +85,9 @@ public class Gameplay {
 
             new Thread(new Runnable() {
                 @Override
-                public void run() { run_game(); }
+                public void run() {
+                    run_game();
+                }
             }).start();
         });
     }
@@ -102,8 +107,12 @@ public class Gameplay {
         healthBar = new HUD(new Coordinates(121, 72, 230, 23), "/sprites/hud/healthbar.png");
         xpBar = new HUD(new Coordinates(112, 96, 95, 15), "/sprites/hud/xpbar.png");
         levelLabel = new HUD(new Coordinates(125, 63, 80, 30));
+        ship = new Ship(new Coordinates(300, 500, 164, 91));
 
         panel.addKeyListener(keyHandler);
+
+        inventory.addStack(new ItemStack(new CarKey(new Coordinates(100,100,32,32),ship), 1, true));
+        inventoryPanel.updateInventoryUI();
 
         // Soundtrack
         soundtrack.stopMusic();
@@ -114,6 +123,7 @@ public class Gameplay {
     }
 
     boolean firstLoop = true;
+
     public void run_game() {
 
         long lastTick = System.currentTimeMillis();
@@ -181,15 +191,7 @@ public class Gameplay {
                 //boss killed
                 if (map instanceof CaveMap && enemies.isEmpty()) {
 
-                    try {
-                        BufferedImage floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_win.png"));
-                        objects.get(0).image = floorSymbol;
-                        beginnerNPC.quest.completed = true;
-                    } catch (Exception e) {
-                        System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
-                    }
-
-                    //TODO display victory text
+                    bossKilled();
 
                 }
 
@@ -233,7 +235,7 @@ public class Gameplay {
                     break;
                 }
             }
-            if(bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 3000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000){
+            if (bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 3000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000) {
                 bulletIterator.remove();
             }
         }
@@ -249,10 +251,10 @@ public class Gameplay {
 //                System.out.println("Player health: " + player.health);
                 bullet.attack(player);
                 bulletIteratorEnemy.remove();
-            }else if(bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 3000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000) {
+            } else if (bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 3000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000) {
                 try {
                     bulletIteratorEnemy.remove();
-                }catch (Exception e){
+                } catch (Exception e) {
                     System.out.println("Error: " + e.getCause());
                 }
             }
@@ -346,6 +348,10 @@ public class Gameplay {
             panel.draw(item.item);
         }
 
+        if((map instanceof AsteroidMap) || (map instanceof AsteroidMap2)){
+            panel.draw(ship);
+        }
+
         panel.draw(player);
         panel.draw(hud);
         panel.draw(healthBar);
@@ -371,7 +377,7 @@ public class Gameplay {
                             player.shootState = FightState.RELOADING;
                         }
                     } else if (player.currentWeapon == player.SWORD) {
-                        if(player.shootState == FightState.READY) {
+                        if (player.shootState == FightState.READY) {
                             player.angle = Utility.getAimAngle(player);
                             for (Enemy enemy : enemies) {
                                 if (player.inSlashRange(enemy)) {
@@ -613,9 +619,34 @@ public class Gameplay {
 
             } catch (Exception e) {
                 System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
-
             }
         }
+    }
+
+    private void bossKilled() {
+
+        System.out.println("Boss killed");
+
+        try {
+            BufferedImage floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_win.png"));
+            objects.get(0).image = floorSymbol;
+            beginnerNPC.quest.completed = true;
+
+            //drops car key
+            stacksOnWorld.add(new ItemStack(
+                    new CarKey(
+                            new Coordinates(450, 450, 48, 29),
+                            ship
+                    ),1, false));
+
+        } catch (Exception e) {
+            System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
+        }
+
+    }
+
+    public static void victory() {
+        //TODO display dialog
     }
 
 }

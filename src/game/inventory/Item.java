@@ -18,7 +18,7 @@ public abstract class Item extends GameObject {
         this.description = description;
     }
 
-    public abstract void use();
+    public abstract boolean use();
 
     public void draw(Graphics graphics){
     }
