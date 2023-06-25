@@ -124,7 +124,9 @@ public class InventoryPanel extends Panel {
             slotButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    soundEffect.playSoundEffect(9);
+                    if (!Gameplay.isMuted) {
+                        soundEffect.playSoundEffect(9);
+                    }
                     clearSelectedSlot();
                     slotSelected[slotIndex] = true;
                     slotButton.setBorder(SELECTED_BORDER);
@@ -178,7 +180,9 @@ public class InventoryPanel extends Panel {
         useItemButton.setBorder(UNSELECTED_BORDER);
         useItemButton.addActionListener(e -> {
             // Handle "Use Item" button click
-            soundEffect.playSoundEffect(9);
+            if (!Gameplay.isMuted) {
+                soundEffect.playSoundEffect(9);
+            }
             int selectedSlot = getSelectedSlot();
             if (selectedSlot != -1 && inventory.slots[selectedSlot] != null) {
                 // Use the item in the selected slot
@@ -211,7 +215,9 @@ public class InventoryPanel extends Panel {
         throwItemButton.setBackground(BACKGROUND_COLOR);
         throwItemButton.setBorder(UNSELECTED_BORDER);
         throwItemButton.addActionListener(e -> {
-            soundEffect.playSoundEffect(9);
+            if (!Gameplay.isMuted) {
+                soundEffect.playSoundEffect(9);
+            }
             int selectedSlot = getSelectedSlot();
             if (selectedSlot != -1 && inventory.slots[selectedSlot] != null) {
                 // Throw away the item in the selected slot

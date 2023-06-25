@@ -69,6 +69,9 @@ public class Gameplay {
     public static HUD healthBar;
     private HUD xpBar;
     private HUD levelLabel;
+    private boolean firstLoop;
+    public static boolean isMuted;
+    private final int soundtrackVolume = -40;
 
     public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {
         this.panel = (GamePanel) panel;
@@ -83,7 +86,9 @@ public class Gameplay {
 
         JButton newGameButton = homePanel.getNewGameButton();
         newGameButton.addActionListener(e -> {
-            effects.playSoundEffect(9);
+            if (!isMuted) {
+                effects.playSoundEffect(9);
+            }
             gameState = GameState.PLAYING;
             homePanel.setVisible(false);
             init();
@@ -122,12 +127,13 @@ public class Gameplay {
         // Soundtrack
         soundtrack.stopMusic();
         soundtrack.playMusic(2);
-        soundtrack.changeVolume(-40);
+        soundtrack.changeVolume(soundtrackVolume);
 
         createButtons();
+        firstLoop = true;
+        isMuted = false;
     }
 
-    boolean firstLoop = true;
 
     public void run_game() {
 
@@ -159,6 +165,7 @@ public class Gameplay {
                 inventoryPanel.setVisible(false);
                 dialogPanel.setVisible(false);
                 infoPanel.setVisible(false);
+                victoryFailPanel.setVisible(false);
 
                 update(diffSeconds);
 
@@ -322,6 +329,11 @@ public class Gameplay {
         xpBar.updateXpBar();
         levelLabel.updateLevelLabel();
 
+        // Don't delete this
+//        if (player.health <= 0) {
+//            fail();
+//        } TODO
+
         System.gc();
     }
 
@@ -381,7 +393,9 @@ public class Gameplay {
                         if (player.shootState == FightState.READY) {
                             int angle = Utility.getAimAngle(player);
                             playerBullets.add(new Bullet(angle, player.coordinates, Bullet.PLAYER, 10, 15, "/sprites/player/Player-bullet.png"));
-                            effects.playSoundEffect(7);
+                            if (!isMuted) {
+                                effects.playSoundEffect(7);
+                            }
                             player.shootState = FightState.RELOADING;
                         }
                     } else if (player.currentWeapon == player.SWORD) {
@@ -392,7 +406,9 @@ public class Gameplay {
                                     player.attack(enemy);
                                 }
                             }
-                            effects.playSoundEffect(8);
+                            if (!isMuted) {
+                                effects.playSoundEffect(8);
+                            }
                         }
                         player.shootState = FightState.RELOADING;
                     }
@@ -417,12 +433,11 @@ public class Gameplay {
                     player.switchWeapon();
                     break;
                 case PAUSE:
-                    victory();
-//                    if (!pausePanel.isVisible()) {
-//                        pause();
-//                    } else {
-//                        resume();
-//                    }
+                    if (!pausePanel.isVisible()) {
+                        pause();
+                    } else {
+                        resume();
+                    }
                     break;
                 case INVENTORY:
                     if (!inventoryPanel.isVisible()) {
@@ -457,9 +472,14 @@ public class Gameplay {
     }
 
     private void closeInventory() {
+        boolean vicVisible = victoryFailPanel.isVisible();
         inventoryPanel.clearSelectedSlot();
         inventoryPanel.setVisible(false);
         gameState = GameState.PLAYING;
+        if (vicVisible) {
+            victoryFailPanel.setVisible(true);
+            gameState = GameState.WIN;
+        }
     }
 
     public void pause() {
@@ -473,21 +493,25 @@ public class Gameplay {
     }
 
     public void muteGame(JButton muteButton) {
-        if (soundtrack.isMusicPlaying()) {
+        if (!isMuted) {
             soundtrack.stopMusic();
-            //effects.stop();
             muteButton.setIcon(new ImageIcon("resources/sprites/pause/music_muted.png"));
+            isMuted = true;
         } else {
             soundtrack.playMusic(2);
-            //effects.play();
-            soundtrack.changeVolume(-40);
+            soundtrack.changeVolume(soundtrackVolume);
             muteButton.setIcon(new ImageIcon("resources/sprites/pause/music_playing.png"));
+            isMuted = false;
         }
     }
 
-    public void quitGame() {
+    public void quitGame() { // TODO
 //        gameState = GameState.HOME;
-//        pausePanel.setVisible(false);
+//        if (pausePanel.isVisible()) {
+//            pausePanel.setVisible(false);
+//        } else if (victoryFailPanel.isVisible()) {
+//            victoryFailPanel.setVisible(false);
+//        }
 //        homePanel.setVisible(true);
     }
 
@@ -539,7 +563,9 @@ public class Gameplay {
         resumeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                effects.playSoundEffect(9);
+                if (!isMuted) {
+                    effects.playSoundEffect(9);
+                }
                 resume();
             }
         });
@@ -549,7 +575,9 @@ public class Gameplay {
         muteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                effects.playSoundEffect(9);
+                if (!isMuted) {
+                    effects.playSoundEffect(9);
+                }
                 muteGame(muteButton);
             }
         });
@@ -558,7 +586,9 @@ public class Gameplay {
         quitGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                effects.playSoundEffect(9);
+                if (!isMuted) {
+                    effects.playSoundEffect(9);
+                }
                 quitGame();
             }
         });
@@ -568,7 +598,9 @@ public class Gameplay {
         closeInventoryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                effects.playSoundEffect(9);
+                if (!isMuted) {
+                    effects.playSoundEffect(9);
+                }
                 closeInventory();
             }
         });
@@ -577,7 +609,9 @@ public class Gameplay {
         closeDialogButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                effects.playSoundEffect(9);
+                if (!isMuted) {
+                    effects.playSoundEffect(9);
+                }
                 closeNPCDialog();
             }
         });
@@ -586,7 +620,9 @@ public class Gameplay {
         closeInfoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                effects.playSoundEffect(9);
+                if (!isMuted) {
+                    effects.playSoundEffect(9);
+                }
                 closeInfo();
             }
         });
@@ -595,8 +631,10 @@ public class Gameplay {
         playAgainButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                effects.playSoundEffect(9);
-                //quitGame();
+                if (!isMuted) {
+                    effects.playSoundEffect(9);
+                }
+                quitGame();
             }
         });
     }
@@ -705,10 +743,22 @@ public class Gameplay {
         gameState = GameState.WIN;
 
         String victoryTextUp = "Congratulations!";
-        String victoryTextDown = "You have made it!";
+        String victoryTextDown = "You have made it! You have found the car key and can now escape this planet! " +
+                "You have won the game!";
 
         victoryFailPanel.setTopText(victoryTextUp);
         victoryFailPanel.setBottomText(victoryTextDown);
+        victoryFailPanel.setVisible(true);
+    }
+
+    public void fail() {
+        gameState = GameState.GAMEOVER;
+
+        String failTextUp = "Oh no!";
+        String failTextDown = "You have failed to complete the game. Try again!";
+
+        victoryFailPanel.setTopText(failTextUp);
+        victoryFailPanel.setBottomText(failTextDown);
         victoryFailPanel.setVisible(true);
     }
 

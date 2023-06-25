@@ -171,11 +171,13 @@ public class Player extends Entity implements Movable {
             previousStateY = yState;
 
             if (footstepCounter <= 0) {
-                footstep.playSoundEffect(6);
+                if (!Gameplay.isMuted) {
+                    footstep.playSoundEffect(6);
+                }
                 footstepCounter = 3.5;
-            }else {
+            } else {
                 footstepCounter -= diffSeconds;
-                System.out.print(footstepCounter + "\t");
+                //System.out.print(footstepCounter + "\t");
             }
         }
 
