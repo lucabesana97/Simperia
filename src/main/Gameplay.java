@@ -213,6 +213,7 @@ public class Gameplay {
             }
         }
 
+
         for (Enemy enemy : enemies) {
             enemy.move(diffSeconds, player);
         }

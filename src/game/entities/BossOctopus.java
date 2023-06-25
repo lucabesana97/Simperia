@@ -53,23 +53,28 @@ public class BossOctopus extends Octopus{
         }
 
         sprites.friendly_down = new BufferedImage[2];
-        sprites.friendly_down[0] = image_idle_down_1;
-        sprites.friendly_down[1] = image_idle_down_2;
+        sprites.friendly_down[0] = image_mad_down_1;
+        sprites.friendly_down[1] = image_mad_down_2;
 
         sprites.friendly_up = new BufferedImage[2];
-        sprites.friendly_up[0] = image_idle_up_1;
-        sprites.friendly_up[1] = image_idle_up_2;
+        sprites.friendly_up[0] = image_mad_up_1;
+        sprites.friendly_up[1] = image_mad_up_2;
 
         sprites.hostile_down = new BufferedImage[2];
-        sprites.hostile_down[0] = image_mad_down_1;
-        sprites.hostile_down[1] = image_mad_down_2;
+        sprites.hostile_down[0] = image_idle_down_1;
+        sprites.hostile_down[1] = image_idle_down_2;
 
         sprites.hostile_up = new BufferedImage[2];
-        sprites.hostile_up[0] = image_mad_up_1;
-        sprites.hostile_up[1] = image_mad_up_2;
+        sprites.hostile_up[0] = image_idle_up_1;
+        sprites.hostile_up[1] = image_idle_up_2;
 
         sprites.current = image_idle_down_1;
 
+    }
+
+    @Override
+    public void draw(Graphics graphics) {
+        super.draw(graphics);
     }
 
     @Override
@@ -95,6 +100,7 @@ public class BossOctopus extends Octopus{
                 this.shoot();
             }
             this.attack(player);
+            this.enemyState = EnemyState.HOSTILE;
             return;
         }
 
