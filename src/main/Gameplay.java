@@ -70,7 +70,7 @@ public class Gameplay {
     private HUD xpBar;
     private HUD levelLabel;
     private boolean firstLoop;
-    public static boolean isMuted;
+    public static boolean isMuted = false;
     private final int soundtrackVolume = -40;
 
     public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {
