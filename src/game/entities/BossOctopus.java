@@ -15,7 +15,7 @@ public class BossOctopus extends Octopus{
 
     public BossOctopus(int x, int y) {
         super(x, y);
-        health = 1;
+        health = 500;
         speed = 3;
         this.experienceOnKill = 150;
         this.coordinates = new Coordinates(x, y, 293, 191);
@@ -79,6 +79,7 @@ public class BossOctopus extends Octopus{
 
     @Override
     public void move(double diffSeconds, Player player) {
+        this.invincibilityTimer += diffSeconds;
 //        super.move(diffSeconds, player);
         // Calculate the distance between the player and the enemy
 //        Iterator<Bullet> iterator = Gameplay.enemyBullets.iterator();

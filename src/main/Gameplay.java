@@ -72,6 +72,7 @@ public class Gameplay {
     private boolean firstLoop;
     public static boolean isMuted = false;
     private final int soundtrackVolume = -40;
+    private boolean bossSpawned = false;
 
     public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {
         this.panel = (GamePanel) panel;
@@ -244,6 +245,7 @@ public class Gameplay {
                 if (enemy.isColliding(bullet)) {
 //                    System.out.println("Enemy health: " + enemy.health);
                     bullet.attack(enemy);
+                    System.out.println("Enemy health: " + enemy.health);
                     if (enemy.enemyState != EnemyState.DEAD) {
                         enemy.enemyState = EnemyState.DAMAGED;
                     }
@@ -704,8 +706,9 @@ public class Gameplay {
         }
 
         // ACTIVATE FINAL BOSS
-        if (player.coordinates.topLeftCorner_y < 820 && player.coordinates.topLeftCorner_y > 750) {
+        if (player.coordinates.topLeftCorner_y < 680 && player.coordinates.topLeftCorner_y > 630 && this.bossSpawned == false) {
             try {
+                this.bossSpawned = true;
                 BufferedImage floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_fight.png"));
                 objects.get(0).image = floorSymbol;
 
@@ -716,6 +719,13 @@ public class Gameplay {
                 System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
             }
         }
+
+//        for (Bullet playerBullet : playerBullets) {
+//            if (playerBullet.coordinates.intersects()) {
+//                enemy.health -= playerBullet.damage;
+//                playerBullet.coordinates = new Coordinates(0, 0, 0, 0);
+//            }
+//        }
     }
 
     private void bossKilled() {
