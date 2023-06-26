@@ -18,7 +18,7 @@ public class GameObject {
 
     public void draw(Graphics graphics) {
         if (coordinates.inScreen()) {
-            graphics.drawImage(image, (int) coordinates.screenX, (int) coordinates.screenY, null);
+            graphics.drawImage(image, (int) coordinates.screenX - 24, (int) coordinates.screenY - 24, null);
         }
     }
 

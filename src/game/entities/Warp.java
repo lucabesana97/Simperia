@@ -32,11 +32,11 @@ public class Warp extends GameObject {
     public void draw(Graphics g) {
         if(coordinates.inScreen()) {
             g.setColor(Color.red);
-            g.drawOval((int) coordinates.screenX, (int) coordinates.screenY, (int) coordinates.size_X, (int) coordinates.size_Y);
+            g.drawOval((int) coordinates.screenX - 24, (int) coordinates.screenY - 24, (int) coordinates.size_X, (int) coordinates.size_Y);
         }
         if(exit.inScreen()) {
             g.setColor(Color.blue);
-            g.drawOval((int) exit.screenX, (int) exit.screenY, (int) exit.size_X, (int) exit.size_Y);
+            g.drawOval((int) exit.screenX - 24, (int) exit.screenY - 24, (int) exit.size_X, (int) exit.size_Y);
         }
     }
 

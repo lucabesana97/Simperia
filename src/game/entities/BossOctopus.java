@@ -15,7 +15,7 @@ public class BossOctopus extends Octopus{
 
     public BossOctopus(int x, int y) {
         super(x, y);
-        health = 1;
+        health = 500;
         speed = 3;
         this.experienceOnKill = 150;
         this.coordinates = new Coordinates(x, y, 293, 191);
@@ -53,27 +53,33 @@ public class BossOctopus extends Octopus{
         }
 
         sprites.friendly_down = new BufferedImage[2];
-        sprites.friendly_down[0] = image_idle_down_1;
-        sprites.friendly_down[1] = image_idle_down_2;
+        sprites.friendly_down[0] = image_mad_down_1;
+        sprites.friendly_down[1] = image_mad_down_2;
 
         sprites.friendly_up = new BufferedImage[2];
-        sprites.friendly_up[0] = image_idle_up_1;
-        sprites.friendly_up[1] = image_idle_up_2;
+        sprites.friendly_up[0] = image_mad_up_1;
+        sprites.friendly_up[1] = image_mad_up_2;
 
         sprites.hostile_down = new BufferedImage[2];
-        sprites.hostile_down[0] = image_mad_down_1;
-        sprites.hostile_down[1] = image_mad_down_2;
+        sprites.hostile_down[0] = image_idle_down_1;
+        sprites.hostile_down[1] = image_idle_down_2;
 
         sprites.hostile_up = new BufferedImage[2];
-        sprites.hostile_up[0] = image_mad_up_1;
-        sprites.hostile_up[1] = image_mad_up_2;
+        sprites.hostile_up[0] = image_idle_up_1;
+        sprites.hostile_up[1] = image_idle_up_2;
 
         sprites.current = image_idle_down_1;
 
     }
 
     @Override
+    public void draw(Graphics graphics) {
+        super.draw(graphics);
+    }
+
+    @Override
     public void move(double diffSeconds, Player player) {
+        this.invincibilityTimer += diffSeconds;
 //        super.move(diffSeconds, player);
         // Calculate the distance between the player and the enemy
 //        Iterator<Bullet> iterator = Gameplay.enemyBullets.iterator();
@@ -95,6 +101,7 @@ public class BossOctopus extends Octopus{
                 this.shoot();
             }
             this.attack(player);
+            this.enemyState = EnemyState.HOSTILE;
             return;
         }
 

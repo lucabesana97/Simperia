@@ -187,14 +187,14 @@ public class Octopus extends Enemy{
     }
 
     public void shoot() {
-        Gameplay.enemyBullets.add(new Bullet(0, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(45, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(90, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(135, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(180, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(225, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(270, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(315, this.coordinates, Bullet.ENEMY, 3, 6));
+        Gameplay.enemyBullets.add(new Bullet(0, this.coordinates, Bullet.ENEMY, 3, 10));
+        Gameplay.enemyBullets.add(new Bullet(45, this.coordinates, Bullet.ENEMY, 3, 10));
+        Gameplay.enemyBullets.add(new Bullet(90, this.coordinates, Bullet.ENEMY, 3, 10));
+        Gameplay.enemyBullets.add(new Bullet(135, this.coordinates, Bullet.ENEMY, 3, 10));
+        Gameplay.enemyBullets.add(new Bullet(180, this.coordinates, Bullet.ENEMY, 3, 10));
+        Gameplay.enemyBullets.add(new Bullet(225, this.coordinates, Bullet.ENEMY, 3, 10));
+        Gameplay.enemyBullets.add(new Bullet(270, this.coordinates, Bullet.ENEMY, 3, 10));
+        Gameplay.enemyBullets.add(new Bullet(315, this.coordinates, Bullet.ENEMY, 3, 10));
     }
 
 }

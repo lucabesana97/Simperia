@@ -57,7 +57,11 @@ public abstract class Entity extends GameObject {
     }
 
     public void takeDamage(int amount) {
+        if (this instanceof BossOctopus){
+            System.out.println("BossOctopus took damage");
+        }
         if (this.invincibilityTimer < this.invincibilityCooldown) {
+            System.out.println(this.name + " is invincible.");
             return;
         }
         this.invincibilityTimer = 0;
