@@ -205,7 +205,7 @@ public class Gameplay {
                 enemyIter.remove();
 
                 //boss killed
-                if (map instanceof CaveMap && enemies.isEmpty()) {
+                if (map instanceof CaveMap && enemies.isEmpty() && this.bossSpawned == true) {
 
                     bossKilled();
 
@@ -407,6 +407,7 @@ public class Gameplay {
                             for (Enemy enemy : enemies) {
                                 if (player.inSlashRange(enemy)) {
                                     player.attack(enemy);
+                                    System.out.println("Enemy health: " + enemy.health);
                                 }
                             }
                             if (!isMuted) {
