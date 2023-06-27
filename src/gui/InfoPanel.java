@@ -10,7 +10,7 @@ public class InfoPanel extends Panel {
     private final JButton closeButton;
     final Color BACKGROUND_COLOR = new Color(51, 51, 51);
     final Color MAIN_COLOR = new Color(0, 254, 254);
-    final int FONT_SIZE = 19;
+    final int FONT_SIZE = 18;
     final Font customFont;
 
     public InfoPanel() {
@@ -23,7 +23,7 @@ public class InfoPanel extends Panel {
 
         // Calculate the position to center the info panel
         int infoPanelWidth = (int) (getWidth() * 0.6);
-        int infoPanelHeight = (int) (getHeight() * 0.6);
+        int infoPanelHeight = (int) (getHeight() * 0.7);
         int panelX = (getWidth() - infoPanelWidth) / 2;
         int panelY = (getHeight() - infoPanelHeight) / 2;
 
@@ -44,10 +44,9 @@ public class InfoPanel extends Panel {
         textPane.setForeground(Color.WHITE);
         textPane.setBackground(BACKGROUND_COLOR);
 
-        // Create a custom StyledDocument for justified text alignment
         StyledDocument doc = textPane.getStyledDocument();
         SimpleAttributeSet style = new SimpleAttributeSet();
-        StyleConstants.setAlignment(style, StyleConstants.ALIGN_JUSTIFIED);
+        StyleConstants.setAlignment(style, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0, doc.getLength(), style, false);
 
         JScrollPane scrollPane = new JScrollPane(textPane);
@@ -55,7 +54,7 @@ public class InfoPanel extends Panel {
         scrollPane.setBackground(BACKGROUND_COLOR);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setViewportBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0)); // Set the margin
+        scrollPane.setViewportBorder(BorderFactory.createEmptyBorder(10, 10, 5, 0)); // Set the margin
 
         add(scrollPane, BorderLayout.CENTER);
 

@@ -66,9 +66,6 @@ public class KeyHandler implements KeyListener {
 			case KeyEvent.VK_SHIFT:
 				returner = Keys.SPRINT;
 				break;
-			case KeyEvent.VK_T:
-				returner = Keys.NPC_TALK;
-				break;
 			default:
 				break;
 		}
