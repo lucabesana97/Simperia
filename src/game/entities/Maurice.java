@@ -16,6 +16,8 @@ import static helperFunctions.Utility.distanceBetweenCoordinates;
 public class Maurice extends Enemy{
     public double attackingCooldown = 30;
     public double timeSinceLastAttack = 30;
+    private List<int[]> lastPath = null;
+    private int currentDestinationID = 0;
     public Maurice(int x, int y) {
         super();
         this.speed = 5;
@@ -105,7 +107,7 @@ public class Maurice extends Enemy{
         // If the player is within x pixels, the enemy is hostile
         // If the player is within y pixels, the enemy is shooting
         // Otherwise the enemy is friendly
-        if (distance < 700) {
+        if (distance < 700 || this.enemyState == EnemyState.HOSTILE || this.enemyState == EnemyState.ATTACKING){
             this.speed = 9;
             if (distance < 2 && this.timeSinceLastAttack > this.attackingCooldown){
                 this.enemyState = EnemyState.ATTACKING;
@@ -138,11 +140,27 @@ public class Maurice extends Enemy{
     private void runTowardsCoordinates(double diffSeconds, Coordinates goalCoordinates){
         List<int[]> path = Gameplay.map.findDirection(this);
         if (path == null){
+            path = this.lastPath;
+        }else{
+            this.lastPath = path;
+            this.currentDestinationID = 0;
+        }
+        if (path == null){
             return;
         }
-        int[] nextCoordinates = path.get(0);
-        int xDistance = nextCoordinates[0] * 16;
-        int yDistance = nextCoordinates[1] * 16;
+        int i = 0;
+        int nextX = path.get(currentDestinationID)[0];
+        int nextY = path.get(currentDestinationID)[1];
+        if ((int)(this.coordinates.centerX / 16)*16 == nextX * 16 && (int)(this.coordinates.centerY / 16)*16 == nextY * 16){
+            if (currentDestinationID >= path.size() - 1){
+                return;
+            }
+            currentDestinationID++;
+            nextX = path.get(currentDestinationID)[0];
+            nextY = path.get(currentDestinationID)[1];
+        }
+        int xDistance = nextX * 16;
+        int yDistance = nextY * 16;
 
 
 
