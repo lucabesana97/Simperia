@@ -31,9 +31,12 @@ public class NPC extends GameObject {
             throw new RuntimeException(e);
         }
         quest = new Quest(
-                "Hi plis help mi. I need 2 find mi dog. He is lost. I will give u 100 coins if u find him. He is in the forest. I'll give" +
-                        " u a health elixir if u find him. And also 500 xp. My dog is scared, plis hurry.",
-                "Thank u for finding mi dog. Here is ur reward.",
+                "Hey, you there! I'm in desperate need of your help. These wretched monsters have invaded my asteroid, " +
+                        "and I can't stand their presence any longer. Coincidentally, you're searching for your missing card, " +
+                        "aren't you? Well, I witnessed those scoundrels taking it. I implore you, aid me in reclaiming my beloved asteroid. " +
+                        "Will you help me? Here you go, take these health elixirs to help you on your mission.",
+                "Thank you! I knew I could count on you. " +
+                        "I'll be sure to reward you handsomely for your efforts.",
                 500,
                 new HealthElixir(
                         new Coordinates(0, 0, 0, 0)

@@ -87,7 +87,7 @@ public class Maurice extends Enemy{
     @Override
     public void move(double diffSeconds, Player player) {
         if (Gameplay.map.mapCollision(this)){
-            System.out.println("Collision");
+            //System.out.println("Collision");
         }
 
         super.move(diffSeconds, player);
