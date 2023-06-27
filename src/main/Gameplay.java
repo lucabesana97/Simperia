@@ -181,11 +181,7 @@ public class Gameplay {
                 }
 
                 if (firstLoop) {
-                    displayInfo("Initial info about the game....... Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut " +
-                            "labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi " +
-                            "ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum " +
-                            "dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia " +
-                            "deserunt mollit anim id est laborum.");
+                    displayInfo(getInitialText());
                     firstLoop = false;
                 }
             }
@@ -510,14 +506,19 @@ public class Gameplay {
         }
     }
 
-    public void quitGame() { // TODO
+    public void restartGame() { // TODO: fix
 //        gameState = GameState.HOME;
 //        if (pausePanel.isVisible()) {
-//            pausePanel.setVisible(false);
+//            pausePanel.setVisible
+//            (false);
 //        } else if (victoryFailPanel.isVisible()) {
 //            victoryFailPanel.setVisible(false);
 //        }
 //        homePanel.setVisible(true);
+    }
+
+    public void quitGame() {
+        System.exit(0);
     }
 
     public void displayNPCDialog(String text) {
@@ -639,7 +640,7 @@ public class Gameplay {
                 if (!isMuted) {
                     effects.playSoundEffect(9);
                 }
-                quitGame();
+                restartGame();
             }
         });
     }
@@ -807,6 +808,18 @@ public class Gameplay {
         victoryFailPanel.setBottomText(failTextDown);
         victoryFailPanel.setVisible(true);
     }
+
+    private String getInitialText () {
+        return "\n My peaceful interstellar journey has been abruptly interrupted by a sudden ambush, " +
+                "throwing me off course and leaving me on this deserted asteroid. The ship seems to have " +
+                "remained intact, but there is no sign of the access card. How will I get out of this place?" + "\n" + "\n" +
+                "Instructions: " + "\n" + "\n" +
+                "You can move around using the arrow or the WASD keys and shoot using the space bar. " + "\n" + "\n" +
+                "You can change your weapon by pressing the Q key, open your inventory with I, pause the game " +
+                "using P or Enter and also interact with the NPC, by getting close to it." + "\n" + "\n" +
+                "Good luck!";
+    }
+
 
 }
 
