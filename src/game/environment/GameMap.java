@@ -20,6 +20,7 @@ public class GameMap {
     public BufferedImage mapImage;
     public static int[][] mapCollision;
     public Player player;
+    public int[][] grid;
     public java.util.List<Enemy> enemies = new ArrayList<>();
     public List<Warp> warps = new ArrayList<>();
     public List<Warp> mapWarps = new ArrayList<>();
@@ -78,5 +79,23 @@ public class GameMap {
                 return new AsteroidMap2();
         }
         return null;
+    }
+
+    public boolean mapCollision(Entity entity){
+        double checkX = entity.coordinates.centerX - 24;
+        double checkY = entity.coordinates.centerY - 24 + entity.coordinates.size_Y / 4;
+        if(grid[(int)((checkX - 12) / 16)][(int)((checkY - 12)  / 16)] == 1 ||
+                grid[(int)((checkX) / 16)][(int)((checkY - 12) / 16)] == 1 ||
+                grid[(int)((checkX + 12) / 16)][(int)((checkY - 12) / 16)] == 1 ||
+                grid[(int)((checkX - 12) / 16)][(int)((checkY) / 16)] == 1 ||
+                grid[(int)((checkX + 12) / 16)][(int)((checkY) / 16)] == 1 ||
+                grid[(int)((checkX - 12) / 16)][(int)((checkY + 12) / 16)] == 1 ||
+                grid[(int)((checkX) / 16)][(int)((checkY + 12) / 16)] == 1 ||
+                grid[(int)((checkX + 12) / 16)][(int)((checkY + 12) / 16)] == 1
+        ){
+            System.out.println("cucucaca");
+            return true;
+        }
+        return false;
     }
 }

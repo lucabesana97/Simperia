@@ -26,13 +26,16 @@ public class Utility {
     }
 
     public static int distanceBetweenCoordinates(Coordinates a, Coordinates b) {
+        if (a.intersects(b)){
+            return 0;
+        }
+        double topLeft = Math.sqrt(Math.pow(a.topLeftCorner_x - b.topLeftCorner_x, 2) + Math.pow(a.topLeftCorner_y - b.topLeftCorner_y, 2));
+        double topRight = Math.sqrt(Math.pow(a.topLeftCorner_x - b.bottomRightCorner_x, 2) + Math.pow(a.topLeftCorner_y - b.bottomRightCorner_y, 2));
+        double bottomLeft = Math.sqrt(Math.pow(a.bottomRightCorner_x - b.topLeftCorner_x, 2) + Math.pow(a.bottomRightCorner_y - b.topLeftCorner_y, 2));
+        double bottomRight = Math.sqrt(Math.pow(a.bottomRightCorner_x - b.bottomRightCorner_x, 2) + Math.pow(a.bottomRightCorner_y - b.bottomRightCorner_y, 2));
 
-        int aCenterX = (int) (a.topLeftCorner_x + a.bottomRightCorner_x) / 2;
-        int aCenterY = (int) (a.topLeftCorner_y + a.bottomRightCorner_y) / 2;
-        int bCenterX = (int) (b.topLeftCorner_x + b.bottomRightCorner_x) / 2;
-        int bCenterY = (int) (b.topLeftCorner_y + b.bottomRightCorner_y) / 2;
-
-        return (int) Math.sqrt(Math.pow(aCenterX - bCenterX, 2) + Math.pow(aCenterY - bCenterY, 2));
+        double min = Math.min(Math.min(topLeft, topRight), Math.min(bottomLeft, bottomRight));
+        return (int) min;
     }
 
     // Used to flip the image horizontally

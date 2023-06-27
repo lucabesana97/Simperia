@@ -8,6 +8,9 @@ import game.inventory.ItemStack;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class AsteroidMap2 extends GameMap {
     private void load() {
@@ -20,7 +23,24 @@ public class AsteroidMap2 extends GameMap {
             System.out.println("Couldn't load map image: " + "\tReason: " + e.getCause());
         }
 
+        str = "/grids/asteroidGrid.csv";
+        grid = new int[128][96];
 
+        try {
+            InputStream is = getClass().getResourceAsStream(str);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+            for(int i = 0; i < 96; i++) {
+                String line = br.readLine();
+                String numbers[] = line.split(",");
+                for(int j = 0; j < 128; j++) {
+                    grid[i][j] = Integer.parseInt(numbers[j]);
+                }
+            }
+            br.close();
+        }catch(Exception e){
+            System.out.println("Couldn't load map grid: " + "\tReason: " + e.getCause());
+        }
 
     }
 

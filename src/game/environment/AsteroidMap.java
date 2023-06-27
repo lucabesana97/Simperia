@@ -6,6 +6,9 @@ import game.inventory.HealthElixir;
 import game.inventory.ItemStack;
 
 import javax.imageio.ImageIO;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class AsteroidMap extends GameMap {
     private void load() {
@@ -18,12 +21,30 @@ public class AsteroidMap extends GameMap {
             System.out.println("Couldn't load map image: " + "\tReason: " + e.getCause());
         }
 
+        str = "/grids/asteroidGrid.csv";
+        grid = new int[128][96];
 
+        try {
+            InputStream is = getClass().getResourceAsStream(str);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+            for(int i = 0; i < 96; i++) {
+                String line = br.readLine();
+                String numbers[] = line.split(",");
+                for(int j = 0; j < 128; j++) {
+                    grid[j][i] = Integer.parseInt(numbers[j]);
+                }
+            }
+            br.close();
+        }catch(Exception e){
+            System.out.println("Couldn't load map grid: " + "\tReason: " + e.getCause());
+        }
 
     }
 
     public AsteroidMap() {
         load();
+        /*
         enemies.add(new Octopus(1413, 1125));
         enemies.add(new Maurice(1413, 1199));
         enemies.add(new Octopus(1297, 1365));
@@ -42,8 +63,9 @@ public class AsteroidMap extends GameMap {
         enemies.add(new Octopus(1459, 406));
         enemies.add(new Maurice(1575, 570));
         enemies.add(new Octopus(1758, 570));
+        enemies.add(new Octopus(800,700));
+        */
         beginnerNPC = new NPC(new Coordinates(472, 150, 37, 64));
-        //enemies.add(new Octopus(800,700));
 //        warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
         mapWarps.add(new Warp(CaveID, new Coordinates(245, 1262, 32, 32), new Coordinates(200, 3150, 32, 32), player));
 
