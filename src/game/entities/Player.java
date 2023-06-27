@@ -155,6 +155,9 @@ public class Player extends Entity implements Movable {
 
         double moveBy = diffSeconds * speed;
 
+        double lastX = coordinates.topLeftCorner_x;
+        double lastY = coordinates.topLeftCorner_y;
+
         if(xState != MovingState.STILL && yState != MovingState.STILL){
             moveBy *= Math.sqrt(2) / 2;
             coordinates.moveX((xState == MovingState.RIGHT) ? moveBy : -moveBy);
@@ -163,6 +166,11 @@ public class Player extends Entity implements Movable {
             coordinates.moveX((xState == MovingState.RIGHT) ? moveBy : -moveBy);
         } else if (yState != MovingState.STILL){
             coordinates.moveY((yState == MovingState.DOWN) ? moveBy : -moveBy);
+        }
+
+        if(Gameplay.map.mapCollision(this)){
+            coordinates.topLeftCorner_x = lastX;
+            coordinates.topLeftCorner_y = lastY;
         }
 
         if(xState == MovingState.STILL && yState == MovingState.STILL) {footstepCounter = 3.5;}

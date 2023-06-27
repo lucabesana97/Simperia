@@ -6,6 +6,9 @@ import game.entities.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class CaveMap extends GameMap {
 
@@ -29,6 +32,25 @@ public class CaveMap extends GameMap {
         } catch (Exception e) {
             System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
 
+        }
+
+        str = "/grids/caveGrid.csv";
+        grid = new int[64][219];
+
+        try {
+            InputStream is = getClass().getResourceAsStream(str);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+            for(int i = 0; i < 219; i++) {
+                String line = br.readLine();
+                String numbers[] = line.split(",");
+                for(int j = 0; j < 64; j++) {
+                    grid[j][i] = Integer.parseInt(numbers[j]);
+                }
+            }
+            br.close();
+        }catch(Exception e){
+            System.out.println("Couldn't load cave map grid: " + "\tReason: " + e.getCause());
         }
     }
 
