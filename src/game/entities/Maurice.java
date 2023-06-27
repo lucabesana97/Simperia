@@ -1,8 +1,9 @@
 package game.entities;
 import game.Coordinates;
+import main.Gameplay;
 import objState.EnemyState;
 import objState.MovingState;
-
+import java.util.List;
 import java.awt.*;
 import java.lang.Math;
 
@@ -83,6 +84,10 @@ public class Maurice extends Enemy{
 
     @Override
     public void move(double diffSeconds, Player player) {
+        if (Gameplay.map.mapCollision(this)){
+            System.out.println("Collision");
+        }
+
         super.move(diffSeconds, player);
         // Calculate the distance between the player and the enemy
         // Recalculate which sprite to show
@@ -114,10 +119,11 @@ public class Maurice extends Enemy{
 
         // If the enemy is hostile, run towards the player
         // If the enemy is friendly, run towards a random point
-
         if (this.enemyState == EnemyState.HOSTILE){
+
+
             runTowardsCoordinates(diffSeconds, player.coordinates);
-            this.whereToMove = getNewCoordinates();
+//            this.whereToMove = getNewCoordinates();
         } else if (this.enemyState == EnemyState.FRIENDLY){
 //            runTowardsCoordinates(diffSeconds, this.whereToMove);
 //            if (distanceBetweenCoordinates(this.coordinates, this.whereToMove) < 3){
@@ -130,18 +136,26 @@ public class Maurice extends Enemy{
 
 
     private void runTowardsCoordinates(double diffSeconds, Coordinates goalCoordinates){
+        List<int[]> path = Gameplay.map.findDirection(this);
+        if (path == null){
+            return;
+        }
+        int[] nextCoordinates = path.get(0);
+        int xDistance = nextCoordinates[0] * 16;
+        int yDistance = nextCoordinates[1] * 16;
+
+
+
+
         int aCenterX = (int) (this.coordinates.topLeftCorner_x + this.coordinates.bottomRightCorner_x) / 2;
         int aCenterY = (int) (this.coordinates.topLeftCorner_y + this.coordinates.bottomRightCorner_y) / 2;
 
-        int bCenterX = (int) (goalCoordinates.topLeftCorner_x + goalCoordinates.bottomRightCorner_x) / 2;
-        int bCenterY = (int) (goalCoordinates.topLeftCorner_y + goalCoordinates.bottomRightCorner_y) / 2;
-
-        double xDistance = aCenterX - bCenterX;
-        double yDistance = aCenterY - bCenterY;
+        xDistance = aCenterX - xDistance;
+        yDistance = aCenterY - yDistance;
         double totalDistance = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
         double xSpeed = -1 * (xDistance / totalDistance);
         double ySpeed = -1 * (yDistance / totalDistance);
-
+//
         calculateOrientation(xSpeed, ySpeed);
 
         this.coordinates.moveX(xSpeed * this.speed * diffSeconds);
