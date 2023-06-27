@@ -21,6 +21,8 @@ import static helperFunctions.Utility.distanceBetweenCoordinates;
 public class Octopus extends Enemy{
     public double shootingCooldown = 30;
     public double timeSinceLastShot = 30;
+    private List<int[]> lastPath = null;
+    private int currentDestinationID = 0;
     public Octopus(int x, int y) {
         super();
         this.speed = 5;
@@ -122,9 +124,9 @@ public class Octopus extends Enemy{
         // If the player is within x pixels, the enemy is hostile
         // If the player is within y pixels, the enemy is shooting
         // Otherwise the enemy is friendly
-        if (distance < 300) {
+        if (distance < 350 || this.enemyState == EnemyState.HOSTILE || this.enemyState == EnemyState.ATTACKING) {
             this.speed = 7;
-            if (distance < 250 && this.timeSinceLastShot > this.shootingCooldown){
+            if (distance < 330 && this.timeSinceLastShot > this.shootingCooldown){
                 this.enemyState = EnemyState.ATTACKING;
             }else{
                 this.enemyState = EnemyState.HOSTILE;
@@ -139,7 +141,7 @@ public class Octopus extends Enemy{
 
         if (this.enemyState == EnemyState.HOSTILE){
             runTowardsCoordinates(diffSeconds, player.coordinates);
-            this.whereToMove = getNewCoordinates();
+//            this.whereToMove = getNewCoordinates();
         } else if (this.enemyState == EnemyState.FRIENDLY){
 //            runTowardsCoordinates(diffSeconds, this.whereToMove);
 //            if (distanceBetweenCoordinates(this.coordinates, this.whereToMove) < 3){
@@ -156,18 +158,39 @@ public class Octopus extends Enemy{
 
 
     protected void runTowardsCoordinates(double diffSeconds, Coordinates goalCoordinates){
+        List<int[]> path = Gameplay.map.findDirection(this);
+        if (path == null){
+            path = this.lastPath;
+        }else{
+            this.lastPath = path;
+            this.currentDestinationID = 0;
+        }
+        if (path == null){
+            return;
+        }
+        int i = 0;
+        int nextX = path.get(currentDestinationID)[0];
+        int nextY = path.get(currentDestinationID)[1];
+        if ((int)(this.coordinates.centerX / 16)*16 == nextX * 16 && (int)(this.coordinates.centerY / 16)*16 == nextY * 16){
+            if (currentDestinationID >= path.size() - 1){
+                return;
+            }
+            currentDestinationID++;
+            nextX = path.get(currentDestinationID)[0];
+            nextY = path.get(currentDestinationID)[1];
+        }
+        int xDistance = nextX * 16;
+        int yDistance = nextY * 16;
+
         int aCenterX = (int) (this.coordinates.topLeftCorner_x + this.coordinates.bottomRightCorner_x) / 2;
         int aCenterY = (int) (this.coordinates.topLeftCorner_y + this.coordinates.bottomRightCorner_y) / 2;
 
-        int bCenterX = (int) (goalCoordinates.topLeftCorner_x + goalCoordinates.bottomRightCorner_x) / 2;
-        int bCenterY = (int) (goalCoordinates.topLeftCorner_y + goalCoordinates.bottomRightCorner_y) / 2;
-
-        double xDistance = aCenterX - bCenterX;
-        double yDistance = aCenterY - bCenterY;
+        xDistance = aCenterX - xDistance;
+        yDistance = aCenterY - yDistance;
         double totalDistance = Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
         double xSpeed = -1 * (xDistance / totalDistance);
         double ySpeed = -1 * (yDistance / totalDistance);
-
+//
         calculateOrientation(xSpeed, ySpeed);
 
         this.coordinates.moveX(xSpeed * this.speed * diffSeconds);
@@ -187,14 +210,14 @@ public class Octopus extends Enemy{
     }
 
     public void shoot() {
-        Gameplay.enemyBullets.add(new Bullet(0, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(45, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(90, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(135, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(180, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(225, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(270, this.coordinates, Bullet.ENEMY, 3, 6));
-        Gameplay.enemyBullets.add(new Bullet(315, this.coordinates, Bullet.ENEMY, 3, 6));
+        Gameplay.enemyBullets.add(new Bullet(0, this.coordinates, Bullet.ENEMY, 5, 10));
+        Gameplay.enemyBullets.add(new Bullet(45, this.coordinates, Bullet.ENEMY, 5, 10));
+        Gameplay.enemyBullets.add(new Bullet(90, this.coordinates, Bullet.ENEMY, 5, 10));
+        Gameplay.enemyBullets.add(new Bullet(135, this.coordinates, Bullet.ENEMY, 5, 10));
+        Gameplay.enemyBullets.add(new Bullet(180, this.coordinates, Bullet.ENEMY, 5, 10));
+        Gameplay.enemyBullets.add(new Bullet(225, this.coordinates, Bullet.ENEMY, 5, 10));
+        Gameplay.enemyBullets.add(new Bullet(270, this.coordinates, Bullet.ENEMY, 5, 10));
+        Gameplay.enemyBullets.add(new Bullet(315, this.coordinates, Bullet.ENEMY, 5, 10));
     }
 
 }

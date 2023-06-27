@@ -62,10 +62,6 @@ public class Bullet extends Enemy{
     }
 
     public void move(double diffSeconds, Player player) {
-        // TODO: make bullets disappear after a certain amount of time
-        //if (this.coordinates.topLeftCorner_x > 2000 || this.coordinates.topLeftCorner_x < -200 || this.coordinates.topLeftCorner_y > 2000 || this.coordinates.topLeftCorner_y < -200) {
-        //    this.enemyState = EnemyState.DEAD;
-        //}
         this.invincibilityTimer += diffSeconds;
         // based on the degrees, move the bullet in that direction
         double radians = Math.toRadians(angle);
