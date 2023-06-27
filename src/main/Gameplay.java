@@ -253,9 +253,10 @@ public class Gameplay {
                     break;
                 }
             }
-            if (bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 3000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000) {
+            if (bulletIterator != null){
+            if ((this.map.mapCollision(bullet) && map instanceof CaveMap) || bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 4000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000) {
                 bulletIterator.remove();
-            }
+            }}
         }
 
         Iterator<Bullet> bulletIteratorEnemy = enemyBullets.iterator();
@@ -269,7 +270,7 @@ public class Gameplay {
 //                System.out.println("Player health: " + player.health);
                 bullet.attack(player);
                 bulletIteratorEnemy.remove();
-            } else if (bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 3000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000) {
+            } else if ((this.map.mapCollision(bullet) && map instanceof CaveMap) || bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 4000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000) {
                 try {
                     bulletIteratorEnemy.remove();
                 } catch (Exception e) {

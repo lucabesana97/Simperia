@@ -86,6 +86,9 @@ public class GameMap {
     public boolean mapCollision(Entity entity){
         double checkX = entity.coordinates.centerX - 24;
         double checkY = entity.coordinates.centerY - 24 + entity.coordinates.size_Y / 4;
+        if(checkY < 0 || checkY > this.grid[0].length * 16 || checkX < 0 || checkX > this.grid.length * 16){
+            return true;
+        }
         if(grid[(int)((checkX - 12) / 16)][(int)((checkY - 12)  / 16)] == 1 ||
                 grid[(int)((checkX) / 16)][(int)((checkY - 12) / 16)] == 1 ||
                 grid[(int)((checkX + 12) / 16)][(int)((checkY - 12) / 16)] == 1 ||
@@ -148,7 +151,7 @@ public class GameMap {
                 int newY = y + dir[1];
 
                 if (newX >= 0 && newX < rows && newY >= 0 && newY < cols &&
-                        !visited[newX][newY] && grid[newX][newY] == -1) {
+                        !visited[newX][newY] && grid[newX][newY] == -1 && grid[newX + 2][newY] == -1  && grid[newX][newY - 2] == -1  && grid[newX][newY + 2] == -1  && grid[newX - 2][newY] == -1 &&  grid[newX - 1][newY] == -1 && grid[newX + 1][newY] == -1 && grid[newX][newY + 1] == -1 && grid[newX][newY - 1] == -1 && grid[newX + 1][newY - 1] == -1 && grid[newX + 1][newY + 1] == -1 && grid[newX - 1][newY - 1] == -1 && grid[newX - 1][newY + 1] == -1) {
                     queue.add(new int[]{newX, newY});
                     visited[newX][newY] = true;
                     distance[newX][newY] = distance[x][y] + 1;
