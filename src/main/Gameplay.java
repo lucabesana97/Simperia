@@ -1,6 +1,7 @@
 
 package main;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -51,12 +52,12 @@ public class Gameplay {
     private List<Warp> mapWarps = new ArrayList<>();
     public List<GameObject> objects = new ArrayList<>();
     private List<GameObject> rocks = new ArrayList<>();
-    private GameObject ship;
+    public static GameObject ship;
 
     private GameMap mapDestination;
     private Warp warpDestination;
     private final PausePanel pausePanel;
-    private final InventoryPanel inventoryPanel;
+    public static InventoryPanel inventoryPanel;
     private final HomePanel homePanel;
     private final DialogPanel dialogPanel;
     private final InfoPanel infoPanel;
@@ -122,8 +123,8 @@ public class Gameplay {
 
         panel.addKeyListener(keyHandler);
 
-        inventory.addStack(new ItemStack(new CarKey(new Coordinates(100, 100, 32, 32), ship), 1, true));
-        inventoryPanel.updateInventoryUI();
+//        inventory.addStack(new ItemStack(new CarKey(new Coordinates(100, 100, 32, 32), ship), 1, true));
+//        inventoryPanel.updateInventoryUI();
 
         // Soundtrack
         soundtrack.stopMusic();
@@ -249,10 +250,11 @@ public class Gameplay {
                     break;
                 }
             }
-            if (bulletIterator != null){
-            if ((this.map.mapCollision(bullet) && map instanceof CaveMap) || bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 4000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000) {
-                bulletIterator.remove();
-            }}
+            if (bulletIterator != null) {
+                if ((this.map.mapCollision(bullet) && map instanceof CaveMap) || bullet.coordinates.topLeftCorner_y < -100 || bullet.coordinates.topLeftCorner_y > 4000 || bullet.coordinates.topLeftCorner_x < -100 || bullet.coordinates.topLeftCorner_x > 3000) {
+                    bulletIterator.remove();
+                }
+            }
         }
 
         Iterator<Bullet> bulletIteratorEnemy = enemyBullets.iterator();
@@ -367,7 +369,6 @@ public class Gameplay {
         for (ItemStack item : stacksOnWorld) {
             panel.draw(item.item);
         }
-
         if ((map instanceof AsteroidMap) || (map instanceof AsteroidMap2)) {
             panel.draw(ship);
         }
@@ -660,52 +661,107 @@ public class Gameplay {
         //down left section
         if (rocks.size() == 0 && player.coordinates.topLeftCorner_y < 2510 && player.coordinates.topLeftCorner_x < 650) {
             rocks = new ArrayList<>();
-            rock = new GameObject(new Coordinates(310, 2530, 104, 106), rockImage);
-            dropRock(rock);
-            rock = new GameObject(new Coordinates(400, 2530, 104, 106), rockImage);
-            rocks.add(rock);
+            rock = new GameObject(new Coordinates(330, 2530, 104, 106), rockImage);
+            if (rocks.size() == 0) {
+                rocks.add(rock);
+                dropRock(rock, 2000);
+            }
+            rock = new GameObject(new Coordinates(430, 2530, 104, 106), rockImage);
+            if (rocks.size() == 1) {
+                rocks.add(rock);
+                dropRock(rock, 2200);
+            }
         }
         //down right section
         else if (rocks.size() == 0 && player.coordinates.topLeftCorner_y < 2510 && player.coordinates.topLeftCorner_x > 650) {
             rocks = new ArrayList<>();
-            rock = new GameObject(new Coordinates(710, 2530, 104, 106), rockImage);
-            rocks.add(rock);
-            rock = new GameObject(new Coordinates(810, 2530, 104, 106), rockImage);
-            rocks.add(rock);
+            rock = new GameObject(new Coordinates(735, 2530, 104, 106), rockImage);
+            if (rocks.size() == 0) {
+                rocks.add(rock);
+                dropRock(rock, 2000);
+            }
+            rock = new GameObject(new Coordinates(840, 2530, 104, 106), rockImage);
+            if (rocks.size() == 1) {
+                rocks.add(rock);
+                dropRock(rock, 2100);
+            }
         }
         //center section
-        else if (rocks.size() <= 6 && player.coordinates.topLeftCorner_y < 1820) {
-            rock = new GameObject(new Coordinates(200, 1839, 104, 106), rockImage);
-            rocks.add(rock);
-            rock = new GameObject(new Coordinates(320, 1839, 104, 106), rockImage);
-            rocks.add(rock);
-            rock = new GameObject(new Coordinates(570, 1839, 104, 106), rockImage);
-            rocks.add(rock);
-            rock = new GameObject(new Coordinates(711, 1839, 104, 106), rockImage);
-            rocks.add(rock);
+        else if (rocks.size() <= 2 && player.coordinates.topLeftCorner_y < 1820) {
+            rock = new GameObject(new Coordinates(180, 1849, 104, 106), rockImage);
+            if (rocks.size() == 2) {
+                rocks.add(rock);
+                dropRock(rock, 1300);
+            }
+            rock = new GameObject(new Coordinates(280, 1840, 104, 106), rockImage);
+            if (rocks.size() == 3) {
+                rocks.add(rock);
+                dropRock(rock, 1200);
+            }
+            rock = new GameObject(new Coordinates(376, 1839, 104, 106), rockImage);
+            if (rocks.size() == 4) {
+                rocks.add(rock);
+                dropRock(rock, 1220);
+            }
+            rock = new GameObject(new Coordinates(580, 1839, 104, 106), rockImage);
+            if (rocks.size() == 5) {
+                rocks.add(rock);
+                dropRock(rock, 1280);
+            }
+            rock = new GameObject(new Coordinates(681, 1839, 104, 106), rockImage);
+            if (rocks.size() == 6) {
+                rocks.add(rock);
+                dropRock(rock, 1305);
+            }
+            rock = new GameObject(new Coordinates(781, 1839, 104, 106), rockImage);
+            if (rocks.size() == 7) {
+                rocks.add(rock);
+                dropRock(rock, 1212);
+            }
         }
         //top left section
-        else if (rocks.size() <= 10 && player.coordinates.topLeftCorner_y < 1600 && player.coordinates.topLeftCorner_x < 650) {
-            rock = new GameObject(new Coordinates(320, 1620, 104, 106), rockImage);
-            rocks.add(rock);
-            rock = new GameObject(new Coordinates(400, 1620, 104, 106), rockImage);
-            rocks.add(rock);
+        else if (rocks.size() <= 8 && player.coordinates.topLeftCorner_y < 1600 && player.coordinates.topLeftCorner_x < 650) {
+            rock = new GameObject(new Coordinates(350, 1620, 104, 106), rockImage);
+            if (rocks.size() == 8) {
+                rocks.add(rock);
+                dropRock(rock, 1100);
+            }
+            rock = new GameObject(new Coordinates(430, 1620, 104, 106), rockImage);
+            if (rocks.size() == 9) {
+                rocks.add(rock);
+                dropRock(rock, 1300);
+            }
         }
         //top right section
         else if (rocks.size() <= 10 && player.coordinates.topLeftCorner_y < 1600 && player.coordinates.topLeftCorner_x > 650) {
-            rock = new GameObject(new Coordinates(670, 1620, 104, 106), rockImage);
-            rocks.add(rock);
+            rock = new GameObject(new Coordinates(690, 1620, 104, 106), rockImage);
+            if (rocks.size() == 10) {
+                rocks.add(rock);
+                dropRock(rock, 1010);
+            }
         }
         //boss section
         else if (rocks.size() <= 15 && player.coordinates.topLeftCorner_y < 700) {
-            rock = new GameObject(new Coordinates(335, 730, 104, 106), rockImage);
-            rocks.add(rock);
-            rock = new GameObject(new Coordinates(440, 730, 104, 106), rockImage);
-            rocks.add(rock);
-            rock = new GameObject(new Coordinates(680, 730, 104, 106), rockImage);
-            rocks.add(rock);
-            rock = new GameObject(new Coordinates(760, 730, 104, 106), rockImage);
-            rocks.add(rock);
+            rock = new GameObject(new Coordinates(365, 730, 104, 106), rockImage);
+            if (rocks.size() == 10) {
+                rocks.add(rock);
+                dropRock(rock, 200);
+            }
+            rock = new GameObject(new Coordinates(470, 730, 104, 106), rockImage);
+            if (rocks.size() == 11) {
+                rocks.add(rock);
+                dropRock(rock, 300);
+            }
+            rock = new GameObject(new Coordinates(697, 730, 104, 106), rockImage);
+            if (rocks.size() == 12) {
+                rocks.add(rock);
+                dropRock(rock, 220);
+            }
+            rock = new GameObject(new Coordinates(789, 730, 104, 106), rockImage);
+            if (rocks.size() == 13) {
+                rocks.add(rock);
+                dropRock(rock, 280);
+            }
         }
 
         // ACTIVATE FINAL BOSS
@@ -716,7 +772,7 @@ public class Gameplay {
                 objects.get(0).image = floorSymbol;
 
                 enemies.removeAll(enemies);
-                this.enemies.add(new BossOctopus(500, 500));
+                this.enemies.add(new BossOctopus(400, 200));
 
             } catch (Exception e) {
                 System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
@@ -731,23 +787,24 @@ public class Gameplay {
 //        }
     }
 
-    private void dropRock(GameObject rock) {
+    private void dropRock(GameObject rock, double startY) {
 
-        final GameObject[] rockToDrop = new GameObject[1];
+//        final GameObject[] rockToDrop = new GameObject[1];
         final double x = rock.coordinates.topLeftCorner_x;
         final double finalY = rock.coordinates.topLeftCorner_y;
-        final double startY = 0;
-        Timer timer = new Timer(10, new ActionListener() {
+        rock.coordinates.topLeftCorner_y = startY;
+        Timer timer = new Timer(1, new ActionListener() {
             double dy = startY;
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (dy < finalY) {
-                    rockToDrop[0] = new GameObject(new Coordinates(x, dy, 104, 106), rock.image);
-                    dy += 1;
+                    rock.coordinates.moveY(1);
+//                    rockToDrop[0] = new GameObject(new Coordinates(x, dy, 104, 106), rock.image);
+                    dy += 2;
                     rock.coordinates.topLeftCorner_y = dy;
-                    panel.draw(rockToDrop[0]);
-                } else {
+//                    panel.draw(rockToDrop[0]);
+                } else if (dy >= finalY) {
                     rock.coordinates.topLeftCorner_y = finalY;
                     ((Timer) e.getSource()).stop();
                     return;
@@ -760,7 +817,6 @@ public class Gameplay {
         if (!timer.isRunning())
             rocks.add(rock);
 
-
     }
 
 
@@ -768,17 +824,18 @@ public class Gameplay {
 
         System.out.println("Boss killed");
 
+        //drops car key
+        if (stacksOnWorld.size() == 0)
+            stacksOnWorld.add(new ItemStack(
+                    new CarKey(
+                            new Coordinates(475, 440, 48, 29),
+                            Gameplay.ship
+                    ), 1, false));
+
         try {
             BufferedImage floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_win.png"));
             objects.get(0).image = floorSymbol;
             beginnerNPC.quest.completed = true;
-
-            //drops car key
-            stacksOnWorld.add(new ItemStack(
-                    new CarKey(
-                            new Coordinates(450, 450, 48, 29),
-                            ship
-                    ), 1, false));
 
         } catch (Exception e) {
             System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
@@ -809,7 +866,7 @@ public class Gameplay {
         victoryFailPanel.setVisible(true);
     }
 
-    private String getInitialText () {
+    private String getInitialText() {
         return "\n My peaceful interstellar journey has been abruptly interrupted by a sudden ambush, " +
                 "throwing me off course and leaving me on this deserted asteroid. The ship seems to have " +
                 "remained intact, but there is no sign of the access card. How will I get out of this place?" + "\n" + "\n" +
