@@ -9,7 +9,7 @@ public class Quest {
     public String finalText;
     public int coinsReward;
     public int xpReward;
-    public Item itemReward;
+    public Item item;
     public boolean completed = false;
 
     public Quest(String initialText, String finalText, int coinsReward, Item itemReward, int xpReward) {
@@ -17,7 +17,7 @@ public class Quest {
         this.finalText = finalText;
         this.coinsReward = coinsReward;
         this.xpReward = xpReward;
-        this.itemReward = itemReward;
+        this.item = itemReward;
     }
 
     public void complete() {
@@ -25,7 +25,7 @@ public class Quest {
 
         //Reward is given to the player instantly (doesnt wait till the player talks
         //to the NPC again)
-        Gameplay.inventory.addStack(new ItemStack(itemReward, 1, true));
+        Gameplay.inventory.addStack(new ItemStack(item, 1, true));
         Gameplay.player.coins += coinsReward;
         Gameplay.player.gainXp(xpReward);
     }
