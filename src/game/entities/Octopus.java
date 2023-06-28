@@ -124,9 +124,9 @@ public class Octopus extends Enemy{
         // If the player is within x pixels, the enemy is hostile
         // If the player is within y pixels, the enemy is shooting
         // Otherwise the enemy is friendly
-        if (distance < 350 || this.enemyState == EnemyState.HOSTILE || this.enemyState == EnemyState.ATTACKING) {
-            this.speed = 7;
-            if (distance < 330 && this.timeSinceLastShot > this.shootingCooldown){
+        if (distance < 320) {
+            this.speed = 15;
+            if (distance < 280 && this.timeSinceLastShot > this.shootingCooldown){
                 this.enemyState = EnemyState.ATTACKING;
             }else{
                 this.enemyState = EnemyState.HOSTILE;
@@ -210,14 +210,14 @@ public class Octopus extends Enemy{
     }
 
     public void shoot() {
-        Gameplay.enemyBullets.add(new Bullet(0, this.coordinates, Bullet.ENEMY, 5, 10));
-        Gameplay.enemyBullets.add(new Bullet(45, this.coordinates, Bullet.ENEMY, 5, 10));
-        Gameplay.enemyBullets.add(new Bullet(90, this.coordinates, Bullet.ENEMY, 5, 10));
-        Gameplay.enemyBullets.add(new Bullet(135, this.coordinates, Bullet.ENEMY, 5, 10));
-        Gameplay.enemyBullets.add(new Bullet(180, this.coordinates, Bullet.ENEMY, 5, 10));
-        Gameplay.enemyBullets.add(new Bullet(225, this.coordinates, Bullet.ENEMY, 5, 10));
-        Gameplay.enemyBullets.add(new Bullet(270, this.coordinates, Bullet.ENEMY, 5, 10));
-        Gameplay.enemyBullets.add(new Bullet(315, this.coordinates, Bullet.ENEMY, 5, 10));
+        Gameplay.enemyBullets.add(new Bullet(0, this.coordinates, Bullet.ENEMY, 5, 10, 450));
+        Gameplay.enemyBullets.add(new Bullet(45, this.coordinates, Bullet.ENEMY, 5, 10, 450));
+        Gameplay.enemyBullets.add(new Bullet(90, this.coordinates, Bullet.ENEMY, 5, 10, 450));
+        Gameplay.enemyBullets.add(new Bullet(135, this.coordinates, Bullet.ENEMY, 5, 10, 450));
+        Gameplay.enemyBullets.add(new Bullet(180, this.coordinates, Bullet.ENEMY, 5, 10, 450));
+        Gameplay.enemyBullets.add(new Bullet(225, this.coordinates, Bullet.ENEMY, 5, 10, 450));
+        Gameplay.enemyBullets.add(new Bullet(270, this.coordinates, Bullet.ENEMY, 5, 10, 450));
+        Gameplay.enemyBullets.add(new Bullet(315, this.coordinates, Bullet.ENEMY, 5, 10, 450));
     }
 
 }

@@ -15,8 +15,11 @@ public class Bullet extends Enemy{
     public final static int PLAYER = 2;
     public int owner;
     public int angle;
-    public Bullet(int angle, Coordinates coordinates, int owner, int speed, int attack) {
+    public int traveledDistance;
+    public int maxTraveledDistance;
+    public Bullet(int angle, Coordinates coordinates, int owner, int speed, int attack, int maxTraveledDistance) {
         super();
+        this.maxTraveledDistance = maxTraveledDistance;
         this.attack = attack;
         this.speed = speed;
         this.angle = angle;
@@ -36,8 +39,9 @@ public class Bullet extends Enemy{
         this.sprites.current = rotateImageByDegrees(bulletImage, angle);
     }
 
-    public Bullet(int angle, Coordinates coordinates, int owner, int speed, int attack, String bulletPath) {
+    public Bullet(int angle, Coordinates coordinates, int owner, int speed, int attack, String bulletPath, int maxTraveledDistance) {
         super();
+        this.maxTraveledDistance = maxTraveledDistance;
         this.attack = attack;
         this.speed = speed;
         this.angle = angle;
@@ -70,5 +74,11 @@ public class Bullet extends Enemy{
 
         coordinates.moveX(dx * this.speed * diffSeconds);
         coordinates.moveY(dy * this.speed * diffSeconds);
+
+        this.traveledDistance += (int)Math.sqrt(dx*dx + dy*dy) ;
+    }
+
+    public Boolean isTraveledMax(){
+        return this.traveledDistance > this.maxTraveledDistance;
     }
 }
