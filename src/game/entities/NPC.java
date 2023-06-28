@@ -5,7 +5,6 @@ import game.GameObject;
 import game.Quest;
 import game.inventory.HealthElixir;
 import game.inventory.ItemStack;
-import gui.GameFrame;
 import main.Gameplay;
 
 import javax.imageio.ImageIO;
@@ -18,6 +17,7 @@ public class NPC extends GameObject {
 
     public BufferedImage sprite;
     public Quest quest;
+    public boolean firstItemGiven = false;
     public boolean rewardGiven = false;
     private boolean npcDone = false;
     public boolean interacting = false;
@@ -54,21 +54,25 @@ public class NPC extends GameObject {
                 rewardGiven = true;
                 Gameplay.player.gainXp(quest.xpReward);
                 Gameplay.player.coins += quest.coinsReward;
-                Gameplay.inventory.addStack(new ItemStack(quest.itemReward, 1, true));
+                Gameplay.inventory.addStack(new ItemStack(quest.item, 1, true));
                 toBeReturned = quest.finalText;
-            }else if (rewardGiven && !npcDone){
+            } else if (rewardGiven && !npcDone) {
                 toBeReturned = quest.finalText;
-            }else if (npcDone){
+            } else if (npcDone) {
                 toBeReturned = "I have nothing more to say to you.";
             }
-        }else{
+        } else if (!firstItemGiven) {
+            Gameplay.inventory.addStack(new ItemStack(new HealthElixir(
+                    new Coordinates(0, 0, 0, 0)
+            ), 5, true));
+            Gameplay.inventoryPanel.updateInventoryUI();
             toBeReturned = quest.initialText;
         }
         return toBeReturned;
 
     }
 
-    public void stopInteracting(){
+    public void stopInteracting() {
         this.interacting = false;
         if (quest.completed && rewardGiven) {
             npcDone = true;
@@ -76,7 +80,7 @@ public class NPC extends GameObject {
     }
 
     public void draw(Graphics graphics) {
-        if(coordinates.inScreen()) {
+        if (coordinates.inScreen()) {
             graphics.drawImage(sprite, (int) coordinates.screenX - 24, (int) coordinates.screenY - 24, null);
         }
         // draw circle around player

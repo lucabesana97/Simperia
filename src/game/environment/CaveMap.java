@@ -3,6 +3,10 @@ package game.environment;
 import game.Coordinates;
 import game.GameObject;
 import game.entities.*;
+import game.inventory.CarKey;
+import game.inventory.HealthElixir;
+import game.inventory.ItemStack;
+import main.Gameplay;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -28,7 +32,7 @@ public class CaveMap extends GameMap {
         try {
             floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_inactive.png"));
 
-            objects.add(new GameObject(new Coordinates(280, 240, 455, 453), floorSymbol));
+            objects.add(new GameObject(new Coordinates(300, 250, 455, 453), floorSymbol));
         } catch (Exception e) {
             System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
 
