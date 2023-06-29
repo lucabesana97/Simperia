@@ -44,7 +44,7 @@ public class AsteroidMap extends GameMap {
 
     public AsteroidMap() {
         load();
-/*
+
         enemies.add(new Octopus(1413, 1125));
         enemies.add(new Maurice(1413, 1199));
         enemies.add(new Octopus(1297, 1365));
@@ -52,20 +52,20 @@ public class AsteroidMap extends GameMap {
         enemies.add(new Octopus(1028, 1251));
         enemies.add(new Maurice(904, 1120));
         enemies.add(new Octopus(691, 1120));
-        enemies.add(new Maurice(503, 1025));
+        enemies.add(new Maurice(675, 990));
         enemies.add(new Octopus(506, 1193));
-        enemies.add(new Maurice(398, 1118));
-        enemies.add(new Octopus(341, 1277));
-        enemies.add(new Maurice(234, 1171));
-        enemies.add(new Octopus(253, 1047));
+        enemies.add(new Maurice(482, 1259));
+        enemies.add(new Octopus(625, 1082));
+        enemies.add(new Maurice(696, 1362));
+        enemies.add(new Octopus(678, 1225));
         enemies.add(new Octopus(901, 93));
         enemies.add(new Maurice(1213, 238));
         enemies.add(new Octopus(1459, 406));
-        enemies.add(new Maurice(1575, 570));
+        enemies.add(new Maurice(1480, 570));
         enemies.add(new Octopus(1758, 570));
         enemies.add(new Octopus(750,700));
-*/
-        beginnerNPC = new NPC(new Coordinates(472, 150, 37, 64));
+
+        beginnerNPC = new NPC(new Coordinates(1349, 187, 37, 64));
 //        warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
         mapWarps.add(new Warp(CaveID, new Coordinates(500, 1090, 32, 32), new Coordinates(200, 3150, 32, 32), player));
 

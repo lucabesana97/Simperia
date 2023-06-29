@@ -148,6 +148,8 @@ public class Player extends Entity implements Movable {
 
         }
 
+        System.out.println("x: " + coordinates.topLeftCorner_x + " y: " + coordinates.topLeftCorner_y);
+
 
     }
 
