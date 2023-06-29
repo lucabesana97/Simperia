@@ -165,16 +165,23 @@ public class Player extends Entity implements Movable {
         if(xState != MovingState.STILL && yState != MovingState.STILL){
             moveBy *= Math.sqrt(2) / 2;
             coordinates.moveX((xState == MovingState.RIGHT) ? moveBy : -moveBy);
+            if(Gameplay.map.mapCollision(this)){
+                coordinates.topLeftCorner_x = lastX;
+            }
             coordinates.moveY((yState == MovingState.DOWN) ? moveBy : -moveBy);
+            if(Gameplay.map.mapCollision(this)){
+                coordinates.topLeftCorner_y = lastY;
+            }
         } else if (xState != MovingState.STILL){
             coordinates.moveX((xState == MovingState.RIGHT) ? moveBy : -moveBy);
+            if(Gameplay.map.mapCollision(this)){
+                coordinates.topLeftCorner_x = lastX;
+            }
         } else if (yState != MovingState.STILL){
             coordinates.moveY((yState == MovingState.DOWN) ? moveBy : -moveBy);
-        }
-
-        if(Gameplay.map.mapCollision(this)){
-            coordinates.topLeftCorner_x = lastX;
-            coordinates.topLeftCorner_y = lastY;
+            if(Gameplay.map.mapCollision(this)){
+                coordinates.topLeftCorner_y = lastY;
+            }
         }
 
         if(xState == MovingState.STILL && yState == MovingState.STILL) {footstepCounter = 3.5;}

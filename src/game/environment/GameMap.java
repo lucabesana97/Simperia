@@ -98,7 +98,6 @@ public class GameMap {
                 grid[(int)((checkX) / 16)][(int)((checkY + 12) / 16)] == 1 ||
                 grid[(int)((checkX + 12) / 16)][(int)((checkY + 12) / 16)] == 1
         ){
-//            System.out.println("cucucaca");
             return true;
         }
         return false;
