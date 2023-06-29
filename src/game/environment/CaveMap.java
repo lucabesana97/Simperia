@@ -90,8 +90,8 @@ public class CaveMap extends GameMap {
         */
 //        items.add(new HealthElixir(new Coordinates(1000, 1000, 32, 32)));
 //        mapWarps.add(new Warp(asteroid2ID, new Coordinates(240,220,32,32), new Coordinates(202,342,32,32), player));
-        mapWarps.add(new Warp(asteroidID, new Coordinates(190, 3100, 32, 32),new Coordinates(530, 1110, 32, 32), player));
-        mapWarps.add(new Warp(asteroid2ID, new Coordinates(400, 450, 32, 32),new Coordinates(530, 1110, 32, 32), player));
+        mapWarps.add(new Warp(asteroidID, new Coordinates(190, 3100, 32, 32),new Coordinates(550, 1130, 32, 32), player));
+        mapWarps.add(new Warp(asteroid2ID, new Coordinates(400, 450, 32, 32),new Coordinates(550, 1130, 32, 32), player));
 
     }
 

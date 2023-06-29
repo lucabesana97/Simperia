@@ -34,7 +34,7 @@ public class AsteroidMap2 extends GameMap {
                 String line = br.readLine();
                 String numbers[] = line.split(",");
                 for(int j = 0; j < 128; j++) {
-                    grid[i][j] = Integer.parseInt(numbers[j]);
+                    grid[j][i] = Integer.parseInt(numbers[j]);
                 }
             }
             br.close();
