@@ -125,7 +125,7 @@ public class Octopus extends Enemy{
         // If the player is within y pixels, the enemy is shooting
         // Otherwise the enemy is friendly
         if (distance < 320) {
-            this.speed = 15;
+            this.speed = 10;
             if (distance < 280 && this.timeSinceLastShot > this.shootingCooldown){
                 this.enemyState = EnemyState.ATTACKING;
             }else{
