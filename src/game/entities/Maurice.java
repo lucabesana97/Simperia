@@ -108,7 +108,7 @@ public class Maurice extends Enemy{
         // If the player is within y pixels, the enemy is shooting
         // Otherwise the enemy is friendly
         if (distance < 400){
-            this.speed = 20;
+            this.speed = 12;
             if (distance < 2 && this.timeSinceLastAttack > this.attackingCooldown){
                 this.enemyState = EnemyState.ATTACKING;
             }else{

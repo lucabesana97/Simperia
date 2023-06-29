@@ -5,25 +5,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.Timer;
 
 import game.Coordinates;
 import game.GameObject;
 import game.environment.AsteroidMap;
 import game.environment.AsteroidMap2;
 import game.environment.CaveMap;
-import game.inventory.CarKey;
-import game.inventory.Item;
+import game.inventory.*;
 import game.GameState;
 import game.entities.*;
 import game.environment.GameMap;
-import game.inventory.Inventory;
-import game.inventory.ItemStack;
 import gui.*;
 import gui.Panel;
 import gui.elements.HUD;
@@ -199,6 +195,7 @@ public class Gameplay {
         while (enemyIter.hasNext()) {
             Enemy enemy = enemyIter.next();
             if (enemy != null && enemy.enemyState == EnemyState.DEAD) {
+
                 enemyIter.remove();
 
                 //boss killed
@@ -246,7 +243,19 @@ public class Gameplay {
                     System.out.println("Enemy health: " + enemy.health);
                     if (enemy.enemyState != EnemyState.DEAD) {
                         enemy.enemyState = EnemyState.DAMAGED;
+
+                    }else{
+                        // In 10% of the cases, the health potion will drop
+                        Random random = new Random();
+                        int randomInt = random.nextInt(10);
+                        if (randomInt < 3) {
+                            HealthElixir healthPotion = new HealthElixir(new Coordinates(enemy.coordinates.topLeftCorner_x, enemy.coordinates.topLeftCorner_y, 32, 32));
+                            ItemStack healthPotionStack = new ItemStack(healthPotion, 1, false);
+                            this.stacksOnWorld.add(healthPotionStack);
+//                    healthPotions.add(healthPotion);
+                        }
                     }
+
                     bulletIterator.remove();
                     break;
                 }

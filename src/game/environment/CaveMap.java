@@ -64,9 +64,9 @@ public class CaveMap extends GameMap {
         enemies.add(new Octopus(130, 1050));
         enemies.add(new Octopus(200, 1150));
         enemies.add(new Octopus(320, 2790));
-        enemies.add(new Octopus(830, 2860));
-        enemies.add(new Octopus(780, 3020));
-        enemies.add(new Octopus(730, 3060));
+        enemies.add(new Octopus(815, 2840));
+        enemies.add(new Octopus(750, 2980));
+        enemies.add(new Octopus(730, 3030));
         enemies.add(new Octopus(330, 2650));
         enemies.add(new Octopus(870, 2690));
         enemies.add(new Octopus(280, 2450));
@@ -77,7 +77,7 @@ public class CaveMap extends GameMap {
         enemies.add(new Octopus(820, 2490));
         enemies.add(new Octopus(920, 2190));
         enemies.add(new Octopus(780, 1940));
-        enemies.add(new Octopus(480, 1540));
+        enemies.add(new Octopus(460, 1540));
         enemies.add(new Octopus(730, 1540));
         enemies.add(new Octopus(900, 1390));
         enemies.add(new Octopus(920, 1200));
