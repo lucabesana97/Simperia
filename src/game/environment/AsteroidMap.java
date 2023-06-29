@@ -69,6 +69,5 @@ public class AsteroidMap extends GameMap {
 //        warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
         mapWarps.add(new Warp(CaveID, new Coordinates(500, 1090, 32, 32), new Coordinates(200, 3150, 32, 32), player));
 
-        stacksOnWorld.add(new ItemStack(new HealthElixir(new Coordinates(1000, 1000, 32, 32)), 5, false));
     }
 }
