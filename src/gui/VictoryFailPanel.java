@@ -11,6 +11,7 @@ public class VictoryFailPanel extends Panel{
     private final JTextPane textPane;
     private final JButton playButton;
     private final JLabel topLabel;
+    private final JPanel buttonPanel;
     final Color BACKGROUND_COLOR = new Color(51, 51, 51);
     final Color MAIN_COLOR = new Color(0, 254, 254);
     final int FONT_SIZE_TITLE = 27;
@@ -49,7 +50,7 @@ public class VictoryFailPanel extends Panel{
         topLabel.setBackground(BACKGROUND_COLOR);
         topLabel.setOpaque(true);
         topLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        topLabel.setBorder(BorderFactory.createEmptyBorder(70, 10, 30, 10));
+        topLabel.setBorder(BorderFactory.createEmptyBorder(30, 10, 0, 10));
 
         textPane = new JTextPane();
         textPane.setEditable(false);
@@ -82,10 +83,10 @@ public class VictoryFailPanel extends Panel{
         playButton.setMaximumSize(new Dimension(180, 50));
         playButton.setPreferredSize(new Dimension(180, 50));
 
-        JPanel buttonPanel = new JPanel();
+        buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
         buttonPanel.setBackground(BACKGROUND_COLOR);
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 70, 0));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         buttonPanel.add(playButton);
 
         this.add(topLabel);
@@ -105,4 +106,8 @@ public class VictoryFailPanel extends Panel{
         return playButton;
     }
 
+    public void setPaddingToFail (){
+        topLabel.setBorder(BorderFactory.createEmptyBorder(70, 10, 30, 10));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 70, 0));
+    }
 }

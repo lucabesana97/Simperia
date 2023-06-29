@@ -16,9 +16,6 @@ public class Game {
 		this.frame.addKeyListener(keyHandler);
 	}
 
-	public void init() {
-	}
-
 	public void start() {
 		this.panel = new GamePanel();
 		this.panel.setFocusable(true);

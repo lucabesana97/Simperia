@@ -9,10 +9,6 @@ import java.awt.*;
 
 
 public class GamePanel extends Panel {
-	private JLabel levelLabel;
-	final String LABEL_FONT = "Helvetica";
-	final int LABEL_FONT_SIZE = 18;
-
 
 	public GamePanel() {
 		super();

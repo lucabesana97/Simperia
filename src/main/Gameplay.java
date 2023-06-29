@@ -79,7 +79,7 @@ public class Gameplay {
     public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {
         this.panel = (GamePanel) panel;
         this.pausePanel = frame.getPausePanel();
-        this.inventoryPanel = frame.getInventoryPanel();
+        inventoryPanel = frame.getInventoryPanel();
         this.dialogPanel = frame.getDialogPanel();
         this.homePanel = frame.getHomePanel();
         this.infoPanel = frame.getInfoPanel();
@@ -357,10 +357,8 @@ public class Gameplay {
         xpBar.updateXpBar();
         levelLabel.updateLevelLabel();
 
-        // Don't delete this
-        if (player.health <= 0) {
-            fail();
-        }
+        // Player is dead
+        if (player.health <= 0) { fail(); }
 
         System.gc();
     }
@@ -534,15 +532,7 @@ public class Gameplay {
         }
     }
 
-    public void restartGame() { // TODO: fix
-//        gameState = GameState.HOME;
-//        if (pausePanel.isVisible()) {
-//            pausePanel.setVisible
-//            (false);
-//        } else if (victoryFailPanel.isVisible()) {
-//            victoryFailPanel.setVisible(false);
-//        }
-//        homePanel.setVisible(true);
+    public void restartGame() {
         init();
         gameState = GameState.PLAYING;
     }
@@ -914,8 +904,10 @@ public class Gameplay {
         gameState = GameState.WIN;
 
         String victoryTextUp = "Congratulations!";
-        String victoryTextDown = "You have made it! You have found the car key and can now escape this planet! " +
-                "You have won the game!";
+        String victoryTextDown = "You are able now to get out of this deserted asteroid and keep exploring the interstellar " +
+                "space. Prepare for thrilling adventures: explore uncharted galaxies, encounter wonders, and discover " +
+                "new civilizations. Embrace the unknown and let the stars guide you. Bon voyage, brave explorer!\n" + "\n" +
+                "To be continued...";
 
         victoryFailPanel.setTopText(victoryTextUp);
         victoryFailPanel.setBottomText(victoryTextDown);
@@ -930,6 +922,7 @@ public class Gameplay {
 
         victoryFailPanel.setTopText(failTextUp);
         victoryFailPanel.setBottomText(failTextDown);
+        victoryFailPanel.setPaddingToFail();
         victoryFailPanel.setVisible(true);
     }
 
