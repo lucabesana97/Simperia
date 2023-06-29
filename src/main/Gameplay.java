@@ -208,7 +208,13 @@ public class Gameplay {
         while (enemyIter.hasNext()) {
             Enemy enemy = enemyIter.next();
             if (enemy != null && enemy.enemyState == EnemyState.DEAD) {
-
+                if(!isMuted) {
+                    if (enemy.getClass() == Octopus.class) {
+                        effects.playSoundEffect(10);
+                    } else if (enemy.getClass() == Maurice.class) {
+                        effects.playSoundEffect(11);
+                    }
+                }
                 enemyIter.remove();
 
                 //boss killed
