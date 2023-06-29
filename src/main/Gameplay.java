@@ -234,9 +234,10 @@ public class Gameplay {
         while (bulletIterator.hasNext()) {
             Bullet bullet = bulletIterator.next();
             bullet.move(diffSeconds, player);
-            if (bullet.enemyState == EnemyState.DEAD) {
+            if (bullet.enemyState == EnemyState.DEAD || bullet.isTraveledMax()) {
                 bulletIterator.remove();
                 continue;
+//                continue;
             }
             for (Enemy enemy : enemies) {
                 if (enemy.isColliding(bullet)) {
@@ -261,8 +262,9 @@ public class Gameplay {
         while (bulletIteratorEnemy.hasNext()) {
             Bullet bullet = bulletIteratorEnemy.next();
             bullet.move(diffSeconds, player);
-            if (bullet.enemyState == EnemyState.DEAD) {
+            if (bullet.enemyState == EnemyState.DEAD || bullet.isTraveledMax()) {
                 bulletIteratorEnemy.remove();
+                continue;
             }
             if (player.isColliding(bullet)) {
 //                System.out.println("Player health: " + player.health);
@@ -393,7 +395,7 @@ public class Gameplay {
                     if (player.currentWeapon == player.GUN) {
                         if (player.shootState == FightState.READY) {
                             int angle = Utility.getAimAngle(player);
-                            playerBullets.add(new Bullet(angle, player.coordinates, Bullet.PLAYER, 10, 15, "/sprites/player/Player-bullet.png"));
+                            playerBullets.add(new Bullet(angle, player.coordinates, Bullet.PLAYER, 10, 15, "/sprites/player/Player-bullet.png", 200));
                             if (!isMuted) {
                                 effects.playSoundEffect(7);
                             }
