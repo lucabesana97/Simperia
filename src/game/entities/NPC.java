@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Objects;
 
 import static main.Gameplay.player;
@@ -19,7 +20,7 @@ public class NPC extends GameObject {
 
     public BufferedImage sprite;
     public Quest quest;
-    public boolean firstItemGiven = false;
+    //public boolean firstItemGiven = false;
     public boolean rewardGiven = false;
     private boolean npcDone = false;
     public boolean interacting = false;
@@ -51,28 +52,34 @@ public class NPC extends GameObject {
 
     public String interact() {
         this.interacting = true;
+        if(!player.quests.contains(quest)){
+            player.quests.add(quest);
+        }
+
         String toBeReturned = "";
-        if (quest.completed) {
+        Quest playerQuest = player.getQuestById(quest.iD);
+
+        if (playerQuest.completed) {
             if (!rewardGiven) {
                 rewardGiven = true;
-                player.gainXp(quest.xpReward);
-                player.coins += quest.coinsReward;
-                Gameplay.inventory.addStack(new ItemStack(quest.item, 1, true));
-                toBeReturned = quest.finalText;
+                player.gainXp(playerQuest.xpReward);
+                player.coins += playerQuest.coinsReward;
+                Gameplay.inventory.addStack(new ItemStack(playerQuest.item, 1, true));
+                toBeReturned = playerQuest.finalText;
             } else if (rewardGiven && !npcDone) {
-                toBeReturned = quest.finalText;
+                toBeReturned = playerQuest.finalText;
             } else if (npcDone) {
                 toBeReturned = "I have nothing more to say to you.";
             }
-        } else if (!firstItemGiven) {
+        } else if (!playerQuest.firstItemGiven) {
             Gameplay.inventory.addStack(new ItemStack(new HealthElixir(
                     new Coordinates(0, 0, 0, 0)
             ), 5, true));
             Gameplay.inventoryPanel.updateInventoryUI();
-            toBeReturned = quest.initialText;
-        }
-        if(!player.quests.contains(quest)){
-            player.quests.add(quest);
+            toBeReturned = playerQuest.initialText;
+            playerQuest.firstItemGiven = true;
+        } else{
+            toBeReturned = "My life is in your hands, I'm counting on you!";
         }
         return toBeReturned;
 

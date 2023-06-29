@@ -10,6 +10,7 @@ public class Quest {
     public int coinsReward;
     public int xpReward;
     public Item item;
+    public boolean firstItemGiven = false;
     public boolean completed = false;
     public int iD;
     public Quest(String initialText, String finalText, int coinsReward, Item itemReward, int xpReward, int iD) {

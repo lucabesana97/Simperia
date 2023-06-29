@@ -265,6 +265,7 @@ public class Player extends Entity implements Movable {
         levelXp = (level * level)/2 * 100;
         xpToNextLevel = levelXp;
         gainXp(xpLeft);
+        attack += 10;
     }
 
     public boolean isColliding(ItemStack itemStack){
@@ -403,5 +404,14 @@ public class Player extends Entity implements Movable {
     public boolean closeToDownWall(){
         if(coordinates.topLeftCorner_y > mapHeight - (int)(GameFrame.HEIGHT/2)){return true;}
         return false;
+    }
+
+    public Quest getQuestById(int questId) {
+        for (Quest quest : quests) {
+            if (quest.iD == questId) {
+                return quest;
+            }
+        }
+        return null; // Quest with the specified ID not found
     }
 }

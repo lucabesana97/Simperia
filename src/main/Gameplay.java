@@ -883,7 +883,7 @@ public class Gameplay {
         System.out.println("Boss killed");
 
         //drops car key
-        if (stacksOnWorld.size() == 0)
+        //if (stacksOnWorld.size() == 0)
             stacksOnWorld.add(new ItemStack(
                     new CarKey(
                             new Coordinates(475, 440, 48, 29),
