@@ -11,13 +11,14 @@ public class Quest {
     public int xpReward;
     public Item item;
     public boolean completed = false;
-
-    public Quest(String initialText, String finalText, int coinsReward, Item itemReward, int xpReward) {
+    public int iD;
+    public Quest(String initialText, String finalText, int coinsReward, Item itemReward, int xpReward, int iD) {
         this.initialText = initialText;
         this.finalText = finalText;
         this.coinsReward = coinsReward;
         this.xpReward = xpReward;
         this.item = itemReward;
+        this.iD = iD;
     }
 
     public void complete() {
@@ -29,5 +30,4 @@ public class Quest {
         Gameplay.player.coins += coinsReward;
         Gameplay.player.gainXp(xpReward);
     }
-
 }

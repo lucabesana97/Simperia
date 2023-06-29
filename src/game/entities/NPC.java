@@ -13,6 +13,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+import static main.Gameplay.player;
+
 public class NPC extends GameObject {
 
     public BufferedImage sprite;
@@ -41,7 +43,8 @@ public class NPC extends GameObject {
                 new HealthElixir(
                         new Coordinates(0, 0, 0, 0)
                 ),
-                100
+                100,
+                1
         );
 
     }
@@ -52,8 +55,8 @@ public class NPC extends GameObject {
         if (quest.completed) {
             if (!rewardGiven) {
                 rewardGiven = true;
-                Gameplay.player.gainXp(quest.xpReward);
-                Gameplay.player.coins += quest.coinsReward;
+                player.gainXp(quest.xpReward);
+                player.coins += quest.coinsReward;
                 Gameplay.inventory.addStack(new ItemStack(quest.item, 1, true));
                 toBeReturned = quest.finalText;
             } else if (rewardGiven && !npcDone) {
@@ -67,6 +70,9 @@ public class NPC extends GameObject {
             ), 5, true));
             Gameplay.inventoryPanel.updateInventoryUI();
             toBeReturned = quest.initialText;
+        }
+        if(!player.quests.contains(quest)){
+            player.quests.add(quest);
         }
         return toBeReturned;
 

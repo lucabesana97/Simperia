@@ -2,12 +2,13 @@ package game.entities;
 
 import game.Coordinates;
 import game.Movable;
+import game.Quest;
 import game.inventory.ItemStack;
 import gui.GameFrame;
 import helperFunctions.Utility;
 import main.Gameplay;
-import objState.MovingState;
 import objState.FightState;
+import objState.MovingState;
 import output.Sound;
 
 import javax.imageio.ImageIO;
@@ -15,8 +16,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-import static helperFunctions.Utility.*;
+import static helperFunctions.Utility.createFlipped;
+import static helperFunctions.Utility.rotateImageByDegrees;
 
 public class Player extends Entity implements Movable {
     public static final int SWORD = 0;
@@ -52,7 +56,7 @@ public class Player extends Entity implements Movable {
     private double footstepCounter = 3.5;
     private BufferedImage[] spritesAttackSlash;
     public MovingState previousStateX, previousStateY;
-    //public List<Item> items = new ArrayList<>();
+    public List<Quest> quests = new ArrayList<>();
 
     public Player() {
         spritesDown = loadSprites("/sprites/player/Down-gun-", 2);

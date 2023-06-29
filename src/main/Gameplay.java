@@ -13,6 +13,7 @@ import javax.swing.Timer;
 
 import game.Coordinates;
 import game.GameObject;
+import game.Quest;
 import game.environment.AsteroidMap;
 import game.environment.AsteroidMap2;
 import game.environment.CaveMap;
@@ -824,11 +825,15 @@ public class Gameplay {
                 BufferedImage floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_fight.png"));
                 objects.get(0).image = floorSymbol;
 
+            } catch (Exception e) {
+                System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
+            }
+            try {
                 enemies.removeAll(enemies);
                 this.enemies.add(new BossOctopus(400, 200));
 
             } catch (Exception e) {
-                System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
+                System.out.println("Couldn't spawn boss: " + "\tReason: " + e.getCause());
             }
         }
 
@@ -888,7 +893,13 @@ public class Gameplay {
         try {
             BufferedImage floorSymbol = ImageIO.read(getClass().getResourceAsStream("/sprites/maps/cavern_floor_win.png"));
             objects.get(0).image = floorSymbol;
-            beginnerNPC.quest.completed = true;
+            Iterator<Quest> questIter = player.quests.iterator();
+            while (questIter.hasNext()) {
+                Quest quest = questIter.next();
+                if (quest != null && quest.iD == 1) {
+                    quest.completed = true;
+                }
+            }
 
         } catch (Exception e) {
             System.out.println("Couldn't load floor symbol: " + "\tReason: " + e.getCause());
