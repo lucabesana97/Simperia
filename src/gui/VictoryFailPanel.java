@@ -74,14 +74,14 @@ public class VictoryFailPanel extends Panel{
         scrollPane.setSize(new Dimension(vicPanelWidth,vicPanelHeight / 2));
         scrollPane.setViewportBorder(BorderFactory.createEmptyBorder(10, 10, 10, 0)); // Set the margin
 
-        playButton = new JButton("PLAY AGAIN");
+        playButton = new JButton("QUIT");
         playButton.setFont(new Font(customFont, Font.PLAIN, FONT_SIZE_TEXT));
         playButton.setForeground(Color.WHITE);
         playButton.setBackground(BACKGROUND_COLOR);
         playButton.setBorder(BorderFactory.createLineBorder(MAIN_COLOR, 2));
         playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        playButton.setMaximumSize(new Dimension(180, 50));
-        playButton.setPreferredSize(new Dimension(180, 50));
+        playButton.setMaximumSize(new Dimension(130, 50));
+        playButton.setPreferredSize(new Dimension(130, 50));
 
         buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));

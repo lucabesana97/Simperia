@@ -112,6 +112,7 @@ public class Gameplay {
         map = new AsteroidMap();
         player = new Player();
         map.init(player);
+        this.bossSpawned = false;
 
         loadObjects();
         inventory = new Inventory();
@@ -666,7 +667,7 @@ public class Gameplay {
                 if (!isMuted) {
                     effects.playSoundEffect(9);
                 }
-                restartGame();
+                quitGame();
             }
         });
     }
