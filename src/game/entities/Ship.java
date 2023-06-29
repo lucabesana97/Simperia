@@ -13,7 +13,6 @@ public class Ship extends GameObject {
     public Ship(Coordinates coordinates) {
         super(coordinates);
         initSprite();
-
     }
 
     public void initSprite() {

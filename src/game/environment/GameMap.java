@@ -16,9 +16,9 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class GameMap {
-    protected static final int asteroidID = 0;
-    protected static final int CaveID = 1;
-    protected static final int asteroid2ID = 2;
+    public static final int asteroidID = 0;
+    public static final int CaveID = 1;
+    public static final int asteroid2ID = 2;
     public BufferedImage mapImage;
     public static int[][] mapCollision;
     public Player player;

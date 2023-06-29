@@ -215,6 +215,7 @@ public class Gameplay {
                 if (map instanceof CaveMap && enemies.isEmpty() && this.bossSpawned) {
 
                     bossKilled();
+                    mapWarps.add(new Warp(GameMap.asteroid2ID, new Coordinates(510, 460, 32, 32),new Coordinates(550, 1130, 32, 32), player));
 
                 }
 
@@ -888,7 +889,7 @@ public class Gameplay {
         //if (stacksOnWorld.size() == 0)
             stacksOnWorld.add(new ItemStack(
                     new CarKey(
-                            new Coordinates(475, 440, 48, 29),
+                            new Coordinates(475, 500, 48, 29),
                             Gameplay.ship
                     ), 1, false));
 
