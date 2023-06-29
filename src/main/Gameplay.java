@@ -357,9 +357,9 @@ public class Gameplay {
         levelLabel.updateLevelLabel();
 
         // Don't delete this
-//        if (player.health <= 0) {
-//            fail();
-//        } TODO
+        if (player.health <= 0) {
+            fail();
+        }
 
         System.gc();
     }
@@ -542,6 +542,8 @@ public class Gameplay {
 //            victoryFailPanel.setVisible(false);
 //        }
 //        homePanel.setVisible(true);
+        init();
+        gameState = GameState.PLAYING;
     }
 
     public void quitGame() {
