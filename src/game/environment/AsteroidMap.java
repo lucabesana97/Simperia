@@ -44,6 +44,7 @@ public class AsteroidMap extends GameMap {
 
     public AsteroidMap() {
         load();
+        /*
         enemies.add(new Octopus(1413, 1125));
         enemies.add(new Maurice(1413, 1199));
         enemies.add(new Octopus(1297, 1365));
@@ -63,10 +64,10 @@ public class AsteroidMap extends GameMap {
         enemies.add(new Maurice(1575, 570));
         enemies.add(new Octopus(1758, 570));
         enemies.add(new Octopus(750,700));
-
+        */
         beginnerNPC = new NPC(new Coordinates(472, 150, 37, 64));
 //        warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
-        mapWarps.add(new Warp(CaveID, new Coordinates(245, 1262, 32, 32), new Coordinates(200, 3150, 32, 32), player));
+        mapWarps.add(new Warp(CaveID, new Coordinates(500, 1090, 32, 32), new Coordinates(200, 3150, 32, 32), player));
 
         stacksOnWorld.add(new ItemStack(new HealthElixir(new Coordinates(1000, 1000, 32, 32)), 5, false));
     }
