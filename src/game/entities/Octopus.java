@@ -23,7 +23,7 @@ public class Octopus extends Enemy{
     public double timeSinceLastShot = 30;
     private List<int[]> lastPath = null;
     private int currentDestinationID = 0;
-    public Octopus(int x, int y) {
+    public Octopus(int x, int y, int iD) {
         super();
         this.speed = 5;
         this.name = "Octopus";
@@ -32,6 +32,7 @@ public class Octopus extends Enemy{
         this.experienceOnKill = 40;
         this.coordinates = new Coordinates(x, y, 42, 26);
         this.whereToMove = getNewCoordinates(); // Random coordinates to move to when roaming around
+        this.iD = iD;
 
         // Loading the sprites
         URL idle_down_1 = getClass().getResource("/sprites/enemies/Octopus-idle-down-1.png");

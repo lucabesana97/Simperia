@@ -75,6 +75,7 @@ public class Gameplay {
 
     private GameObject rock;
     private BufferedImage rockImage = null;
+    public static boolean[] asteroidEnemies;
 
     public Gameplay(Panel panel, KeyHandler keyHandler, GameFrame frame) {
         this.panel = (GamePanel) panel;
@@ -107,6 +108,11 @@ public class Gameplay {
 
 
     public void init() {
+
+        asteroidEnemies = new boolean[19];
+        for(int i = 0; i < 19; i++){
+            asteroidEnemies[i] = true;
+        }
 
         // Don't change the order
         map = new AsteroidMap();
@@ -217,7 +223,9 @@ public class Gameplay {
                     }
                 }
                 enemyIter.remove();
-
+                if(map instanceof AsteroidMap) {
+                    asteroidEnemies[enemy.iD] = false;
+                }
                 //boss killed
                 if (map instanceof CaveMap && enemies.isEmpty() && this.bossSpawned) {
 

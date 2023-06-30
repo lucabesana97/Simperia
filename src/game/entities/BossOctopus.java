@@ -14,7 +14,7 @@ import static helperFunctions.Utility.distanceBetweenCoordinates;
 public class BossOctopus extends Octopus{
 
     public BossOctopus(int x, int y) {
-        super(x, y);
+        super(x, y,69);
         health = 500;
         speed = 3;
         this.experienceOnKill = 150;

@@ -20,6 +20,7 @@ public abstract class Entity extends GameObject {
     public double invincibilityCooldown = 5;
     public double invincibilityTimer = 0;
     public int experienceOnKill = 0;
+    public int iD;
 
     public Entity() {
         super(new Coordinates(0, 0, 100, 100));

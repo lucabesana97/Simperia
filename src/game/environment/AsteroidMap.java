@@ -4,6 +4,7 @@ import game.Coordinates;
 import game.entities.*;
 import game.inventory.HealthElixir;
 import game.inventory.ItemStack;
+import main.Gameplay;
 
 import javax.imageio.ImageIO;
 import java.io.BufferedReader;
@@ -45,25 +46,44 @@ public class AsteroidMap extends GameMap {
     public AsteroidMap() {
         load();
 
-        enemies.add(new Octopus(1413, 1125));
-        enemies.add(new Maurice(1413, 1199));
-        enemies.add(new Octopus(1297, 1365));
-        enemies.add(new Maurice(1186, 1130));
-        enemies.add(new Octopus(1028, 1251));
-        enemies.add(new Maurice(904, 1120));
-        enemies.add(new Octopus(691, 1120));
-        enemies.add(new Maurice(675, 990));
-        enemies.add(new Octopus(506, 1193));
-        enemies.add(new Maurice(482, 1259));
-        enemies.add(new Octopus(625, 1082));
-        enemies.add(new Maurice(696, 1362));
-        enemies.add(new Octopus(678, 1225));
-        enemies.add(new Octopus(901, 93));
-        enemies.add(new Maurice(1213, 238));
-        enemies.add(new Octopus(1459, 406));
-        enemies.add(new Maurice(1480, 570));
-        enemies.add(new Octopus(1758, 570));
-        enemies.add(new Octopus(750,700));
+        if(Gameplay.asteroidEnemies[0])
+        enemies.add(new Octopus(1413, 1125,0));
+        if(Gameplay.asteroidEnemies[1])
+        enemies.add(new Maurice(1413, 1199,1));
+        if(Gameplay.asteroidEnemies[2])
+        enemies.add(new Octopus(1297, 1365,2));
+        if(Gameplay.asteroidEnemies[3])
+        enemies.add(new Maurice(1186, 1130,3));
+        if(Gameplay.asteroidEnemies[4])
+        enemies.add(new Octopus(1028, 1251,4));
+        if(Gameplay.asteroidEnemies[5])
+        enemies.add(new Maurice(904, 1120,5));
+        if(Gameplay.asteroidEnemies[6])
+        enemies.add(new Octopus(691, 1120,6));
+        if(Gameplay.asteroidEnemies[7])
+        enemies.add(new Maurice(675, 990,7));
+        if(Gameplay.asteroidEnemies[8])
+        enemies.add(new Octopus(506, 1193,8));
+        if(Gameplay.asteroidEnemies[9])
+        enemies.add(new Maurice(482, 1259,9));
+        if(Gameplay.asteroidEnemies[10])
+        enemies.add(new Octopus(625, 1082,10));
+        if(Gameplay.asteroidEnemies[11])
+        enemies.add(new Maurice(696, 1362,11));
+        if(Gameplay.asteroidEnemies[12])
+        enemies.add(new Octopus(678, 1225,12));
+        if(Gameplay.asteroidEnemies[13])
+        enemies.add(new Octopus(901, 93,13));
+        if(Gameplay.asteroidEnemies[14])
+        enemies.add(new Maurice(1213, 238,14));
+        if(Gameplay.asteroidEnemies[15])
+        enemies.add(new Octopus(1459, 406,15));
+        if(Gameplay.asteroidEnemies[16])
+        enemies.add(new Maurice(1480, 570,16));
+        if(Gameplay.asteroidEnemies[17])
+        enemies.add(new Octopus(1758, 570,17));
+        if(Gameplay.asteroidEnemies[18])
+        enemies.add(new Octopus(750,700,18));
 
         beginnerNPC = new NPC(new Coordinates(1349, 187, 37, 64));
 //        warps.add(new Warp(new Coordinates(1000,500,32,32), new Coordinates(1400,600,32,32), player));
