@@ -699,7 +699,7 @@ public class Gameplay {
                 dropRock(rock, 2200, diffseconds);
             //}
             for(int i = 20; i < 36; i++) {
-                for(int j = 0; j < 3; j++) {
+                for(int j = 0; j < 5; j++) {
                     map.grid[i][158 + j] = 1;
                 }
             }
@@ -719,7 +719,7 @@ public class Gameplay {
                 dropRock(rock, 2100, diffseconds);
             //}
             for(int i = 45; i < 61; i++) {
-                for(int j = 0; j < 3; j++) {
+                for(int j = 0; j < 5; j++) {
                     map.grid[i][158 + j] = 1;
                 }
             }
@@ -758,7 +758,7 @@ public class Gameplay {
                 dropRock(rock, 1212, diffseconds);
             //}
             for(int i = 12; i < 61; i++) {
-                for(int j = 0; j < 3; j++) {
+                for(int j = 0; j < 5; j++) {
                     map.grid[i][115 + j] = 1;
                 }
             }
@@ -776,8 +776,8 @@ public class Gameplay {
                 rocks.add(rock);
                 dropRock(rock, 1300, diffseconds);
             //}
-            for(int i = 17; i < 30; i++) {
-                for(int j = 0; j < 3; j++) {
+            for(int i = 17; i < 33; i++) {
+                for(int j = 0; j < 5; j++) {
                     map.grid[i][101 + j] = 1;
                 }
             }
@@ -790,7 +790,7 @@ public class Gameplay {
             dropRock(rock, 1010, diffseconds);
 
             for(int i = 30; i < 60; i++) {
-                for(int j = 0; j < 3; j++) {
+                for(int j = 0; j < 5; j++) {
                     map.grid[i][101 + j] = 1;
                 }
             }
@@ -819,7 +819,7 @@ public class Gameplay {
                 dropRock(rock, 280, diffseconds);
             //}
             for(int i = 10; i < 60; i++) {
-                for(int j = 0; j < 3; j++) {
+                for(int j = 0; j < 5; j++) {
                     map.grid[i][46 + j] = 1;
                 }
             }
