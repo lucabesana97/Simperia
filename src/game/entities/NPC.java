@@ -4,7 +4,9 @@ import game.Coordinates;
 import game.GameObject;
 import game.Quest;
 import game.inventory.HealthElixir;
+import game.inventory.Inventory;
 import game.inventory.ItemStack;
+import gui.InventoryPanel;
 import main.Gameplay;
 
 import javax.imageio.ImageIO;
@@ -64,7 +66,7 @@ public class NPC extends GameObject {
                 rewardGiven = true;
                 player.gainXp(playerQuest.xpReward);
                 player.coins += playerQuest.coinsReward;
-                Gameplay.inventory.addStack(new ItemStack(playerQuest.item, 1, true));
+                //Gameplay.inventory.addStack(new ItemStack(playerQuest.item, 1, true));
                 toBeReturned = playerQuest.finalText;
             } else if (rewardGiven && !npcDone) {
                 toBeReturned = playerQuest.finalText;

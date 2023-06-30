@@ -18,7 +18,7 @@ public class Maurice extends Enemy{
     public double timeSinceLastAttack = 30;
     private List<int[]> lastPath = null;
     private int currentDestinationID = 0;
-    public Maurice(int x, int y) {
+    public Maurice(int x, int y, int iD) {
         super();
         this.speed = 5;
         this.name = "Maurice";
@@ -27,7 +27,7 @@ public class Maurice extends Enemy{
         this.experienceOnKill = 60;
         this.coordinates = new Coordinates(x, y, 32, 59);
         this.whereToMove = getNewCoordinates(); // Random coordinates to move to when roaming around
-
+        this.iD = iD;
         // Loading the sprites
         URL idle_down_1 = getClass().getResource("/sprites/enemies/monster/Monster-down-1.png");
         URL idle_down_2 = getClass().getResource("/sprites/enemies/monster/Monster-down-2.png");
