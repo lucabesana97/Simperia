@@ -262,7 +262,7 @@ public class Player extends Entity implements Movable {
 
     public void levelUp(int xpLeft){
         level++;
-        levelXp = (level * level)/2 * 100;
+        levelXp = (level*2)/3 * 100;
         xpToNextLevel = levelXp;
         gainXp(xpLeft);
         attack += 10;
