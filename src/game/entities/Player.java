@@ -131,20 +131,25 @@ public class Player extends Entity implements Movable {
             int offsetX = 0;
             int offsetY = 0;
 
-            if (previousStateX == MovingState.LEFT) {
-                offsetX = -15;
-            } else if (previousStateX == MovingState.RIGHT) {
-                offsetX = 20;
-            }
 
             if (previousStateY == MovingState.UP) {
-                offsetY = -15;
+                offsetY = -30;
+                offsetX = -27;
             } else if (previousStateY == MovingState.DOWN) {
                 offsetY = 30;
+                offsetX = -27;
             }
 
+            if (previousStateX == MovingState.LEFT) {
+                offsetX = - 54;
+            }else if(previousStateX == MovingState.RIGHT){
+                offsetX = 0;
+            }
+
+
+
             graphics.drawImage(rotateImageByDegrees(spritesAttackSlash[(int) (switchCounter*4/RELOAD_TIMER+1)], angle),
-                    screenX + offsetX, screenY + offsetY, null);
+                    (int)(screenX + coordinates.size_X/2 + offsetX), screenY + offsetY, 65, 65, null);
 
         }
 
