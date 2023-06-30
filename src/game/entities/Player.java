@@ -71,7 +71,7 @@ public class Player extends Entity implements Movable {
             throw new RuntimeException(e);
         }
         speed = 30;
-        attack = 25;
+        attack = 50;
         xState = MovingState.STILL;
         previousStateX = previousStateY = MovingState.STILL;
         yState = MovingState.STILL;

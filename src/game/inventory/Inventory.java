@@ -50,12 +50,13 @@ public class Inventory {
             if (slots[i] == null) {
                 if (firstAvailableSlot < 0)
                     firstAvailableSlot = i;
-            } else if (slots[i].item == itemStack.item && slots[i].amount < ItemStack.MAX_STACK) {
+            } else if (slots[i].item.name.equals(itemStack.item.name) && slots[i].amount < ItemStack.MAX_STACK) {
+                System.out.println("Adding to stack");
                 slots[i].amount += itemStack.amount;
                 added = true;
                 adjustStackAmount(slots[i]);
+                return remainder;
             }
-
         }
 
         // If it's full, it returns
