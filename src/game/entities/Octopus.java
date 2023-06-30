@@ -194,8 +194,17 @@ public class Octopus extends Enemy{
 //
         calculateOrientation(xSpeed, ySpeed);
 
+        double lastX = coordinates.topLeftCorner_x;
+        double lastY = coordinates.topLeftCorner_y;
+
         this.coordinates.moveX(xSpeed * this.speed * diffSeconds);
+        if(Gameplay.map.mapCollision(this)){
+            coordinates.topLeftCorner_x = lastX;
+        }
         this.coordinates.moveY(ySpeed * this.speed * diffSeconds);
+        if(Gameplay.map.mapCollision(this)){
+            coordinates.topLeftCorner_y = lastY;
+        }
     }
 
     private void calculateOrientation(double xSpeed, double ySpeed) {
